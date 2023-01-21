@@ -10,7 +10,7 @@
             position: absolute;
             right: 30px;
         }
-        .message{
+        .messageDTO{
             font-family: 'Poppins', sans-serif;
             font-size: 30px;
             color: white;
@@ -186,7 +186,7 @@
     </style>
 </head>
 <body>
-<div class="message">You are not authorized.
+<div class="messageDTO">You are not authorized.
 </div>
 <div class="message2">You tried to access a page you did not have prior authorization for.</div>
 <div class="container">

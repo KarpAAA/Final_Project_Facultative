@@ -2,10 +2,8 @@ package com.example.final_project.controller.factory.commands.teacher;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.CourseDTO;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.UserService;
 
@@ -33,10 +31,10 @@ public class TeacherDetailedCourseCommand implements Command {
         CourseService courseService = new CourseService(connectionPool);
         UserService userService = new UserService(connectionPool);
 
-        Course course = courseService.getCourseByTitle(courseTitle);
-        Map<Integer, List<User>> userMap = userService.getUsersMarksMap(course);
+        CourseDTO courseDTO = courseService.getCourseByTitle(courseTitle);
+        Map<Integer, List<UserDTO>> userMap = userService.getUsersMarksMap(courseDTO);
 
-        request.setAttribute("course", course);
+        request.setAttribute("course", courseDTO);
         request.getSession().setAttribute("students", userMap);
         request.setAttribute("pageToInclude", "/teacher/detailedCourse.jsp");
 
@@ -54,7 +52,7 @@ public class TeacherDetailedCourseCommand implements Command {
                 newMarks[i] = Integer.parseInt(request.getParameter("mark" + i));
             }
 
-            userService.saveMarks((Map<Integer, List<User>>) request.getSession().getAttribute("students"),courseTitle, newMarks);
+            userService.saveMarks((Map<Integer, List<UserDTO>>) request.getSession().getAttribute("students"),courseTitle, newMarks);
             request.getSession().removeAttribute("students");
         }
         executeGet(request, resp);

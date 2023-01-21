@@ -3,11 +3,9 @@ package com.example.final_project.validation;
 import com.example.final_project.database.connection.ConnectionPool;
 import com.example.final_project.database.dao.CoursesDao;
 import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.user.User;
-import com.example.final_project.services.UserService;
+import com.example.final_project.database.entities.course.Course;
+import com.example.final_project.database.entities.user.User;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -20,7 +18,7 @@ public class Validator {
         if(!checkIfPhoneNumberValid(user.getPhone()))result.add("phone");
         if(!checkIfEmailValid(user.getEmail()))result.add("email");
         if(!checkIfNameValid(user.getName()))result.add("name");
-        if(!checkIfLoginAvailable(connectionPool,user.getLogin()))result.add("login");
+        if(!checkIfLoginAvailable(connectionPool, user.getLogin()))result.add("login");
 
         return result;
     }
@@ -42,7 +40,7 @@ public class Validator {
 
     public List<String> validateCourse(ConnectionPool connectionPool, Course course) {
         List<String> result  = new ArrayList<>();
-        if(!checkIfTitleAvailable(connectionPool,course.getTitle())) result.add("title");
+        if(!checkIfTitleAvailable(connectionPool, course.getTitle())) result.add("title");
         if(!checkIfMaxStudentsAmountValid(course.getMaxStudentsAmount())) result.add("maxStudentsAmount");
 
         return result;

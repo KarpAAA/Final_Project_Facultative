@@ -2,15 +2,12 @@ package com.example.final_project.controller.factory.commands.defaulT;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.CourseDTO;
+import com.example.final_project.database.entities.user.Role;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.UserService;
 import com.example.final_project.utilities.CoursesFilter;
-import com.google.protobuf.ServiceException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -53,9 +50,9 @@ public class DefaultCommand implements Command {
         coursesFilter.setCoursesPerPage(recordsPerPage);
 
 
-        CoursesDao dao = new CoursesDao(connectionPool);
-        List<Course> list = dao.selectCoursesByCondition(coursesFilter);
-        int coursesAmount = dao.getCoursesAmount();
+
+        List<CourseDTO> list = courseService.selectCoursesByCondition(coursesFilter);
+        int coursesAmount = courseService.getCoursesAmount();
         int pagesAmount = (int) Math.ceil(coursesAmount * 1.0 / recordsPerPage);
 
         request.getSession().setAttribute("teachersList", userService.getUsersByRole(Role.Teacher));
@@ -71,7 +68,7 @@ public class DefaultCommand implements Command {
     private CoursesFilter formCourseFilter(HttpServletRequest request) {
         CoursesFilter coursesFilter = new CoursesFilter();
         List<String> topicsList = (List<String>) request.getSession().getAttribute("topicsList");
-        List<User> teachersList = (List<User>) request.getSession().getAttribute("teachersList");
+        List<UserDTO> teachersList = (List<UserDTO>) request.getSession().getAttribute("teachersList");
 
         CoursesFilter.SortBy sortBy = CoursesFilter.SortBy.NONE;
         if (request.getParameter("sortAsc") != null && request.getParameter("sortAsc").compareTo("on") == 0)
@@ -86,12 +83,12 @@ public class DefaultCommand implements Command {
                         && request.getParameter(topic).compareTo("on") == 0).collect(Collectors.toList()));
 
         if (request.getParameter("chooseAll") != null && request.getParameter("chooseAll").compareTo("on") == 0) {
-            coursesFilter.addTeachers(teachersList.stream().map(User::getLogin).collect(Collectors.toList()));
+            coursesFilter.addTeachers(teachersList.stream().map(UserDTO::getLogin).collect(Collectors.toList()));
         } else {
             coursesFilter.addTeachers(teachersList.stream()
                     .filter(teacher -> request.getParameter(teacher.getName()) != null
                             && request.getParameter(teacher.getName()).compareTo("on") == 0)
-                    .map(User::getLogin).collect(Collectors.toList()));
+                    .map(UserDTO::getLogin).collect(Collectors.toList()));
         }
 
 

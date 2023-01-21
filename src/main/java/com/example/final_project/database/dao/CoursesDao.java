@@ -2,10 +2,9 @@ package com.example.final_project.database.dao;
 
 
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.course.CourseBuilder;
-import com.example.final_project.entities.course.State;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.course.Course;
+import com.example.final_project.database.entities.user.User;
+import com.example.final_project.database.entities.course.State;
 import com.example.final_project.utilities.CoursesFilter;
 
 
@@ -277,10 +276,10 @@ public class CoursesDao {
         }
     }
     public void changeCoursesState() {
-        List<Course> coursesList = selectAllCourses();
+        List<Course> courseList = selectAllCourses();
         java.util.Date date = new java.util.Date();
 
-        coursesList = coursesList.stream().filter(course -> {
+        courseList = courseList.stream().filter(course -> {
             return !(
                     (date.after(course.getStartDate()) && date.after(course.getFinishDate()) && course.getState() == State.Finished)
                             || (date.before(course.getFinishDate()) && date.before(course.getStartDate()) && course.getState() == State.NotStarted)
@@ -288,7 +287,7 @@ public class CoursesDao {
             );
         }).collect(Collectors.toList());
 
-        for (Course value : coursesList) {
+        for (Course value : courseList) {
             if (date.after(value.getStartDate()) && date.after(value.getFinishDate())) {
                 value.setState(State.Finished);
             } else if (date.before(value.getFinishDate()) && date.before(value.getStartDate())) {
@@ -302,7 +301,7 @@ public class CoursesDao {
             Connection connection = connectionPool.getConnection();
             PreparedStatement statement = connection.prepareStatement("UPDATE Course SET State_id = ? WHERE title = ?");
 
-            for (var course : coursesList) {
+            for (var course : courseList) {
                 statement.setInt(1, course.getState().ordinal());
                 statement.setString(2, course.getTitle());
                 statement.addBatch();
@@ -378,26 +377,26 @@ public class CoursesDao {
 
 
     private Course getCourse(ResultSet resultSet) throws SQLException {
-        Course course;
-        CourseBuilder courseBuilder = new CourseBuilder();
-        UserDao userDao = new UserDao(connectionPool);
-        courseBuilder.setTitle(resultSet.getString(1))
-                .setStartDate(resultSet.getDate(2))
-                .setFinishDate(resultSet.getDate(3))
-                .setMaxStudentsAmount(resultSet.getInt(4))
-                .setTopic(resultSet.getString(5))
-                .setPrice(resultSet.getInt(6))
-                .setCurrentStudentsAmount(resultSet.getInt(7))
-                .setDescription(resultSet.getString(8))
-                .setTeacher(userDao.findUser(resultSet.getString(10)))
-                .setState(indentifyState(resultSet.getString(14)));
 
         Blob blob = resultSet.getBlob(12);
-        if (blob != null) {
-            byte[] b = blob.getBytes(1, (int) blob.length());
-            courseBuilder.setPhoto(b);
-        }
-        return courseBuilder.buildCourse();
+        UserDao userDao = new UserDao(connectionPool);
+        User teacher = userDao.findUser(resultSet.getString(10));
+
+        return new Course(
+                resultSet.getString(1),
+                resultSet.getString(5),
+                resultSet.getString(8),
+                teacher,
+                resultSet.getDate(2),
+                resultSet.getDate(3),
+                resultSet.getInt(4),
+                resultSet.getInt(7),
+                resultSet.getInt(6),
+                indentifyState(resultSet.getString(14)),
+                blob == null ? null:blob.getBytes(1,(int) blob.length())
+
+        );
+
     }
 
     public  boolean checkIfTitleAvailable(String title) {

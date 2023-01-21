@@ -1,6 +1,5 @@
-package com.example.final_project.entities.user;
+package com.example.final_project.database.entities.user;
 
-import java.io.InputStream;
 import java.sql.Date;
 
 public class UserBuilder {
@@ -10,6 +9,7 @@ public class UserBuilder {
     private String name;
     private Role role;
     private String email;
+
     private int age;
 
     private Date registrationDate;

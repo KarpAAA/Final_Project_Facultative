@@ -15,8 +15,8 @@
     </error-page>
 
 
-    <error-page>
-        <error-code>500</error-code>
-        <location>/errorPages/500/500.jsp</location>
-    </error-page>
+<!--    <error-page>-->
+<!--        <error-code>500</error-code>-->
+<!--        <location>/errorPages/500/500.jsp</location>-->
+<!--    </error-page>-->
 </web-app>

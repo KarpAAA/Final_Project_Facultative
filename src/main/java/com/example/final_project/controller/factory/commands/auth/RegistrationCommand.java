@@ -4,9 +4,9 @@ package com.example.final_project.controller.factory.commands.auth;
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
 
-import com.example.final_project.entities.user.DirectorBuilder;
-import com.example.final_project.entities.user.User;
-import com.example.final_project.entities.user.UserBuilder;
+import com.example.final_project.database.entities.user.User;
+import com.example.final_project.database.entities.user.DirectorBuilder;
+import com.example.final_project.database.entities.user.UserBuilder;
 import com.example.final_project.services.UserService;
 
 
@@ -39,7 +39,7 @@ public class RegistrationCommand implements Command {
 
 
         req.setAttribute("errorList", errorList);
-        req.setAttribute("user",user);
+        req.setAttribute("user", user);
 
         if(errorList.size()==0){
             userService.insertUser(user);

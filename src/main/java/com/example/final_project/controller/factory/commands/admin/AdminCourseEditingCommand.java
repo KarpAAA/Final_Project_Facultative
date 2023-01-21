@@ -2,35 +2,24 @@ package com.example.final_project.controller.factory.commands.admin;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.course.CourseBuilder;
-import com.example.final_project.entities.course.State;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.course.Course;
+import com.example.final_project.dto.CourseDTO;
+import com.example.final_project.database.entities.course.CourseBuilder;
+import com.example.final_project.database.entities.course.State;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.UserService;
+import com.example.final_project.utilities.CourseMapper;
+import com.example.final_project.utilities.UserMapper;
 import com.example.final_project.validation.Validator;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
-import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FileExistsException;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 public class AdminCourseEditingCommand implements Command{
     @Override
@@ -47,12 +36,12 @@ public class AdminCourseEditingCommand implements Command{
         CourseService courseService = new CourseService(connectionPool);
         UserService userService = new UserService(connectionPool);
 
-        Course course = courseService.getCourseByTitle(courseTitle);
-        Map<Integer, List<User>> userMap = userService.getUsersMarksMap(course);
+        CourseDTO courseDTO = courseService.getCourseByTitle(courseTitle);
+        Map<Integer, List<UserDTO>> userMap = userService.getUsersMarksMap(courseDTO);
 
 
 
-        request.setAttribute("course", course);
+        request.setAttribute("course", courseDTO);
         request.setAttribute("students", userMap);
         request.setAttribute("pageToInclude", "/admin/editingCourse.jsp");
 
@@ -74,13 +63,13 @@ public class AdminCourseEditingCommand implements Command{
             req.setAttribute("errorList", errorList);
 
             if(errorList.size()==0){
-                courseService.updateCourse(connectionPool,course);
-                resp.sendRedirect("/project/controller?command=adminEditingCourse&courseTitle="+course.getTitle());
+                courseService.updateCourse(connectionPool, course);
+                resp.sendRedirect("/project/controller?command=adminEditingCourse&courseTitle="+ course.getTitle());
 
 
             }
             else {
-                req.setAttribute("course", course);
+                req.setAttribute("course", CourseMapper.courseToCourseDTO(course));
                 req.setAttribute("pageToInclude", "/admin/editingCourse.jsp");
                 req.getRequestDispatcher("/admin/adminPage.jsp").forward(req, resp);
 
@@ -89,9 +78,9 @@ public class AdminCourseEditingCommand implements Command{
         }
 
         else{
-            Course course = courseService.getCourseByTitle(req.getParameter("courseTitle"));
-            courseService.addPhotoToCourse(req,course);
-            resp.sendRedirect("/project/controller?command=adminEditingCourse&courseTitle="+course.getTitle());
+            CourseDTO courseDTO = courseService.getCourseByTitle(req.getParameter("courseTitle"));
+            courseService.addPhotoToCourse(req, courseDTO);
+            resp.sendRedirect("/project/controller?command=adminEditingCourse&courseTitle="+ courseDTO.getTitle());
 
         }
     }
@@ -101,7 +90,7 @@ public class AdminCourseEditingCommand implements Command{
         courseBuilder.setTitle(req.getParameter("courseTitle"))
                 .setPrice(Integer.parseInt(req.getParameter("price")))
                 .setTopic(req.getParameter("topic"))
-                .setTeacher(userService.findUser(req.getParameter("teacher")))
+                .setTeacher(UserMapper.userDTOToUser(userService.findUser(req.getParameter("teacher"))))
                 .setState(State.NotStarted)
                 .setMaxStudentsAmount(Integer.parseInt(req.getParameter("maxStudentsAmount")))
                 .setDescription("");

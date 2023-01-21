@@ -1,6 +1,6 @@
-package com.example.final_project.entities.course;
+package com.example.final_project.database.entities.course;
 
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.user.User;
 
 import java.sql.Date;
 

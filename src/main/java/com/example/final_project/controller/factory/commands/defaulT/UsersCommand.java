@@ -1,9 +1,6 @@
 package com.example.final_project.controller.factory.commands.defaulT;
 
 import com.example.final_project.controller.factory.commands.Command;
-import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

@@ -2,14 +2,13 @@ package com.example.final_project.controller.factory.commands.admin;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.course.CourseBuilder;
-import com.example.final_project.entities.course.State;
-import com.example.final_project.entities.user.Role;
+import com.example.final_project.database.entities.course.Course;
+import com.example.final_project.database.entities.course.CourseBuilder;
+import com.example.final_project.database.entities.course.State;
+import com.example.final_project.database.entities.user.Role;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.UserService;
+import com.example.final_project.utilities.UserMapper;
 import com.example.final_project.validation.Validator;
 
 import javax.servlet.ServletException;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -67,7 +65,7 @@ public class AdminAddCourse implements Command {
         courseBuilder.setTitle(req.getParameter("title"))
                 .setPrice(Integer.parseInt(req.getParameter("price")))
                 .setTopic(req.getParameter("topic"))
-                .setTeacher(userService.findUser(req.getParameter("teacher")))
+                .setTeacher(UserMapper.userDTOToUser(userService.findUser(req.getParameter("teacher"))))
                 .setState(State.NotStarted)
                 .setMaxStudentsAmount(Integer.parseInt(req.getParameter("maxStudentsAmount")))
                 .setDescription("");

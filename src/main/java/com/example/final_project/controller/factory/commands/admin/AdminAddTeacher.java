@@ -2,9 +2,9 @@ package com.example.final_project.controller.factory.commands.admin;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.entities.user.DirectorBuilder;
-import com.example.final_project.entities.user.User;
-import com.example.final_project.entities.user.UserBuilder;
+import com.example.final_project.database.entities.user.User;
+import com.example.final_project.database.entities.user.DirectorBuilder;
+import com.example.final_project.database.entities.user.UserBuilder;
 import com.example.final_project.services.UserService;
 
 import javax.servlet.ServletException;
@@ -34,7 +34,7 @@ public class AdminAddTeacher implements Command {
 
 
         req.setAttribute("errorList", errorList);
-        req.setAttribute("teacher",user);
+        req.setAttribute("teacher", user);
 
         if(errorList.size()==0){
             userService.insertUser(user);
@@ -49,6 +49,7 @@ public class AdminAddTeacher implements Command {
 
 
     private User formUser(HttpServletRequest req){
+
         UserBuilder userBuilder = DirectorBuilder.buildTeacher(
                         req.getParameter("login"),
                         req.getParameter("pwd"),

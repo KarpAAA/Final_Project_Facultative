@@ -1,8 +1,8 @@
 package com.example.final_project.controller.session.filters;
 
 
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.user.Role;
+import com.example.final_project.dto.UserDTO;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -26,13 +26,13 @@ public class SettingsFilter implements Filter {
         if (servletRequest.getParameter("command") != null
                 && servletRequest.getParameter("command").compareTo("settings") == 0) {
             HttpServletRequest req = (HttpServletRequest) servletRequest;
-            if(((User)req.getSession().getAttribute("user")).getRole() == Role.Student){
+            if(((UserDTO)req.getSession().getAttribute("user")).getRole() == Role.Student){
                 req.setAttribute("toInclude", "/client/settings.jsp");
                 req.setAttribute("toForward", "/client/clientPage.jsp");
 
 
             }
-            else if(((User)req.getSession().getAttribute("user")).getRole() == Role.Teacher){
+            else if(((UserDTO)req.getSession().getAttribute("user")).getRole() == Role.Teacher){
                 req.setAttribute("toInclude", "/teacher/teacherSettings.jsp");
                 req.setAttribute("toForward", "/teacher/teacherPage.jsp");
 

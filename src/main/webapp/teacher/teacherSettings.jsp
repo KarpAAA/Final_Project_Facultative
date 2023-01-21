@@ -83,32 +83,39 @@
                     ${errorList.contains('phone') && user.getPhone()!='empty'? "<span class=\"help-block\">Number should start with '+'and have at least 7 digits": ""}
                 </div>
 
-                <div style="margin-top: 40px">
-                    <p><b>${sessionScope.get("bundle").getString("resetPassword")}: </b></p>
-                    <br>
-                    <div class="form-group ${errorList.contains('pwd')? " has-error": ""}">
-                        <label for="pwd" class="${errorList.contains('pwd')? "text-danger": ""}">${sessionScope.get("bundle").getString("password")}:&#42;</label>
-                        <input type="password" class="control-label form-control" id="pwd" placeholder="${sessionScope.get("bundle").getString("enterPassword")}"
-                               name="pwd"
-                               value="${user.getPassword()}" required>
-
-                    </div>
-
-                    <div class="form-group ${errorList.contains('cpwd')? " has-error": ""}">
-                        <label for="cpwd" class="${errorList.contains('cpwd')? "text-danger": ""}">${sessionScope.get("bundle").getString("confirmPassword")}
-                            :&#42;</label>
-                        <input type="password" class="control-label form-control" id="cpwd"
-                               placeholder="${sessionScope.get("bundle").getString("confirmPassword")}"
-                               name="cpwd"
-                               value="${user.getPassword()}" required>
-                        ${errorList.contains('pwd')? "<span class=\"help-block\">Incorrect password</span>": ""}
-                    </div>
-                </div>
 
                 <button type="submit" class = "btn btn-default" style="width: 130px;margin-top: 20px;color: white;background-color: black">${sessionScope.get("bundle").getString("saveChanges")}</button>
             </form>
 
+            <form action="/project/controller?command=settings" method="post">
+                <input type="text" name="action" value="updateUserPassword" hidden="hidden">
+                <div style="margin-top: 40px">
+                    <p><b>${sessionScope.get("bundle").getString("resetPassword")}: </b></p>
+                    <br>
+                    <div class="form-group ${errorList.contains('pwd')? " has-error": ""}">
+                        <label for="pwd"
+                               class="${errorList.contains('pwd')? "text-danger": ""}">${sessionScope.get("bundle").getString("password")}:&#42;</label>
+                        <input type="password" class="control-label form-control" id="pwd"
+                               placeholder="${sessionScope.get("bundle").getString("enterPassword")}"
+                               name="pwd" required>
 
+                    </div>
+
+                    <div class="form-group ${errorList.contains('cpwd')? " has-error": ""}">
+                        <label for="cpwd"
+                               class="${errorList.contains('cpwd')? "text-danger": ""}">${sessionScope.get("bundle").getString("confirmPassword")}
+                            :&#42;</label>
+                        <input type="password" class="control-label form-control" id="cpwd"
+                               placeholder="${sessionScope.get("bundle").getString("confirmPassword")}"
+                               name="cpwd" required>
+                        ${errorList.contains('pwd')? "<span class=\"help-block\">Incorrect password</span>": ""}
+                    </div>
+                    <button type="submit" class="btn btn-default"
+                            style="width: 130px;margin-top: 20px;color: white;background-color: #67BF63">${sessionScope.get("bundle").getString("resetPassword")}</button>
+                </div>
+
+
+            </form>
         </div>
     </div>
 

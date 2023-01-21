@@ -1,13 +1,10 @@
 package com.example.final_project.services;
 
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.course.State;
-import com.example.final_project.entities.user.Blocked_State;
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
-import com.example.final_project.entities.user.UserBuilder;
+import com.example.final_project.database.entities.user.User;
+import com.example.final_project.database.entities.user.Blocked_State;
+import com.example.final_project.database.entities.user.Role;
+import com.example.final_project.database.entities.user.UserBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 import java.sql.*;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 

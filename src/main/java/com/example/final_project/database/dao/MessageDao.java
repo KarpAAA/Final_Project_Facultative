@@ -1,10 +1,10 @@
 package com.example.final_project.database.dao;
 
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.entities.message.Message;
-import com.example.final_project.entities.message.MessageBuilder;
-import com.example.final_project.entities.message.Status;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.message.Message;
+import com.example.final_project.database.entities.user.User;
+import com.example.final_project.database.entities.message.MessageBuilder;
+import com.example.final_project.database.entities.message.Status;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -103,12 +103,18 @@ public class MessageDao {
     private Message getMessage(ResultSet resultSet) throws SQLException {
         MessageBuilder messageBuilder = new MessageBuilder();
         UserDao userDao = new UserDao(connectionPool);
-        return messageBuilder.setId(resultSet.getInt(1))
-                .setText(resultSet.getString(2))
-                .setSubject(resultSet.getString(3))
-                .setSender(userDao.findUser(resultSet.getString(4)))
-                .setReceiver(userDao.findUser(resultSet.getString(5)))
-                .setStatus(validateStatus(resultSet.getString(6))).buildMessage();
+        User sender = userDao.findUser(resultSet.getString(4));
+        User receiver = userDao.findUser(resultSet.getString(5));
+
+        return new Message(
+                resultSet.getInt(1),
+                resultSet.getString(2),
+                resultSet.getString(3),
+                sender,
+                receiver,
+                validateStatus(resultSet.getString(6)).name()
+
+        );
     }
 
     private static Status validateStatus(String status) {

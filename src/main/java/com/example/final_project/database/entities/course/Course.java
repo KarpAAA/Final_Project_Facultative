@@ -1,11 +1,10 @@
-package com.example.final_project.entities.course;
+package com.example.final_project.database.entities.course;
 
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.user.User;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Base64;
 
 public class Course {
     private final String title;
@@ -17,9 +16,9 @@ public class Course {
     private final int maxStudentsAmount;
     private  int currentStudentsAmount;
     private final int price;
-    private  State state;
+    private State state;
     private byte[] photo;
-    private String base64String;
+
 
     public Course(String title, String topic, String description, User teacher, Date startDate,
                   Date finishDate, int maxStudentsAmount, int currentStudentsAmount, int price, State state, byte[] photo) {
@@ -47,16 +46,14 @@ public class Course {
                 throw new RuntimeException(e);
             }
         }
-        base64String = Base64.getEncoder().encodeToString(this.photo);
+
     }
 
     public void setState(State state) {
         this.state = state;
     }
 
-    public String getBase64String() {
-        return base64String;
-    }
+
 
     public byte[] getPhoto() {
         return photo;

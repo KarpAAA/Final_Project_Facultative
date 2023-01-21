@@ -2,12 +2,8 @@ package com.example.final_project.controller.factory.commands.teacher;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.MessageDao;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.message.MessageBuilder;
-import com.example.final_project.entities.message.Status;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.CourseDTO;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.UserService;
 
 import javax.servlet.ServletException;
@@ -30,10 +26,10 @@ public class TeacherMessagesCommand implements Command {
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
-        User user = (User) request.getSession().getAttribute("user");
+        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
 
 
-        Map<Course, List<User>> map = userService.getAllRegisteredUserToTeacherCourses(user);
+        Map<CourseDTO, List<UserDTO>> map = userService.getAllRegisteredUserToTeacherCourses(userDTO);
         request.setAttribute("map", map);
 
 

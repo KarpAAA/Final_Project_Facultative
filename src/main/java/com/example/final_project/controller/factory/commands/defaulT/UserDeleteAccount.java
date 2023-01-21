@@ -2,7 +2,7 @@ package com.example.final_project.controller.factory.commands.defaulT;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.UserService;
 
 import javax.servlet.ServletException;
@@ -26,7 +26,7 @@ public class UserDeleteAccount implements Command {
             response.sendRedirect("/project/controller?command=adminUsers&action=teachers");
         }
         else {
-            userService.deleteUser((User)request.getSession().getAttribute("user"));
+            userService.deleteUser((UserDTO)request.getSession().getAttribute("user"));
             response.sendRedirect("/project/controller?command=default");
         }
 

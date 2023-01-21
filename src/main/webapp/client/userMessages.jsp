@@ -39,25 +39,25 @@
 
             <div class="col-sm-10">
                 <div class="panel-group">
-                    <c:forEach var="message" items="${messagesList}">
+                    <c:forEach var="messageDTO" items="${messagesList}">
 
                         <c:choose>
-                            <c:when test="${message.status.compareToIgnoreCase('read')==0}">
+                            <c:when test="${messageDTO.status.compareToIgnoreCase('read')==0}">
                                 <div class="panel panel-default" style="margin-top: 10px;">
                                     <div class="panel-heading"
-                                         style="font-weight :bold; font-size: 20px;background: #afacac; color: #ffffff;">${message.subject}</div>
+                                         style="font-weight :bold; font-size: 20px;background: #afacac; color: #ffffff;">${messageDTO.subject}</div>
                                     <div class="panel-body">
-                                        <span style="font-weight :bold">${sessionScope.get("bundle").getString("from")}: ${message.sender.name}</span>
-                                        <p>${message.text}</p></div>
+                                        <span style="font-weight :bold">${sessionScope.get("bundle").getString("from")}: ${messageDTO.sender.name}</span>
+                                        <p>${messageDTO.text}</p></div>
                                 </div>
                             </c:when>
                             <c:otherwise>
                                 <div class="panel panel-primary" style="margin-top: 10px">
                                     <div class="panel-heading"
-                                         style="font-weight :bold; font-size: 20px;">${message.subject}</div>
+                                         style="font-weight :bold; font-size: 20px;">${messageDTO.subject}</div>
                                     <div class="panel-body">
-                                        <span style="font-weight :bold">${sessionScope.get("bundle").getString("from")}: ${message.sender.name}</span>
-                                        <p>${message.text}</p></div>
+                                        <span style="font-weight :bold">${sessionScope.get("bundle").getString("from")}: ${messageDTO.sender.name}</span>
+                                        <p>${messageDTO.text}</p></div>
                                 </div>
                             </c:otherwise>
                         </c:choose>

@@ -1,18 +1,16 @@
 package com.example.final_project.database.dao;
 
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.entities.message.Message;
-import com.example.final_project.entities.message.MessageBuilder;
-import com.example.final_project.entities.message.Status;
-import com.example.final_project.entities.user.Blocked_State;
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.message.Message;
+import com.example.final_project.database.entities.user.User;
+import com.example.final_project.database.entities.message.Status;
+import com.example.final_project.database.entities.user.Blocked_State;
+import com.example.final_project.database.entities.user.Role;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.lang.reflect.Method;
 import java.sql.*;
 import java.util.List;
 
@@ -36,6 +34,7 @@ class MessageDaoTest {
     ResultSet mockResultSet;
 
     MessageDao messagesDao;
+
 
     private User getTestUser() {
         return new User("login", "password", "name", Role.Student, "1@1", 18, new Date(1), "Surname",

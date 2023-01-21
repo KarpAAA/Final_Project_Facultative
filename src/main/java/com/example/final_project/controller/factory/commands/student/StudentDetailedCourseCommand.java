@@ -2,10 +2,8 @@ package com.example.final_project.controller.factory.commands.student;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.CourseDTO;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.UserService;
 
@@ -32,17 +30,17 @@ public class StudentDetailedCourseCommand implements Command {
         CourseService courseService = new CourseService(connectionPool);
         UserService userService = new UserService(connectionPool);
 
-        Course course = courseService.findCourse(courseTitle);
-        User user = (User) request.getSession().getAttribute("user");
+        CourseDTO courseDTO = courseService.findCourse(courseTitle);
+        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
 
-        String state = userService.getUserRegisteredState(user, course);
+        String state = userService.getUserRegisteredState(userDTO, courseDTO);
         if(state!=null){
             request.setAttribute("registerState", state);
-            int grade = userService.getUserGradeForCourse(user.getLogin(),courseTitle);
+            int grade = userService.getUserGradeForCourse(userDTO.getLogin(),courseTitle);
             request.setAttribute("grade", grade);
         }
 
-        request.setAttribute("course", course);
+        request.setAttribute("course", courseDTO);
         request.setAttribute("pageToInclude", "/client/detailedCourse.jsp");
 
 

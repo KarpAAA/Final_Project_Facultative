@@ -52,10 +52,12 @@
                     <br><br>
                     <input type="file" name="fileName" id="fileName">
                     <input type="text" class="filestyle"
-                           data-classButton="btn btn-primary" data-input="false" data-classIcon="icon-plus" data-buttonText="Choose photo"
+                           data-classButton="btn btn-primary" data-input="false" data-classIcon="icon-plus"
+                           data-buttonText="Choose photo"
                            name="action" hidden="hidden">
                     <br>
-                    <button class="btn btn-default" type="submit">${sessionScope.get("bundle").getString("savePhoto")}</button>
+                    <button class="btn btn-default"
+                            type="submit">${sessionScope.get("bundle").getString("savePhoto")}</button>
                 </div>
 
             </form>
@@ -107,7 +109,11 @@
                            value="${user.getPhone()}">
                     ${errorList.contains('phone') && user.getPhone()!='empty'? "<span class=\"help-block\">Number should start with '+'and have at least 7 digits": ""}
                 </div>
-
+                <button type="submit" class="btn btn-default"
+                        style="width: 130px;margin-top: 20px;color: white;background-color: #67BF63">${sessionScope.get("bundle").getString("saveChanges")}</button>
+            </form>
+            <form action="/project/controller?command=settings" method="post">
+                <input type="text" name="action" value="updateUserPassword" hidden="hidden">
                 <div style="margin-top: 40px">
                     <p><b>${sessionScope.get("bundle").getString("resetPassword")}: </b></p>
                     <br>
@@ -116,8 +122,7 @@
                                class="${errorList.contains('pwd')? "text-danger": ""}">${sessionScope.get("bundle").getString("password")}:&#42;</label>
                         <input type="password" class="control-label form-control" id="pwd"
                                placeholder="${sessionScope.get("bundle").getString("enterPassword")}"
-                               name="pwd"
-                               value="${user.getPassword()}" required>
+                               name="pwd" required>
 
                     </div>
 
@@ -127,16 +132,15 @@
                             :&#42;</label>
                         <input type="password" class="control-label form-control" id="cpwd"
                                placeholder="${sessionScope.get("bundle").getString("confirmPassword")}"
-                               name="cpwd"
-                               value="${user.getPassword()}" required>
+                               name="cpwd" required>
                         ${errorList.contains('pwd')? "<span class=\"help-block\">Incorrect password</span>": ""}
                     </div>
+                    <button type="submit" class="btn btn-default"
+                            style="width: 130px;margin-top: 20px;color: white;background-color: #67BF63">${sessionScope.get("bundle").getString("resetPassword")}</button>
                 </div>
 
-                <button type="submit" class="btn btn-default"
-                        style="width: 130px;margin-top: 20px;color: white;background-color: #67BF63">${sessionScope.get("bundle").getString("saveChanges")}</button>
-            </form>
 
+            </form>
             <div style="margin-top: 45px">
                 <h4><b>${sessionScope.get("bundle").getString("accountDeleting")}: </b></h4>
                 <p><b>${sessionScope.get("bundle").getString("accountDeletingText")}</b></p>

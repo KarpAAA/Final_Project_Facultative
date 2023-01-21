@@ -2,10 +2,8 @@ package com.example.final_project.controller.factory.commands.admin;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.user.Role;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.UserService;
 import com.example.final_project.utilities.CoursesFilter;
@@ -44,7 +42,7 @@ public class FilterCourses implements Command {
         CourseService courseService = new CourseService(connectionPool);
 
         List<String> topicsList = courseService.getAllTopics();
-        List<User> teachersList = userService.getUsersByRole(Role.Teacher);
+        List<UserDTO> teachersList = userService.getUsersByRole(Role.Teacher);
 
         CoursesFilter.SortBy sortBy = CoursesFilter.SortBy.NONE;
         if (request.getParameter("sortAsc") != null && request.getParameter("sortAsc").compareTo("on") == 0)
@@ -59,12 +57,12 @@ public class FilterCourses implements Command {
                         && request.getParameter(topic).compareTo("on") == 0).collect(Collectors.toList()));
 
         if (request.getParameter("chooseAll") != null && request.getParameter("chooseAll").compareTo("on") == 0) {
-            coursesFilter.addTeachers(teachersList.stream().map(User::getLogin).collect(Collectors.toList()));
+            coursesFilter.addTeachers(teachersList.stream().map(UserDTO::getLogin).collect(Collectors.toList()));
         } else {
             coursesFilter.addTeachers(teachersList.stream()
                     .filter(teacher -> request.getParameter(teacher.getName()) != null
                             && request.getParameter(teacher.getName()).compareTo("on") == 0)
-                    .map(User::getLogin).collect(Collectors.toList()));
+                    .map(UserDTO::getLogin).collect(Collectors.toList()));
         }
 
 

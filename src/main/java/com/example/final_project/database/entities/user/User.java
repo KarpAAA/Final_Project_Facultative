@@ -1,9 +1,10 @@
-package com.example.final_project.entities.user;
+package com.example.final_project.database.entities.user;
 
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
-import java.util.Base64;
 
 public class User {
     //nec fields
@@ -20,10 +21,10 @@ public class User {
     private final String phone;
     private byte[] photo;
     private Blocked_State blocked_state;
-    private String base64String;
+
 
     public User(String login, String password, String name, Role role, String email,
-                int age, Date registrationDate, String surname, String phone, byte[] photo,Blocked_State blocked_state) {
+                int age, Date registrationDate, String surname, String phone, byte[] photo, Blocked_State blocked_state) {
 
         this.login = login;
         this.password = password;
@@ -48,7 +49,7 @@ public class User {
                 throw new RuntimeException(e);
             }
         }
-        base64String = Base64.getEncoder().encodeToString(this.photo);
+
     }
 
     public void setPhoto(InputStream photo) {
@@ -109,8 +110,6 @@ public class User {
         return photo;
     }
 
-    public String getBase64String() {
-        return base64String;
-    }
+
 
 }

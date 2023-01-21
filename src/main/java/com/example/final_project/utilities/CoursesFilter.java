@@ -1,6 +1,6 @@
 package com.example.final_project.utilities;
 
-import com.example.final_project.entities.course.State;
+import com.example.final_project.database.entities.course.State;
 
 import java.util.ArrayList;
 import java.util.List;

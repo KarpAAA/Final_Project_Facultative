@@ -2,8 +2,7 @@ package com.example.final_project.controller.factory.commands.student;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
 
 import javax.servlet.ServletException;
@@ -24,10 +23,10 @@ public class RegisterUserToCourse implements Command {
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
-        User user = (User) request.getSession().getAttribute("user");
+        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
         CourseService courseService = new CourseService(connectionPool);
 
-        courseService.registerStudentToCourse(user.getLogin(), request.getParameter("course"));
+        courseService.registerStudentToCourse(userDTO.getLogin(), request.getParameter("course"));
         response.sendRedirect("/project/controller?command=studentCatalogue");
 
     }

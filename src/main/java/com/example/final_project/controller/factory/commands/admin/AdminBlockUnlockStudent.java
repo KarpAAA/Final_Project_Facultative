@@ -2,8 +2,6 @@ package com.example.final_project.controller.factory.commands.admin;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.user.Blocked_State;
 import com.example.final_project.services.UserService;
 
 import javax.servlet.ServletException;

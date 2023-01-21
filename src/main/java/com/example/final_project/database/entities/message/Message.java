@@ -1,6 +1,6 @@
-package com.example.final_project.entities.message;
+package com.example.final_project.database.entities.message;
 
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.user.User;
 
 public class Message {
     private final int id;
@@ -10,7 +10,7 @@ public class Message {
     private final User receiver;
     private final String status;
 
-    public Message(int id, String text, String subject, User sender, User receiver,String status) {
+    public Message(int id, String text, String subject, User sender, User receiver, String status) {
         this.id = id;
         this.text = text;
         this.subject = subject;

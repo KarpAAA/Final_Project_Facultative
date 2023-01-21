@@ -2,11 +2,14 @@ package com.example.final_project.services;
 
 import com.example.final_project.database.connection.ConnectionPool;
 import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.course.State;
+import com.example.final_project.database.entities.course.Course;
+import com.example.final_project.dto.CourseDTO;
+import com.example.final_project.database.entities.course.State;
 
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.UserDTO;
+import com.example.final_project.utilities.CourseMapper;
 import com.example.final_project.utilities.CoursesFilter;
+import com.example.final_project.utilities.UserMapper;
 import com.example.final_project.validation.Validator;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -20,6 +23,7 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class CourseService {
@@ -35,8 +39,8 @@ public class CourseService {
         courseDao.addCourse(course);
     }
 
-    public Course getCourseByTitle(String courseTitle) {
-        return courseDao.findCourse(courseTitle);
+    public CourseDTO getCourseByTitle(String courseTitle) {
+        return CourseMapper.courseToCourseDTO(courseDao.findCourse(courseTitle));
     }
 
     public List<String> validateCourse(Course course) {
@@ -69,7 +73,7 @@ public class CourseService {
         return errorList;
     }
 
-    public void addPhotoToCourse(HttpServletRequest req, Course course) {
+    public void addPhotoToCourse(HttpServletRequest req, CourseDTO courseDTO) {
         String file_name = null;
 
         boolean isMultipleContent = ServletFileUpload.isMultipartContent(req);
@@ -99,8 +103,8 @@ public class CourseService {
 
                         }
                         FileInputStream fileInputStream = new FileInputStream("C:\\Users\\ivank\\IdeaProjects\\Final_Project\\src\\main\\webapp\\userImages\\" + fileItem.getName());
-                        course.setPhoto(fileInputStream.readAllBytes());
-                        courseDao.setPhotoToCourse(course);
+                        courseDTO.setPhoto(fileInputStream.readAllBytes());
+                        courseDao.setPhotoToCourse(CourseMapper.courseDTOToCourse(courseDTO));
                     }
                 }
             }
@@ -129,12 +133,15 @@ public class CourseService {
         courseDao.updateCourse(course);
     }
 
-    public Course findCourse(String title) {
-        return courseDao.findCourse(title);
+    public CourseDTO findCourse(String title) {
+        return CourseMapper.courseToCourseDTO(courseDao.findCourse(title));
     }
 
-    public List<Course> selectCoursesByCondition(CoursesFilter coursesFilter) {
-        return courseDao.selectCoursesByCondition(coursesFilter);
+    public List<CourseDTO> selectCoursesByCondition(CoursesFilter coursesFilter) {
+        return courseDao.selectCoursesByCondition(coursesFilter)
+                .stream()
+                .map(CourseMapper::courseToCourseDTO)
+                .collect(Collectors.toList());
     }
 
     public List<String> getAllTopics() {
@@ -157,16 +164,22 @@ public class CourseService {
         courseDao.removeStudentFromCourse(login, courseTitle);
     }
 
-    public List<Course> getAllTeacherCourses(User user, int i, int recordsPerPage) {
-        return courseDao.getAllTeacherCourses(user, i,recordsPerPage);
+    public List<CourseDTO> getAllTeacherCourses(UserDTO userDTO, int i, int recordsPerPage) {
+        return courseDao.getAllTeacherCourses(UserMapper.userDTOToUser(userDTO), i,recordsPerPage)
+                .stream()
+                .map(CourseMapper::courseToCourseDTO)
+                .collect(Collectors.toList());
     }
 
     public void changeCoursesState() {
         courseDao.changeCoursesState();
     }
 
-    public List<Course> selectStatedAmountOfUserCourses(User user, int i, int recordsPerPage, State state) {
-        return courseDao.selectStatedAmountOfUserCourses(user, i, recordsPerPage, state);
+    public List<CourseDTO> selectStatedAmountOfUserCourses(UserDTO userDTO, int i, int recordsPerPage, State state) {
+        return courseDao.selectStatedAmountOfUserCourses(UserMapper.userDTOToUser(userDTO), i, recordsPerPage, state)
+                .stream()
+                .map(CourseMapper::courseToCourseDTO)
+                .collect(Collectors.toList());
     }
 
     public int getTeacherCoursesAmount() {

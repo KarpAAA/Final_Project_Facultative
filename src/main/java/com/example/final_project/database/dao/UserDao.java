@@ -3,11 +3,10 @@ package com.example.final_project.database.dao;
 
 import com.example.final_project.database.connection.ConnectionPool;
 
-import com.example.final_project.entities.user.Blocked_State;
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.user.UserBuilder;
+import com.example.final_project.database.entities.course.Course;
+import com.example.final_project.database.entities.user.User;
+import com.example.final_project.database.entities.user.Blocked_State;
+import com.example.final_project.database.entities.user.Role;
 
 import java.io.*;
 import java.sql.*;
@@ -26,25 +25,21 @@ public class UserDao {
 
 
     private User getUser(ResultSet resultSet) throws SQLException {
-        UserBuilder userBuilder = new UserBuilder();
-        userBuilder.setLogin(resultSet.getString(1))
-                .setPassword(resultSet.getString(2))
-                .setName(resultSet.getString(3))
-                .setEmail(resultSet.getString(4))
-                .setRole(indentifyRole(resultSet.getInt(5)))
-                .setAge(resultSet.getInt(7))
-                .setSurname(resultSet.getString(8))
-                .setRegistrationDate(resultSet.getDate(9))
-                .setPhone(resultSet.getString(10));
-
-
         Blob blob = resultSet.getBlob(11);
-        if (blob != null) {
-            byte[] b = blob.getBytes(1, (int) blob.length());
-            userBuilder.setPhoto(b);
-        }
-        userBuilder.setBlocked_state(indentifyBlockedState(resultSet.getInt(12)));
-        return userBuilder.getUser();
+
+        return new User(
+                resultSet.getString(1)
+                ,resultSet.getString(2)
+                ,resultSet.getString(3)
+                ,indentifyRole(resultSet.getInt(5))
+                ,resultSet.getString(4)
+                ,resultSet.getInt(7)
+                ,resultSet.getDate(9)
+                ,resultSet.getString(8)
+                ,resultSet.getString(10)
+                ,blob == null ? null:blob.getBytes(1,(int) blob.length())
+                ,indentifyBlockedState(resultSet.getInt(12))
+        );
     }
     public User identifyUser(String login, String password) {
 
@@ -118,14 +113,13 @@ public class UserDao {
     public void updateUser(User user) {
         try {
             Connection connection = connectionPool.getConnection();
-            PreparedStatement statement = connection.prepareStatement("UPDATE user SET password = ?" +
-                    ", name = ? , email = ? WHERE login = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE user " +
+                    "SET name = ? , email = ? WHERE login = ?");
 
 
-            statement.setString(1, user.getPassword());
-            statement.setString(2, user.getName());
-            statement.setString(3, user.getEmail());
-            statement.setString(4, user.getLogin());
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getEmail());
+            statement.setString(3, user.getLogin());
             statement.executeUpdate();
 
             updateAdditionalFieldsToUser(connection, user);
@@ -188,9 +182,20 @@ public class UserDao {
 
         statement.executeUpdate();
 
-
     }
-
+    public void updateUserPassword(User user, String pwd) {
+        try {
+            Connection connection = connectionPool.getConnection();
+            PreparedStatement statement = connection.prepareStatement("UPDATE User SET password = ? " +
+                    "WHERE login = ?");
+            statement.setString(1, pwd);
+            statement.setString(2, user.getLogin());
+            statement.executeUpdate();
+            connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public List<User> getUsersByRole(Role role) {
 
@@ -394,4 +399,6 @@ public class UserDao {
         else return Blocked_State.UNLOCKED;
 
     }
+
+
 }

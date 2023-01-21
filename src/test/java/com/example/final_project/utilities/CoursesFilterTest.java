@@ -1,12 +1,10 @@
 package com.example.final_project.utilities;
 
-import com.example.final_project.entities.course.State;
+import com.example.final_project.database.entities.course.State;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CoursesFilterTest {
 

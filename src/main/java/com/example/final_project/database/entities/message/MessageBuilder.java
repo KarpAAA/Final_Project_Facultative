@@ -1,7 +1,7 @@
-package com.example.final_project.entities.message;
+package com.example.final_project.database.entities.message;
 
 
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.user.User;
 
 public class MessageBuilder {
     private int id;

@@ -9,8 +9,8 @@ import com.example.final_project.controller.factory.commands.student.*;
 import com.example.final_project.controller.factory.commands.teacher.*;
 import com.example.final_project.controller.session.exceptions.NoAccessProvidedException;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.user.Role;
+import com.example.final_project.dto.UserDTO;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -72,7 +72,7 @@ public class SecuirtyFilter implements Filter {
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         ConnectionPool connectionPool = (ConnectionPool) req.getSession().getAttribute("connectionPool");
-        User user = (User) req.getSession().getAttribute("user");
+        UserDTO userDTO = (UserDTO) req.getSession().getAttribute("user");
         String command;
         if (req.getParameter("command") != null) {
             command = req.getParameter("command");
@@ -82,16 +82,16 @@ public class SecuirtyFilter implements Filter {
         }
 
 
-        if (user == null) {
+        if (userDTO == null) {
             if (command.equals("") || DEFAULT_COMMAND_MAP.containsKey(command)) ;
             else throw new NoAccessProvidedException();
-        } else if (user.getRole() == Role.Admin) {
+        } else if (userDTO.getRole() == Role.Admin) {
             if (ADMIN_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
             else throw new NoAccessProvidedException();
-        } else if (user.getRole() == Role.Teacher) {
+        } else if (userDTO.getRole() == Role.Teacher) {
             if (TEACHER_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
             else throw new NoAccessProvidedException();
-        } else if (user.getRole() == Role.Student) {
+        } else if (userDTO.getRole() == Role.Student) {
             if (STUDENT_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
             else throw new NoAccessProvidedException();
             if(command.compareTo("deleteAccount") == 0 && req.getParameter("teacher")!=null) throw new NoAccessProvidedException();

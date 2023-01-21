@@ -1,13 +1,12 @@
 package com.example.final_project.services;
 
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.course.CourseBuilder;
-import com.example.final_project.entities.course.State;
-import com.example.final_project.entities.user.Blocked_State;
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
-import com.example.final_project.entities.user.UserBuilder;
+import com.example.final_project.database.entities.course.Course;
+import com.example.final_project.database.entities.user.User;
+import com.example.final_project.database.entities.course.CourseBuilder;
+import com.example.final_project.database.entities.course.State;
+import com.example.final_project.database.entities.user.Blocked_State;
+import com.example.final_project.database.entities.user.Role;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,6 @@ import org.mockito.MockitoAnnotations;
 import java.sql.*;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -33,17 +31,14 @@ class CourseServiceTest {
     @Mock
     ResultSet mockResultSet;
 
-    private Course getTestCourse(){
+    private Course getTestCourse() {
         return new Course("title", "topic", "description",
-                new User("login","password", "name", Role.Student,"1@1",18,new Date(1),"Surname",
+                new User("login", "password", "name", Role.Student, "1@1", 18, new Date(1), "Surname",
                         "+3809641345", new byte[]{1, 2, 3}, Blocked_State.UNLOCKED)
-                ,new Date(1),new Date(1),120,120,120, State.InProgress,new byte[]{1,2,3});
+                , new Date(1), new Date(1), 120, 120, 120, State.InProgress, new byte[]{1, 2, 3});
     }
 
-    private User getTestUser() {
-        return new User("login", "password", "name", Role.Student, "1@1", 18, new Date(1), "Surname",
-                "+3809641345", new byte[]{1, 2, 3}, Blocked_State.UNLOCKED);
-    }
+
     private CourseBuilder getTestCourseBuilder(){
         CourseBuilder courseBuilder = new CourseBuilder();
         Course course = getTestCourse();

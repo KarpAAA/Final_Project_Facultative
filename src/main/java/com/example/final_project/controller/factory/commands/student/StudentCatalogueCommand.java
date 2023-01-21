@@ -2,11 +2,9 @@ package com.example.final_project.controller.factory.commands.student;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.CourseDTO;
+import com.example.final_project.database.entities.user.Role;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.UserService;
 import com.example.final_project.utilities.CoursesFilter;
@@ -50,7 +48,7 @@ public class StudentCatalogueCommand implements Command {
         coursesFilter.setOffset((page - 1) * recordsPerPage);
         coursesFilter.setCoursesPerPage(recordsPerPage);
 
-        List<Course> coursesList = courseService.selectCoursesByCondition(coursesFilter);
+        List<CourseDTO> coursesList = courseService.selectCoursesByCondition(coursesFilter);
 
         int noOfRecords = courseService.getCoursesAmount();
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
@@ -77,7 +75,7 @@ public class StudentCatalogueCommand implements Command {
     private CoursesFilter formCourseFilter(HttpServletRequest request) {
         CoursesFilter coursesFilter = new CoursesFilter();
         List<String> topicsList = (List<String>) request.getSession().getAttribute("topicsList");
-        List<User> teachersList = (List<User>) request.getSession().getAttribute("teachersList");
+        List<UserDTO> teachersList = (List<UserDTO>) request.getSession().getAttribute("teachersList");
 
         CoursesFilter.SortBy sortBy = CoursesFilter.SortBy.NONE;
         if (request.getParameter("sortAsc") != null && request.getParameter("sortAsc").compareTo("on") == 0)
@@ -92,12 +90,12 @@ public class StudentCatalogueCommand implements Command {
                         && request.getParameter(topic).compareTo("on") == 0).collect(Collectors.toList()));
 
         if (request.getParameter("chooseAll") != null && request.getParameter("chooseAll").compareTo("on") == 0) {
-            coursesFilter.addTeachers(teachersList.stream().map(User::getLogin).collect(Collectors.toList()));
+            coursesFilter.addTeachers(teachersList.stream().map(UserDTO::getLogin).collect(Collectors.toList()));
         } else {
             coursesFilter.addTeachers(teachersList.stream()
                     .filter(teacher -> request.getParameter(teacher.getName()) != null
                             && request.getParameter(teacher.getName()).compareTo("on") == 0)
-                    .map(User::getLogin).collect(Collectors.toList()));
+                    .map(UserDTO::getLogin).collect(Collectors.toList()));
         }
 
 

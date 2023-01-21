@@ -1,8 +1,8 @@
 package com.example.final_project.controller.session.filters;
 
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.database.entities.user.Role;
+import com.example.final_project.dto.UserDTO;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -26,10 +26,10 @@ public class LoggingFilter implements Filter {
                 && servletRequest.getParameter("command").compareTo("users") == 0) {
             HttpServletRequest req = (HttpServletRequest) servletRequest;
             ConnectionPool connectionPool = (ConnectionPool) req.getSession().getAttribute("connectionPool");
-            User user = (User) req.getSession().getAttribute("user");
-            if (user.getRole() == Role.Student) {
+            UserDTO userDTO = (UserDTO) req.getSession().getAttribute("user");
+            if (userDTO.getRole() == Role.Student) {
                 req.setAttribute("toRedirect", "/project/controller?command=studentCourses&page=1");
-            } else if (user.getRole() == Role.Teacher) {
+            } else if (userDTO.getRole() == Role.Teacher) {
                 req.setAttribute("toRedirect", "/project/controller?command=teacherCourses&page=1");
             } else {
                 req.setAttribute("toRedirect", "/project/controller?command=adminCourses&page=1");

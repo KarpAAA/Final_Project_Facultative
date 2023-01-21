@@ -2,28 +2,18 @@ package com.example.final_project.controller.factory.commands.admin;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.course.CourseBuilder;
-import com.example.final_project.entities.course.State;
-import com.example.final_project.entities.user.Role;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.CourseDTO;
+import com.example.final_project.database.entities.user.Role;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.UserService;
 import com.example.final_project.utilities.CoursesFilter;
-import com.example.final_project.validation.Validator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
 
 
 public class AdminCoursesCommand implements Command{
@@ -37,7 +27,7 @@ public class AdminCoursesCommand implements Command{
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
-        User user = (User) request.getSession().getAttribute("user");
+        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
         UserService userService = new UserService(connectionPool);
         CourseService courseService = new CourseService(connectionPool);
         int page = 1;
@@ -56,7 +46,7 @@ public class AdminCoursesCommand implements Command{
 
 
 
-        List<Course> list = courseService.selectCoursesByCondition(coursesFilter);
+        List<CourseDTO> list = courseService.selectCoursesByCondition(coursesFilter);
         int coursesAmount = courseService.getCoursesAmount();
         int pagesAmount = (int) Math.ceil(coursesAmount * 1.0 / recordsPerPage);
 

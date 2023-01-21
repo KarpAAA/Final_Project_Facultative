@@ -144,7 +144,7 @@
                         <table class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
                             <tr>
-                                <th class="text-center">${sessionScope.get("bundle").getString("user")}</th>
+                                <th class="text-center">${sessionScope.get("bundle").getString("users")}</th>
                                 <th class="text-center">${sessionScope.get("bundle").getString("mark")}</th>
                             </tr>
                             </thead>

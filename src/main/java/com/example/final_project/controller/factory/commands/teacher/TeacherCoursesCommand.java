@@ -2,17 +2,13 @@ package com.example.final_project.controller.factory.commands.teacher;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 
 public class TeacherCoursesCommand implements Command {
@@ -28,7 +24,7 @@ public class TeacherCoursesCommand implements Command {
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
         CourseService courseService = new CourseService(connectionPool);
-        User user = (User) request.getSession().getAttribute("user");
+        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
 
         int page = 1;
         int recordsPerPage = 9;
@@ -44,7 +40,7 @@ public class TeacherCoursesCommand implements Command {
         request.setAttribute("currentPage", page);
 
         request.setAttribute("pageToInclude", "/teacher/myCourses.jsp");
-        request.setAttribute("myCourses", courseService.getAllTeacherCourses(user, (page - 1) * recordsPerPage,recordsPerPage));
+        request.setAttribute("myCourses", courseService.getAllTeacherCourses(userDTO, (page - 1) * recordsPerPage,recordsPerPage));
         request.setAttribute("servlet", "teacherCourses");
 
         request.getRequestDispatcher("/teacher/teacherPage.jsp").forward(request, response);

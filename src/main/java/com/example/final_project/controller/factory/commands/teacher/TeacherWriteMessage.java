@@ -2,11 +2,7 @@ package com.example.final_project.controller.factory.commands.teacher;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.MessageDao;
-import com.example.final_project.database.dao.UserDao;
-import com.example.final_project.entities.message.MessageBuilder;
-import com.example.final_project.entities.message.Status;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.MessagesService;
 import com.example.final_project.services.UserService;
 
@@ -27,7 +23,7 @@ public class TeacherWriteMessage implements Command {
         ConnectionPool connectionPool = (ConnectionPool) req.getSession().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
 
-        User receiver = userService.findUser(req.getParameter("receiver"));
+        UserDTO receiver = userService.findUser(req.getParameter("receiver"));
         String subject = req.getParameter("subject");
         String text = req.getParameter("text");
 
@@ -38,7 +34,7 @@ public class TeacherWriteMessage implements Command {
         }
 
         MessagesService messagesService = new MessagesService(connectionPool);
-        messagesService.sendMessage(receiver,(User)req.getSession().getAttribute("user"),subject,text);
+        messagesService.sendMessage(receiver,(UserDTO)req.getSession().getAttribute("user"),subject,text);
 
         response.sendRedirect("/project/controller?command=teacherWriteMessage");
 

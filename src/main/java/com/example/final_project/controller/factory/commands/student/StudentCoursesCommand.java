@@ -2,12 +2,10 @@ package com.example.final_project.controller.factory.commands.student;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.dao.CoursesDao;
-import com.example.final_project.entities.course.Course;
-import com.example.final_project.entities.course.State;
-import com.example.final_project.entities.user.User;
+import com.example.final_project.dto.CourseDTO;
+import com.example.final_project.database.entities.course.State;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
-import com.example.final_project.utilities.CoursesFilter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -29,7 +27,7 @@ public class StudentCoursesCommand implements Command {
         ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
         CourseService courseService = new CourseService(connectionPool);
 
-        User user = (User) request.getSession().getAttribute("user");
+        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
         State state = new CourseService(connectionPool).validateCourseState(request.getParameter("courseState"));
 
 
@@ -39,7 +37,7 @@ public class StudentCoursesCommand implements Command {
             page = Integer.parseInt(request.getParameter("page"));
 
 
-        List<Course> coursesList =  courseService.selectStatedAmountOfUserCourses(user, (page - 1) * recordsPerPage, recordsPerPage, state);
+        List<CourseDTO> coursesList =  courseService.selectStatedAmountOfUserCourses(userDTO, (page - 1) * recordsPerPage, recordsPerPage, state);
         int noOfRecords = courseService.getCoursesAmount();
         int noOfPages = (int)Math.ceil(noOfRecords * 1.0
                 / recordsPerPage);
