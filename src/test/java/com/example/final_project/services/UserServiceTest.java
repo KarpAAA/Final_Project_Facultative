@@ -72,6 +72,6 @@ class UserServiceTest {
         userBuilder.setAge(0);
         List<String> errorList = userService.validateUser("123",userBuilder.getUser());
 
-        Assertions.assertTrue(errorList.size()==3);
+        Assertions.assertTrue(errorList.size()==2);
     }
 }

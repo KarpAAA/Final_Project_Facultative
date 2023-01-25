@@ -26,7 +26,7 @@ public class AdminAddTeacher implements Command {
         req.getRequestDispatcher("/admin/teacherRegistration.jsp").forward(req,resp);
     }
     private void executePost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) req.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) req.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
 
         User user = formUser(req);

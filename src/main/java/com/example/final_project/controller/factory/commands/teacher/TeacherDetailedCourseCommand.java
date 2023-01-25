@@ -25,7 +25,7 @@ public class TeacherDetailedCourseCommand implements Command {
     }
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         String courseTitle = request.getParameter("title");
 
         CourseService courseService = new CourseService(connectionPool);
@@ -42,7 +42,7 @@ public class TeacherDetailedCourseCommand implements Command {
         request.getRequestDispatcher("/teacher/teacherPage.jsp").forward(request, response);
     }
     private void executePost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         String courseTitle = request.getParameter("title");
         UserService userService = new UserService(connectionPool);
         if(request.getParameter("action") != null && request.getParameter("action").compareTo("saveChanges") == 0){

@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class AdminBlockUnlockStudent implements Command {
@@ -19,13 +20,20 @@ public class AdminBlockUnlockStudent implements Command {
     }
     private void executePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         String login = request.getParameter("login");
         String toDo = request.getParameter("do");
         UserService userService = new UserService(connectionPool);
 
-        userService.blockOrUnlockStudent(toDo,login);
+        ArrayList<String> blockedUsers = (ArrayList<String>) request.getServletContext().getAttribute("blockedUsers");
+        if (toDo != null && toDo.compareTo("block") == 0) {
+            blockedUsers.add(login);
+        }
+        else {
+            blockedUsers.remove(login);
+        }
 
+        userService.blockOrUnlockStudent(toDo,login);
         response.sendRedirect("/project/controller?command=adminUsers");
     }
 

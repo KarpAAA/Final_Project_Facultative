@@ -97,9 +97,12 @@
                         </button>
                     </a>
                     <br>
-                    <button type="button" class="myButton">
-                        <span class="glyphicon glyphicon-calendar"></span> ${sessionScope.get("bundle").getString("calendar")}
-                    </button>
+                    <a href="/project/controller?command=calendar">
+
+                        <button type="button" class="myButton">
+                            <span class="glyphicon glyphicon-calendar"></span> ${sessionScope.get("bundle").getString("calendar")}
+                        </button>
+                    </a>
                     <br>
 
                     <a href="/project/controller?command=settings">

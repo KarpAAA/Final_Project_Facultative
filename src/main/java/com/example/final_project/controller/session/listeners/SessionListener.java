@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -17,7 +18,8 @@ public class SessionListener implements HttpSessionListener {
     public void sessionCreated(HttpSessionEvent se) {
         try {
             ConnectionPool connectionPool = ConnectionPool.create();
-            se.getSession().setAttribute("connectionPool", connectionPool);
+            se.getSession().getServletContext().setAttribute("connectionPool", connectionPool);
+            se.getSession().getServletContext().setAttribute("blockedUsers", new ArrayList<String>());
 
             ResourceBundle defaultBundle =
                     ResourceBundle.getBundle("locale" , new Locale("en"));

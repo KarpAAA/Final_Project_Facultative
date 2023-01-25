@@ -25,11 +25,11 @@ public class LoggingFilter implements Filter {
         if (servletRequest.getParameter("command") != null
                 && servletRequest.getParameter("command").compareTo("users") == 0) {
             HttpServletRequest req = (HttpServletRequest) servletRequest;
-            ConnectionPool connectionPool = (ConnectionPool) req.getSession().getAttribute("connectionPool");
-            UserDTO userDTO = (UserDTO) req.getSession().getAttribute("user");
-            if (userDTO.getRole() == Role.Student) {
+            UserDTO user = (UserDTO) req.getSession().getAttribute("user");
+
+            if (user.getRole() == Role.Student) {
                 req.setAttribute("toRedirect", "/project/controller?command=studentCourses&page=1");
-            } else if (userDTO.getRole() == Role.Teacher) {
+            } else if (user.getRole() == Role.Teacher) {
                 req.setAttribute("toRedirect", "/project/controller?command=teacherCourses&page=1");
             } else {
                 req.setAttribute("toRedirect", "/project/controller?command=adminCourses&page=1");

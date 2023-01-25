@@ -27,7 +27,7 @@ public class LoggingCommand implements Command {
     }
 
     private void executePost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) req.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) req.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
         UserDTO userDTO = userService.identifyUser(req.getParameter("login"), req.getParameter("pwd"));
         if (userDTO == null || userDTO.getBlocked_state() == Blocked_State.BLOCKED) {

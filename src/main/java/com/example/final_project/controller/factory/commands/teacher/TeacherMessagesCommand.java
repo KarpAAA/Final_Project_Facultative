@@ -24,7 +24,7 @@ public class TeacherMessagesCommand implements Command {
     }
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
         UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
 

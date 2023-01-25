@@ -39,6 +39,7 @@ public class CommandFactory {
         COMMAND_MAP.put("logOut", new LogOutCommand());
         COMMAND_MAP.put("settings", new SettingsCommand());
         COMMAND_MAP.put("users", new UsersCommand());
+        COMMAND_MAP.put("calendar", new CalendarCommand());
 
         COMMAND_MAP.put("teacherAddStudent", new TeacherAddStudentToCourseCommand());
         COMMAND_MAP.put("teacherCourses", new TeacherCoursesCommand());
@@ -49,6 +50,9 @@ public class CommandFactory {
     }
 
     public Command defineCommand(HttpServletRequest request, HttpServletResponse response) {
+        if(request.getAttribute("ifBlockedUser")!=null){
+            return COMMAND_MAP.get("logOut");
+        }
         Command current = new DefaultCommand();
 
         String action = request.getParameter("command");

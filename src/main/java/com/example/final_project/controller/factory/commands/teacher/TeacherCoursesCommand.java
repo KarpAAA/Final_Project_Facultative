@@ -22,7 +22,7 @@ public class TeacherCoursesCommand implements Command {
     private void executePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         CourseService courseService = new CourseService(connectionPool);
         UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
 

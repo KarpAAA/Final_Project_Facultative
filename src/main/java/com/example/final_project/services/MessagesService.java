@@ -6,22 +6,24 @@ import com.example.final_project.database.entities.message.Message;
 import com.example.final_project.dto.MessageDTO;
 import com.example.final_project.database.entities.message.Status;
 import com.example.final_project.dto.UserDTO;
-import com.example.final_project.utilities.MessageMapper;
-import com.example.final_project.utilities.UserMapper;
+import com.example.final_project.utilities.mappers.MessageMapper;
+import com.example.final_project.utilities.mappers.UserMapper;
+import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MessagesService {
     private final MessageDao messageDao;
-
+    private final MessageMapper messageMapper = Mappers.getMapper(MessageMapper.class);
+    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
     public MessagesService(ConnectionPool connectionPool) {
         this.messageDao = new MessageDao(connectionPool);
     }
 
     public List<MessageDTO> getUserMessages(UserDTO userDTO) {
-        return messageDao.findMessagesByReceiver(UserMapper.userDTOToUser(userDTO)).stream()
-                .map(MessageMapper::messageToMessageDTO)
+        return messageDao.findMessagesByReceiver(userMapper.userDTOToUser(userDTO)).stream()
+                .map(messageMapper::messageToMessageDTO)
                 .sorted(
                 (message, message1) -> message.getStatus().compareTo(message1.getStatus()) * -1
         ).collect(Collectors.toList());
@@ -31,15 +33,15 @@ public class MessagesService {
         messageDao.sendMessage(new Message(-1,
                 text,
                 subject,
-                UserMapper.userDTOToUser(sender),
-                UserMapper.userDTOToUser(receiver),
+                userMapper.userDTOToUser(sender),
+                userMapper.userDTOToUser(receiver),
                 Status.UNREAD.name()));
     }
 
     public void changeStatus(List<MessageDTO> messageDTOList) {
         messageDao.changeStatus(messageDTOList
                 .stream()
-                .map(MessageMapper::messageDTOToMessage)
+                .map(messageMapper::messageDTOToMessage)
                 .collect(Collectors.toList()));
     }
 }

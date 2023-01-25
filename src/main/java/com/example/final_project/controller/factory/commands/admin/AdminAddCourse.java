@@ -8,8 +8,9 @@ import com.example.final_project.database.entities.course.State;
 import com.example.final_project.database.entities.user.Role;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.UserService;
-import com.example.final_project.utilities.UserMapper;
+import com.example.final_project.utilities.mappers.UserMapper;
 import com.example.final_project.validation.Validator;
+import org.mapstruct.factory.Mappers;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class AdminAddCourse implements Command {
 
     private void executePost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 
-        ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
         CourseService courseService = new CourseService(connectionPool);
 
@@ -65,7 +66,7 @@ public class AdminAddCourse implements Command {
         courseBuilder.setTitle(req.getParameter("title"))
                 .setPrice(Integer.parseInt(req.getParameter("price")))
                 .setTopic(req.getParameter("topic"))
-                .setTeacher(UserMapper.userDTOToUser(userService.findUser(req.getParameter("teacher"))))
+                .setTeacher(Mappers.getMapper(UserMapper.class).userDTOToUser(userService.findUser(req.getParameter("teacher"))))
                 .setState(State.NotStarted)
                 .setMaxStudentsAmount(Integer.parseInt(req.getParameter("maxStudentsAmount")))
                 .setDescription("");

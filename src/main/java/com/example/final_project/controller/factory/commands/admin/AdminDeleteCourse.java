@@ -22,7 +22,7 @@ public class AdminDeleteCourse implements Command {
     }
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         CourseService courseService = new CourseService(connectionPool);
         courseService.deleteCourse(request.getParameter("title"));
 

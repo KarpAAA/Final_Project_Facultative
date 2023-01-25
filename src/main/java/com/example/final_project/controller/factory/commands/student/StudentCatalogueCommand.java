@@ -28,7 +28,7 @@ public class StudentCatalogueCommand implements Command {
     }
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
         CourseService courseService = new CourseService(connectionPool);
         request.getSession().setAttribute("teachersList", userService.getUsersByRole(Role.Teacher));

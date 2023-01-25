@@ -9,9 +9,10 @@ import com.example.final_project.database.entities.course.State;
 import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.UserService;
-import com.example.final_project.utilities.CourseMapper;
-import com.example.final_project.utilities.UserMapper;
+import com.example.final_project.utilities.mappers.CourseMapper;
+import com.example.final_project.utilities.mappers.UserMapper;
 import com.example.final_project.validation.Validator;
+import org.mapstruct.factory.Mappers;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +31,7 @@ public class AdminCourseEditingCommand implements Command{
     }
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         String courseTitle = request.getParameter("courseTitle");
 
         CourseService courseService = new CourseService(connectionPool);
@@ -50,7 +51,7 @@ public class AdminCourseEditingCommand implements Command{
     }
 
     private void executePost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) req.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) req.getServletContext().getAttribute("connectionPool");
         CourseService courseService = new CourseService(connectionPool);
         if(req.getParameter("action") != null && req.getParameter("action").compareTo("editCourse") == 0){
 
@@ -69,7 +70,7 @@ public class AdminCourseEditingCommand implements Command{
 
             }
             else {
-                req.setAttribute("course", CourseMapper.courseToCourseDTO(course));
+                req.setAttribute("course", Mappers.getMapper(CourseMapper.class).courseToCourseDTO(course));
                 req.setAttribute("pageToInclude", "/admin/editingCourse.jsp");
                 req.getRequestDispatcher("/admin/adminPage.jsp").forward(req, resp);
 
@@ -90,7 +91,7 @@ public class AdminCourseEditingCommand implements Command{
         courseBuilder.setTitle(req.getParameter("courseTitle"))
                 .setPrice(Integer.parseInt(req.getParameter("price")))
                 .setTopic(req.getParameter("topic"))
-                .setTeacher(UserMapper.userDTOToUser(userService.findUser(req.getParameter("teacher"))))
+                .setTeacher(Mappers.getMapper(UserMapper.class).userDTOToUser(userService.findUser(req.getParameter("teacher"))))
                 .setState(State.NotStarted)
                 .setMaxStudentsAmount(Integer.parseInt(req.getParameter("maxStudentsAmount")))
                 .setDescription("");

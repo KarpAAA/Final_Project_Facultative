@@ -38,6 +38,7 @@ public class UserDTO {
         this.phone = phone;
         this.photo = photo;
 
+
         base64String = Base64.getEncoder().encodeToString(this.photo);
     }
 

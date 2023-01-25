@@ -7,15 +7,17 @@ import com.example.final_project.dto.CourseDTO;
 import com.example.final_project.database.entities.course.State;
 
 import com.example.final_project.dto.UserDTO;
-import com.example.final_project.utilities.CourseMapper;
+import com.example.final_project.utilities.mappers.CourseMapper;
 import com.example.final_project.utilities.CoursesFilter;
-import com.example.final_project.utilities.UserMapper;
+import com.example.final_project.utilities.mappers.MeetingMapper;
+import com.example.final_project.utilities.mappers.UserMapper;
 import com.example.final_project.validation.Validator;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileExistsException;
+import org.mapstruct.factory.Mappers;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 public class CourseService {
     private final CoursesDao courseDao;
     private ConnectionPool connectionPool;
+    private final CourseMapper courseMapper = Mappers.getMapper(CourseMapper.class);
 
     public CourseService(ConnectionPool connectionPool) {
         this.courseDao = new CoursesDao(connectionPool);
@@ -40,7 +43,7 @@ public class CourseService {
     }
 
     public CourseDTO getCourseByTitle(String courseTitle) {
-        return CourseMapper.courseToCourseDTO(courseDao.findCourse(courseTitle));
+        return courseMapper.courseToCourseDTO(courseDao.findCourse(courseTitle));
     }
 
     public List<String> validateCourse(Course course) {
@@ -104,7 +107,7 @@ public class CourseService {
                         }
                         FileInputStream fileInputStream = new FileInputStream("C:\\Users\\ivank\\IdeaProjects\\Final_Project\\src\\main\\webapp\\userImages\\" + fileItem.getName());
                         courseDTO.setPhoto(fileInputStream.readAllBytes());
-                        courseDao.setPhotoToCourse(CourseMapper.courseDTOToCourse(courseDTO));
+                        courseDao.setPhotoToCourse(courseMapper.courseDTOToCourse(courseDTO));
                     }
                 }
             }
@@ -134,13 +137,13 @@ public class CourseService {
     }
 
     public CourseDTO findCourse(String title) {
-        return CourseMapper.courseToCourseDTO(courseDao.findCourse(title));
+        return courseMapper.courseToCourseDTO(courseDao.findCourse(title));
     }
 
     public List<CourseDTO> selectCoursesByCondition(CoursesFilter coursesFilter) {
         return courseDao.selectCoursesByCondition(coursesFilter)
                 .stream()
-                .map(CourseMapper::courseToCourseDTO)
+                .map(courseMapper::courseToCourseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -165,9 +168,9 @@ public class CourseService {
     }
 
     public List<CourseDTO> getAllTeacherCourses(UserDTO userDTO, int i, int recordsPerPage) {
-        return courseDao.getAllTeacherCourses(UserMapper.userDTOToUser(userDTO), i,recordsPerPage)
+        return courseDao.getAllTeacherCourses(Mappers.getMapper(UserMapper.class).userDTOToUser(userDTO), i,recordsPerPage)
                 .stream()
-                .map(CourseMapper::courseToCourseDTO)
+                .map(courseMapper::courseToCourseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -176,9 +179,9 @@ public class CourseService {
     }
 
     public List<CourseDTO> selectStatedAmountOfUserCourses(UserDTO userDTO, int i, int recordsPerPage, State state) {
-        return courseDao.selectStatedAmountOfUserCourses(UserMapper.userDTOToUser(userDTO), i, recordsPerPage, state)
+        return courseDao.selectStatedAmountOfUserCourses(Mappers.getMapper(UserMapper.class).userDTOToUser(userDTO), i, recordsPerPage, state)
                 .stream()
-                .map(CourseMapper::courseToCourseDTO)
+                .map(courseMapper::courseToCourseDTO)
                 .collect(Collectors.toList());
     }
 

@@ -48,11 +48,13 @@ public class SecuirtyFilter implements Filter {
         STUDENT_COMMAND_MAP.put("studentMessages", new StudentsMessagesCommand());
         STUDENT_COMMAND_MAP.put("registerUserToCourse", new RegisterUserToCourse());
         STUDENT_COMMAND_MAP.put("deleteAccount", new UserDeleteAccount());
+        STUDENT_COMMAND_MAP.put("calendar", new CalendarCommand());
 
         DEFAULT_COMMAND_MAP.put("default", new DefaultCommand());
         DEFAULT_COMMAND_MAP.put("logOut", new LogOutCommand());
         DEFAULT_COMMAND_MAP.put("settings", new SettingsCommand());
         DEFAULT_COMMAND_MAP.put("users", new UsersCommand());
+
 
         TEACHER_COMMAND_MAP.put("teacherAddStudent", new TeacherAddStudentToCourseCommand());
         TEACHER_COMMAND_MAP.put("teacherCourses", new TeacherCoursesCommand());
@@ -60,6 +62,7 @@ public class SecuirtyFilter implements Filter {
         TEACHER_COMMAND_MAP.put("teacherMessages", new TeacherMessagesCommand());
         TEACHER_COMMAND_MAP.put("teacherWriteMessage", new TeacherWriteMessage());
         TEACHER_COMMAND_MAP.put("deleteUserFromCourse", new DeleteUserFromCourse());
+        TEACHER_COMMAND_MAP.put("calendar", new CalendarCommand());
     }
 
     @Override
@@ -71,8 +74,8 @@ public class SecuirtyFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
 
         HttpServletRequest req = (HttpServletRequest) servletRequest;
-        ConnectionPool connectionPool = (ConnectionPool) req.getSession().getAttribute("connectionPool");
-        UserDTO userDTO = (UserDTO) req.getSession().getAttribute("user");
+
+        UserDTO user = (UserDTO) req.getSession().getAttribute("user");
         String command;
         if (req.getParameter("command") != null) {
             command = req.getParameter("command");
@@ -82,16 +85,16 @@ public class SecuirtyFilter implements Filter {
         }
 
 
-        if (userDTO == null) {
+        if (user == null) {
             if (command.equals("") || DEFAULT_COMMAND_MAP.containsKey(command)) ;
             else throw new NoAccessProvidedException();
-        } else if (userDTO.getRole() == Role.Admin) {
+        } else if (user.getRole() == Role.Admin) {
             if (ADMIN_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
             else throw new NoAccessProvidedException();
-        } else if (userDTO.getRole() == Role.Teacher) {
+        } else if (user.getRole() == Role.Teacher) {
             if (TEACHER_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
             else throw new NoAccessProvidedException();
-        } else if (userDTO.getRole() == Role.Student) {
+        } else if (user.getRole() == Role.Student) {
             if (STUDENT_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
             else throw new NoAccessProvidedException();
             if(command.compareTo("deleteAccount") == 0 && req.getParameter("teacher")!=null) throw new NoAccessProvidedException();

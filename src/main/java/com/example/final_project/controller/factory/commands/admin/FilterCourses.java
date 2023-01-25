@@ -37,7 +37,7 @@ public class FilterCourses implements Command {
     private CoursesFilter formCourseFilter(HttpServletRequest request) {
 
         CoursesFilter coursesFilter = new CoursesFilter();
-        ConnectionPool connectionPool = (ConnectionPool) request.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
         CourseService courseService = new CourseService(connectionPool);
 

@@ -20,7 +20,7 @@ public class TeacherWriteMessage implements Command {
     }
 
     private void executePost(HttpServletRequest req, HttpServletResponse response) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) req.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) req.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
 
         UserDTO receiver = userService.findUser(req.getParameter("receiver"));

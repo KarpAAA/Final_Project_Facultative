@@ -8,14 +8,16 @@ import com.example.final_project.dto.CourseDTO;
 import com.example.final_project.database.entities.user.Blocked_State;
 import com.example.final_project.database.entities.user.Role;
 import com.example.final_project.dto.UserDTO;
-import com.example.final_project.utilities.CourseMapper;
-import com.example.final_project.utilities.UserMapper;
+import com.example.final_project.utilities.mappers.CourseMapper;
+import com.example.final_project.utilities.mappers.MessageMapper;
+import com.example.final_project.utilities.mappers.UserMapper;
 import com.example.final_project.validation.Validator;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileExistsException;
+import org.mapstruct.factory.Mappers;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 
 public class UserService {
     private final UserDao userDao;
+    private final UserMapper userMapper = Mappers.getMapper(UserMapper.class);
     private ConnectionPool connectionPool;
 
     public UserService(ConnectionPool connectionPool) {
@@ -38,24 +41,24 @@ public class UserService {
     }
 
     public List<UserDTO> getUsersByRole(Role role) {
-        return userDao.getUsersByRole(role).stream().map(UserMapper::userToUserDTO).collect(Collectors.toList());
+        return userDao.getUsersByRole(role).stream().map(userMapper::userToUserDTO).collect(Collectors.toList());
     }
 
     public void blockOrUnlockStudent(String toDo, String login) {
         if (toDo != null && toDo.compareTo("block") == 0) {
-            userDao.updateBlockedState(UserMapper.userDTOToUser(findUser(login)), Blocked_State.BLOCKED);
+            userDao.updateBlockedState(userMapper.userDTOToUser(findUser(login)), Blocked_State.BLOCKED);
         } else {
-            userDao.updateBlockedState(UserMapper.userDTOToUser(findUser(login)), Blocked_State.UNLOCKED);
+            userDao.updateBlockedState(userMapper.userDTOToUser(findUser(login)), Blocked_State.UNLOCKED);
         }
     }
 
     public Map<Integer, List<UserDTO>> getUsersMarksMap(CourseDTO courseDTO) {
-        Map<Integer, List<User>> map = userDao.selectUsersByCourse(CourseMapper.courseDTOToCourse(courseDTO));
+        Map<Integer, List<User>> map = userDao.selectUsersByCourse(Mappers.getMapper(CourseMapper.class).courseDTOToCourse(courseDTO));
         Map<Integer, List<UserDTO>> resultMap = new HashMap<>();
         for(var entry:map.entrySet()){
             resultMap.put(entry.getKey(), entry.getValue()
                     .stream()
-                    .map(UserMapper::userToUserDTO).collect(Collectors.toList()));
+                    .map(userMapper::userToUserDTO).collect(Collectors.toList()));
         }
         return resultMap;
     }
@@ -66,9 +69,9 @@ public class UserService {
         CoursesDao coursesDao = new CoursesDao(connectionPool);
         for (var user : userDTOS) {
             map.put(user,
-                    coursesDao.getUserCourses(UserMapper.userDTOToUser(user))
+                    coursesDao.getUserCourses(userMapper.userDTOToUser(user))
                             .stream()
-                            .map(CourseMapper::courseToCourseDTO)
+                            .map(Mappers.getMapper(CourseMapper.class)::courseToCourseDTO)
                             .collect(Collectors.toList()));
         }
 
@@ -110,7 +113,7 @@ public class UserService {
                                 ,500,500);
                         FileInputStream fileInputStream = new FileInputStream("C:\\Users\\ivank\\IdeaProjects\\Final_Project\\src\\main\\webapp\\userImages\\"+"500x500." + fileItem.getName());
                         userDTO.setPhoto(fileInputStream);
-                        userDao.updateUserPhoto(UserMapper.userDTOToUser(userDTO));
+                        userDao.updateUserPhoto(userMapper.userDTOToUser(userDTO));
                     }
                 }
             }
@@ -136,11 +139,11 @@ public class UserService {
     }
 
     public UserDTO findUser(String userLogin) {
-        return UserMapper.userToUserDTO(userDao.findUser(userLogin));
+        return userMapper.userToUserDTO(userDao.findUser(userLogin));
     }
 
     public UserDTO identifyUser(String login, String pwd) {
-        return UserMapper.userToUserDTO(userDao.identifyUser(login, pwd));
+        return userMapper.userToUserDTO(userDao.identifyUser(login, pwd));
     }
 
     public void updateUser(User user) {
@@ -148,11 +151,11 @@ public class UserService {
     }
 
     public void deleteUser(UserDTO userDTO) {
-        userDao.deleteUser(UserMapper.userDTOToUser(userDTO));
+        userDao.deleteUser(userMapper.userDTOToUser(userDTO));
     }
 
     public String getUserRegisteredState(UserDTO userDTO, CourseDTO courseDTO) {
-        return userDao.getUserRegisteredState(UserMapper.userDTOToUser(userDTO), CourseMapper.courseDTOToCourse(courseDTO));
+        return userDao.getUserRegisteredState(userMapper.userDTOToUser(userDTO), Mappers.getMapper(CourseMapper.class).courseDTOToCourse(courseDTO));
     }
 
     public int getUserGradeForCourse(String login, String courseTitle) {
@@ -162,7 +165,7 @@ public class UserService {
     public void saveMarks(Map<Integer, List<UserDTO>> students, String courseTitle, int[] newMarks) {
         Map<Integer, List<User>> resultMap = new HashMap<>();
         for(var entry:students.entrySet()){
-            resultMap.put(entry.getKey(), entry.getValue().stream().map(UserMapper::userDTOToUser).collect(Collectors.toList()));
+            resultMap.put(entry.getKey(), entry.getValue().stream().map(userMapper::userDTOToUser).collect(Collectors.toList()));
         }
         userDao.saveMarks(resultMap, courseTitle, newMarks);
     }
@@ -171,10 +174,10 @@ public class UserService {
         Map<CourseDTO, List<UserDTO>> resultMap = new HashMap<>();
         CoursesDao coursesDao = new CoursesDao(connectionPool);
 
-        for (var course : coursesDao.getAllTeacherCourses(UserMapper.userDTOToUser(teacher), 0,100)) {
-            resultMap.put(CourseMapper.courseToCourseDTO(course), userDao.getRegisteredUserToCourse(course.getTitle())
+        for (var course : coursesDao.getAllTeacherCourses(userMapper.userDTOToUser(teacher), 0,100)) {
+            resultMap.put(Mappers.getMapper(CourseMapper.class).courseToCourseDTO(course), userDao.getRegisteredUserToCourse(course.getTitle())
                     .stream()
-                    .map(UserMapper::userToUserDTO)
+                    .map(userMapper::userToUserDTO)
                     .collect(Collectors.toList()));
 
         }
@@ -207,6 +210,6 @@ public class UserService {
 
 
     public void updateUserPassword(UserDTO user, String pwd) {
-        userDao.updateUserPassword(UserMapper.userDTOToUser(user),pwd);
+        userDao.updateUserPassword(userMapper.userDTOToUser(user),pwd);
     }
 }

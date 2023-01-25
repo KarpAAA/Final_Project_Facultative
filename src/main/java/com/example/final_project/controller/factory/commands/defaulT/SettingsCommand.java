@@ -24,7 +24,7 @@ public class SettingsCommand implements Command {
         else executeGet(request,response);
     }
     private void executePost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ConnectionPool connectionPool = (ConnectionPool) req.getSession().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) req.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
 
         if (req.getParameter("action") != null
