@@ -72,72 +72,75 @@
 <div class="row">
     <div class="col-md-2">
 
-            <nav class="sidenav" id="sidebar">
+        <nav class="sidenav" id="sidebar">
 
 
-                <div class="nav navbar-header">
-                    <a class="navbar-brand" style="font-size: 30px; color: #EBEFF2" href="#">Be to study</a>
+            <div class="nav navbar-header">
+                <a class="navbar-brand" style="font-size: 30px; color: #EBEFF2" href="#">Be to study</a>
+                <br><br>
+                <div class="dropdown" style="margin-left: 15px;">
+                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">${lang}
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a href="/project/controller?command=studentCourses&page=1&lang=en">EN</a></li>
+                        <li><a href="/project/controller?command=studentCourses&page=1&lang=ua">UKR</a></li>
+
+                    </ul>
+                </div>
+            </div>
+
+
+            <div style="padding-top: 50px">
+                <div style="width:100px;height:200px; margin-top:80px ;margin-left: 20px">
+                    <img class="img-rounded"
+                         src="data:image/jpg;base64,${user.base64String}"
+                         style="width:100%;height:50%; border-radius: 50%;">
                     <br><br>
-                    <div class="dropdown" style="margin-left: 15px;">
-                        <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">${lang}
-                            <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <li><a href="/project/controller?command=studentCourses&page=1&lang=en">EN</a></li>
-                            <li><a href="/project/controller?command=studentCourses&page=1&lang=ua">UKR</a></li>
-
-                        </ul>
-                    </div>
+                    <p style="text-align: center">${user.name} ${user.surname}</p>
                 </div>
 
 
-                <div style="padding-top: 50px">
-                    <div style="width:100px;height:200px; margin-top:80px ;margin-left: 20px">
-                        <img class="img-rounded"
-                             src="data:image/jpg;base64,${user.base64String}"
-                             style="width:100%;height:50%; border-radius: 50%;">
-                        <br><br>
-                        <p style="text-align: center">${user.name} ${user.surname}</p>
-                    </div>
+                <div class="btn-group-vertical" style="padding: 20px;">
+                    <a href="/project/controller?command=studentCourses">
+                        <button type="button" class="myButton">
+                            <span class="glyphicon glyphicon-th-list"></span> ${sessionScope.get("bundle").getString("myCourses")}
+                        </button>
+                    </a>
+                    <br>
+                    <a href="/project/controller?command=studentCatalogue">
+                        <button type="button" class="myButton">
+                            <span class="glyphicon glyphicon-th"></span> ${sessionScope.get("bundle").getString("catalogue")}
+                        </button>
+                    </a>
+                    <br>
+                    <a href="/project/controller?command=studentMessages">
+                        <button type="button" class="myButton">
+                            <span class="glyphicon glyphicon-envelope"></span> ${sessionScope.get("bundle").getString("messages")}
+                        </button>
+                    </a>
+                    <br>
+                    <a href="/project/controller?command=calendar">
 
-
-                    <div class="btn-group-vertical" style="padding: 20px;">
-                        <a href="/project/controller?command=studentCourses">
-                            <button type="button" class="myButton">
-                                <span class="glyphicon glyphicon-th-list"></span> ${sessionScope.get("bundle").getString("myCourses")}
-                            </button>
-                        </a>
-                        <br>
-                        <a href="/project/controller?command=studentCatalogue">
-                            <button type="button" class="myButton">
-                                <span class="glyphicon glyphicon-th"></span> ${sessionScope.get("bundle").getString("catalogue")}
-                            </button>
-                        </a>
-                        <br>
-                        <a href="/project/controller?command=studentMessages">
-                            <button type="button" class="myButton">
-                                <span class="glyphicon glyphicon-envelope"></span> ${sessionScope.get("bundle").getString("messages")}
-                            </button>
-                        </a>
-                        <br>
                         <button type="button" class="myButton">
                             <span class="glyphicon glyphicon-calendar"></span> ${sessionScope.get("bundle").getString("calendar")}
                         </button>
-                        <br>
-                        <a href="/project/controller?command=settings">
-                            <button type="button" class="myButton">
-                                <span class="glyphicon glyphicon-cog"></span> ${sessionScope.get("bundle").getString("settings")}
-                            </button>
-                        </a>
-                        <br><br><br><br><br>
-                        <a href="http://localhost:8080/project/controller?command=logOut">
-                            <button type="button" class="myButton">
-                                <span class="glyphicon glyphicon-log-out"></span> ${sessionScope.get("bundle").getString("logOut")}
-                            </button>
-                        </a>
-                        <br><br>
-                    </div>
+                    </a>
+                    <br>
+                    <a href="/project/controller?command=settings">
+                        <button type="button" class="myButton">
+                            <span class="glyphicon glyphicon-cog"></span> ${sessionScope.get("bundle").getString("settings")}
+                        </button>
+                    </a>
+                    <br><br><br><br><br>
+                    <a href="http://localhost:8080/project/controller?command=logOut">
+                        <button type="button" class="myButton">
+                            <span class="glyphicon glyphicon-log-out"></span> ${sessionScope.get("bundle").getString("logOut")}
+                        </button>
+                    </a>
+                    <br><br>
                 </div>
-            </nav>
+            </div>
+        </nav>
 
     </div>
     <div class="col-md-10">
