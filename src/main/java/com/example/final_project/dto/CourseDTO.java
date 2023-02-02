@@ -3,7 +3,9 @@ package com.example.final_project.dto;
 import com.example.final_project.database.entities.course.State;
 
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Objects;
 
 public class CourseDTO {
     private final String title;
@@ -97,5 +99,16 @@ public class CourseDTO {
         return state;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CourseDTO courseDTO = (CourseDTO) o;
+        return Objects.equals(title, courseDTO.title);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(title);
+    }
 }

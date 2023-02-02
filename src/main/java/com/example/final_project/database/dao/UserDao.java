@@ -4,6 +4,7 @@ package com.example.final_project.database.dao;
 import com.example.final_project.database.connection.ConnectionPool;
 
 import com.example.final_project.database.entities.course.Course;
+import com.example.final_project.database.entities.task.Task;
 import com.example.final_project.database.entities.user.User;
 import com.example.final_project.database.entities.user.Blocked_State;
 import com.example.final_project.database.entities.user.Role;
@@ -29,18 +30,20 @@ public class UserDao {
 
         return new User(
                 resultSet.getString(1)
-                ,resultSet.getString(2)
-                ,resultSet.getString(3)
-                ,indentifyRole(resultSet.getInt(5))
-                ,resultSet.getString(4)
-                ,resultSet.getInt(7)
-                ,resultSet.getDate(9)
-                ,resultSet.getString(8)
-                ,resultSet.getString(10)
-                ,blob == null ? null:blob.getBytes(1,(int) blob.length())
-                ,indentifyBlockedState(resultSet.getInt(12))
+                , resultSet.getString(2)
+                , resultSet.getString(3)
+                , indentifyRole(resultSet.getInt(5))
+                , resultSet.getString(4)
+                , resultSet.getInt(7)
+                , resultSet.getDate(9)
+                , resultSet.getString(8)
+                , resultSet.getString(10)
+                , blob == null ? null : blob.getBytes(1, (int) blob.length())
+                , indentifyBlockedState(resultSet.getInt(12))
+                , resultSet.getInt(13)
         );
     }
+
     public User identifyUser(String login, String password) {
 
         User user = null;
@@ -67,6 +70,7 @@ public class UserDao {
 
         return user;
     }
+
     public User findUser(String login) {
 
         User user = null;
@@ -92,6 +96,7 @@ public class UserDao {
 
         return user;
     }
+
     public void insertUser(User user) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -110,6 +115,7 @@ public class UserDao {
 
 
     }
+
     public void updateUser(User user) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -130,6 +136,7 @@ public class UserDao {
 
 
     }
+
     public void updateUserPhoto(User user) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -143,6 +150,7 @@ public class UserDao {
             e.printStackTrace();
         }
     }
+
     public void deleteUser(User user) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -167,6 +175,7 @@ public class UserDao {
         statement.setBlob(6, new ByteArrayInputStream(user.getPhoto()));
         statement.executeUpdate();
     }
+
     private void updateAdditionalFieldsToUser(Connection connection, User user) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("UPDATE Additional_Info " +
                 "SET age = ?, " +
@@ -183,6 +192,7 @@ public class UserDao {
         statement.executeUpdate();
 
     }
+
     public void updateUserPassword(User user, String pwd) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -223,6 +233,7 @@ public class UserDao {
 
         return userList;
     }
+
     public List<User> selectAllUsers() {
         Connection connection = connectionPool.getConnection();
         List<User> userList = new ArrayList<>();
@@ -242,10 +253,11 @@ public class UserDao {
         }
         return userList;
     }
-    public Map<Integer, List<User>> selectUsersByCourse(Course course) {
+
+    public Map<User, Integer> selectUsersByCourse(Course course) {
 
         Connection connection = connectionPool.getConnection();
-        Map<Integer, List<User>> userMap = new HashMap<>();
+        Map<User, Integer> userMap = new HashMap<>();
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT user_login, grade FROM user_has_course " +
                     "WHERE course_title = ? AND user_state = 'Allowed'");
@@ -253,13 +265,7 @@ public class UserDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                if (!userMap.containsKey(resultSet.getInt(2))) {
-                    userMap.put(resultSet.getInt(2), new ArrayList<>());
-                }
-
-                userMap.get(resultSet.getInt(2))
-                        .add(findUser(resultSet.getString(1)));
-
+                userMap.put(findUser(resultSet.getString(1)), resultSet.getInt(2));
             }
 
             connectionPool.releaseConnection(connection);
@@ -268,6 +274,7 @@ public class UserDao {
         }
         return userMap;
     }
+
     public List<User> getRegisteredUserToCourse(String courseTitle) {
         Connection con = connectionPool.getConnection();
         List<User> userList = new ArrayList<>();
@@ -289,28 +296,58 @@ public class UserDao {
         }
     }
 
+    private void setCourseMarkToUser(Course course, User user, Map<Task, Integer> taskGrades) {
+        try {
+            Connection connection = connectionPool.getConnection();
+            PreparedStatement statement = connection.prepareStatement("UPDATE user_has_course SET grade = ?" +
+                    " WHERE user_login = ? AND course_title = ?");
 
-    public void saveMarks(Map<Integer, List<User>> userMap, String courseTitle, int[] newMarks) {
-        int counter = 0;
-        for (var entry : userMap.entrySet()) {
-            for (var user : entry.getValue()) {
-                try {
-                    Connection connection = connectionPool.getConnection();
-                    PreparedStatement statement = connection.prepareStatement("UPDATE user_has_course SET grade = ?" +
-                            " WHERE user_login = ? AND course_title = ?");
+            statement.setInt(1, calculateGrade(taskGrades));
+            statement.setString(2, user.getLogin());
+            statement.setString(3, course.getTitle());
 
-                    statement.setInt(1, newMarks[counter++]);
-                    statement.setString(2, user.getLogin());
-                    statement.setString(3, courseTitle);
 
-                    statement.executeUpdate();
-                    connectionPool.releaseConnection(connection);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            statement.executeUpdate();
+            connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
+    private int calculateGrade(Map<Task, Integer> taskGrades) {
+        double generalMark = 0;
+        for (var mark : taskGrades.values()) {
+            generalMark += mark;
+        }
+        return (int) Math.round(generalMark / taskGrades.size());
+    }
+
+    public void saveTaskMarks(Map<User, Map<Task, Integer>> userMap) {
+
+        try {
+            Connection connection = connectionPool.getConnection();
+            PreparedStatement statement = connection.prepareStatement("UPDATE user_has_task SET grade = ?" +
+                    " WHERE user_login = ? AND task_id = ?");
+            Course course = null;
+            for (var entry : userMap.entrySet()) {
+                for (var entry1 : entry.getValue().entrySet()) {
+                    course = entry1.getKey().getCourse();
+                    statement.setInt(1, entry1.getValue());
+                    statement.setString(2, entry.getKey().getLogin());
+                    statement.setInt(3, entry1.getKey().getId());
+                    statement.addBatch();
+
+                }
+                if (course != null) setCourseMarkToUser(course, entry.getKey(), entry.getValue());
+            }
+
+            statement.executeBatch();
+            connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void updateBlockedState(User user, Blocked_State blockedState) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -346,6 +383,7 @@ public class UserDao {
         }
 
     }
+
     public String getUserRegisteredState(User user, Course course) {
         Connection con = connectionPool.getConnection();
         try {
@@ -365,6 +403,7 @@ public class UserDao {
             throw new RuntimeException(e);
         }
     }
+
     public int getUserGradeForCourse(String userLogin, String courseTitle) {
         Connection con = connectionPool.getConnection();
         try {
@@ -393,6 +432,7 @@ public class UserDao {
         else return Role.Student;
 
     }
+
     private Blocked_State indentifyBlockedState(int state) {
 
         if (Blocked_State.BLOCKED.ordinal() == state) return Blocked_State.BLOCKED;
@@ -400,5 +440,23 @@ public class UserDao {
 
     }
 
+
+    public void updateUserBalance(User user, int price) {
+        try {
+            Connection connection = connectionPool.getConnection();
+            PreparedStatement statement = connection.prepareStatement("UPDATE Additional_Info " +
+                    "SET balance = ? " +
+                    "WHERE User_login = ?");
+
+            statement.setInt(1, user.getBalance() + price);
+            statement.setString(2, user.getLogin());
+            statement.executeUpdate();
+
+            connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 }

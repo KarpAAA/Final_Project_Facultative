@@ -29,9 +29,12 @@ public class CommandFactory {
         COMMAND_MAP.put("registration", new RegistrationCommand());
 
         COMMAND_MAP.put("studentCatalogue", new StudentCatalogueCommand());
+        COMMAND_MAP.put("studentPassTask", new StudentPassTask());
         COMMAND_MAP.put("studentCourses", new StudentCoursesCommand());
         COMMAND_MAP.put("studentDetailedCourse", new StudentDetailedCourseCommand());
         COMMAND_MAP.put("studentMessages", new StudentsMessagesCommand());
+        COMMAND_MAP.put("studentClearMessages", new StudentClearMessages());
+        COMMAND_MAP.put("receiveCerteficate", new StudentReceiveCerteficate());
         COMMAND_MAP.put("deleteAccount", new UserDeleteAccount());
         COMMAND_MAP.put("registerUserToCourse", new RegisterUserToCourse());
 
@@ -46,7 +49,12 @@ public class CommandFactory {
         COMMAND_MAP.put("teacherDetailedCourse", new TeacherDetailedCourseCommand());
         COMMAND_MAP.put("teacherMessages", new TeacherMessagesCommand());
         COMMAND_MAP.put("teacherWriteMessage", new TeacherWriteMessage());
+        COMMAND_MAP.put("teacherAddEvent", new TeacherAddEvent());
         COMMAND_MAP.put("deleteUserFromCourse", new DeleteUserFromCourse());
+        COMMAND_MAP.put("teacherDownloadStudentSolution", new TeacherDownloadStudentSolution());
+        COMMAND_MAP.put("operateWithTask", new TeacherOperateWithTask());
+        COMMAND_MAP.put("buyCourse", new StudentBuyCourse());
+        COMMAND_MAP.put("fillBalance", new StudentFillBalance());
     }
 
     public Command defineCommand(HttpServletRequest request, HttpServletResponse response) {

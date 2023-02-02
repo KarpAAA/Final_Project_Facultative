@@ -25,7 +25,7 @@ public class StudentsMessagesCommand implements Command {
         UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
 
         request.setAttribute("pageToInclude", "/client/userMessages.jsp");
-        request.setAttribute("messagesList", new MessagesService(connectionPool).getUserMessages(userDTO));
+        request.getSession().setAttribute("messagesList", new MessagesService(connectionPool).getUserMessages(userDTO));
         request.setAttribute("servlet", "messages");
 
         RequestDispatcher view

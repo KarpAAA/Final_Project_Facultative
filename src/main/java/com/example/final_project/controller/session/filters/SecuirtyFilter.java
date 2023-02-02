@@ -8,7 +8,6 @@ import com.example.final_project.controller.factory.commands.defaulT.*;
 import com.example.final_project.controller.factory.commands.student.*;
 import com.example.final_project.controller.factory.commands.teacher.*;
 import com.example.final_project.controller.session.exceptions.NoAccessProvidedException;
-import com.example.final_project.database.connection.ConnectionPool;
 import com.example.final_project.database.entities.user.Role;
 import com.example.final_project.dto.UserDTO;
 
@@ -49,6 +48,12 @@ public class SecuirtyFilter implements Filter {
         STUDENT_COMMAND_MAP.put("registerUserToCourse", new RegisterUserToCourse());
         STUDENT_COMMAND_MAP.put("deleteAccount", new UserDeleteAccount());
         STUDENT_COMMAND_MAP.put("calendar", new CalendarCommand());
+        STUDENT_COMMAND_MAP.put("studentClearMessages", new StudentClearMessages());
+        STUDENT_COMMAND_MAP.put("receiveCerteficate", new StudentReceiveCerteficate());
+        STUDENT_COMMAND_MAP.put("studentPassTask", new StudentPassTask());
+        STUDENT_COMMAND_MAP.put("buyCourse", new StudentBuyCourse());
+        STUDENT_COMMAND_MAP.put("fillBalance", new StudentFillBalance());
+
 
         DEFAULT_COMMAND_MAP.put("default", new DefaultCommand());
         DEFAULT_COMMAND_MAP.put("logOut", new LogOutCommand());
@@ -62,7 +67,10 @@ public class SecuirtyFilter implements Filter {
         TEACHER_COMMAND_MAP.put("teacherMessages", new TeacherMessagesCommand());
         TEACHER_COMMAND_MAP.put("teacherWriteMessage", new TeacherWriteMessage());
         TEACHER_COMMAND_MAP.put("deleteUserFromCourse", new DeleteUserFromCourse());
+        TEACHER_COMMAND_MAP.put("teacherAddEvent", new TeacherAddEvent());
         TEACHER_COMMAND_MAP.put("calendar", new CalendarCommand());
+        TEACHER_COMMAND_MAP.put("teacherDownloadStudentSolution", new TeacherDownloadStudentSolution());
+        TEACHER_COMMAND_MAP.put("operateWithTask", new TeacherOperateWithTask());
     }
 
     @Override

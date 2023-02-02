@@ -33,7 +33,7 @@ class UserServiceTest {
 
     private User getTestUser() {
         return new User("login", "password", "name", Role.Student, "1@1", 18, new Date(1), "Surname",
-                "+3809641345", new byte[]{1, 2, 3}, Blocked_State.UNLOCKED);
+                "+3809641345", new byte[]{1, 2, 3}, Blocked_State.UNLOCKED, 100);
     }
     private UserBuilder getTestUserBuilder(){
         UserBuilder userBuilder = new UserBuilder();

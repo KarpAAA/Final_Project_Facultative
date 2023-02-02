@@ -36,10 +36,13 @@
         </div>
         <ul class="nav nav-tabs" style="margin-top: 100px; margin-left: 55px;">
             <li class="nav-item">
-                <a class="nav-link active" href="/project/controller?command=teacherWriteMessage"
+                <a class="nav-link active" href="/project/controller?command=teacherMessages&action=received"
                    style="color: black">${sessionScope.get("bundle").getString("receives")}</a>
             </li>
-
+            <li class="nav-item">
+                <a class="nav-link active" href="/project/controller?command=teacherMessages&action=sent"
+                   style="color: black">${sessionScope.get("bundle").getString("sent")}</a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/project/controller?command=teacherWriteMessage"
                    style="color: black">${sessionScope.get("bundle").getString("sendMessage")}</a>
@@ -51,6 +54,7 @@
 
             <div class="col-sm-10">
                 <div class="panel-group">
+
                     <c:forEach var="entry" items="${map.entrySet()}">
 
                         <c:forEach var="student" items="${entry.getValue()}">
@@ -63,9 +67,9 @@
                                     <div style="margin-right: auto; margin-left: 0;">
                                         <a href="/project/controller?command=teacherAddStudent&add=true&userLogin=${student.login}&courseTitle=${entry.getKey().title}">
                                             <button class="btn btn-success"
-                                            <c:if test="${entry.getKey().currentStudentsAmount >= entry.getKey().maxStudentsAmount}">
-                                                disabled
-                                            </c:if>
+                                                    <c:if test="${entry.getKey().currentStudentsAmount >= entry.getKey().maxStudentsAmount}">
+                                                        disabled
+                                                    </c:if>
                                             >${sessionScope.get("bundle").getString("allow")}</button>
                                         </a>
                                         <a href="/project/controller?command=teacherAddStudent&add=false&userLogin=${student.login}&courseTitle=${entry.getKey().title}">
@@ -79,6 +83,19 @@
 
 
                     </c:forEach>
+
+                    <c:forEach var="message" items="${messages}">
+
+
+                        <div class="panel panel-primary" style="margin-top: 10px">
+                            <div class="panel-heading">${message.subject}</div>
+                            <div class="panel-body">
+                                To: ${message.receiver.name}<br>${message.text}
+                            </div>
+                        </div>
+
+                    </c:forEach>
+
                 </div>
             </div>
             <div class="col-sm-1"></div>

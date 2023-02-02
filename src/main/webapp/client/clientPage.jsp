@@ -1,9 +1,33 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
 <head>
 
 
     <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #EBEFF2;
+        }
+
+        .page {
+            min-height: 100%;
+            position: relative;
+            background-color: #EBEFF2;
+        }
+
+        .content {
+            padding: 10px;
+            padding-bottom: 45px;
+            text-align: justify;
+        }
+
+        .content {
+            height: 100%;
+            background-color: #EBEFF2;
+        }
 
         .wrapper {
             text-align: center;
@@ -97,6 +121,10 @@
                          style="width:100%;height:50%; border-radius: 50%;">
                     <br><br>
                     <p style="text-align: center">${user.name} ${user.surname}</p>
+                    <c:if test="${user.balance!=0}">
+                        <p style="text-align: center; margin-top: 5px;">Balance:<br>${user.balance} UAN</p>
+
+                    </c:if>
                 </div>
 
 
@@ -143,7 +171,7 @@
         </nav>
 
     </div>
-    <div class="col-md-10">
+    <div class="col-md-10" style="background-color: #EBEFF2">
 
         <jsp:include page="${pageToInclude}"/>
 

@@ -9,12 +9,12 @@ public class MeetingDTO {
     private final String title;
     private final String description;
     private final String link;
-    private final Course course;
+    private final CourseDTO course;
     private final Date startDate;
     private final Time time;
 
 
-    public MeetingDTO(String title, String description, String link, Course course, Date startDate, Time time) {
+    public MeetingDTO(String title, String description, String link, CourseDTO course, Date startDate, Time time) {
 
         this.title = title;
         this.description = description;
@@ -22,6 +22,7 @@ public class MeetingDTO {
         this.course = course;
         this.startDate = startDate;
         this.time = time;
+
     }
 
     public String getTitle() {
@@ -36,7 +37,7 @@ public class MeetingDTO {
         return link;
     }
 
-    public Course getCourse() {
+    public CourseDTO getCourse() {
         return course;
     }
 

@@ -34,7 +34,7 @@ class CourseServiceTest {
     private Course getTestCourse() {
         return new Course("title", "topic", "description",
                 new User("login", "password", "name", Role.Student, "1@1", 18, new Date(1), "Surname",
-                        "+3809641345", new byte[]{1, 2, 3}, Blocked_State.UNLOCKED)
+                        "+3809641345", new byte[]{1, 2, 3}, Blocked_State.UNLOCKED, 100)
                 , new Date(1), new Date(1), 120, 120, 120, State.InProgress, new byte[]{1, 2, 3});
     }
 

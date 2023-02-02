@@ -1,22 +1,9 @@
-<%@ page import="java.util.List" %>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body style="background-color: #EBEFF2">
 
 
-
-<div style="width: 1500px;height: 50px; padding-top: 50px; position: sticky; margin-left: 70px;">
+<div style="height: 50px; padding-top: 50px; position: sticky; margin-left: 70px;">
     <h1 style="font-size: 35px">${sessionScope.get("bundle").getString("settings")}: </h1>
 </div>
-
 <div class="row" style="margin-top: 60px;">
     <div class="col-sm-1"></div>
 
@@ -123,5 +110,3 @@
     <div class="col-sm-2"></div>
 </div>
 
-</body>
-</html>

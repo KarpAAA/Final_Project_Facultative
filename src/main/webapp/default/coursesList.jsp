@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "custom" uri = "/WEB-INF/courseTag.tld"%>
 
 <div style="background-color: #EBEFF2">
     <div class="row">
@@ -191,15 +192,10 @@
         <c:forEach begin="0" end="${3}" var="course" items="${coursesList}">
 
             <div class="col-sm-2" >
-                <div class="card" style="background-color: white; box-shadow: 5px 5px 10px 2px rgba(22,48,64,0.49);">
-                    <div class="card-body">
-                        <img class="img-rounded" src="data:image/jpg;base64,${course.base64String}"
-                             style="width:100%;height:20%; margin-bottom: 10px;">
-                        <p class="card-text" style="color: #a3adaa;margin-left: 15px">${sessionScope.get("bundle").getString("topic")}: ${course.topic}</p>
-                        <h5 class="card-title" style="color: black;margin-left: 15px">${sessionScope.get("bundle").getString("title")}: ${course.title}</h5>
-                        <p class="card-text" style="color: #1b4560;margin-left: 15px;margin-bottom: 15px">${sessionScope.get("bundle").getString("price")}: ${course.price}</p>
-                    </div>
-                </div>
+                <custom:show_Course
+                        bundle="${sessionScope.get('bundle')}"
+                        course="${course}"/>
+
             </div>
 
         </c:forEach>
@@ -213,15 +209,9 @@
 
         <c:forEach begin="4" end="${7}" var="course" items="${coursesList}">
             <div class="col-sm-2" >
-                <div class="card" style="background-color: white; box-shadow: 5px 5px 10px 2px rgba(22,48,64,0.49);">
-                    <div class="card-body">
-                        <img class="img-rounded" src="data:image/jpg;base64,${course.base64String}"
-                             style="width:100%;height:20%; margin-bottom: 10px;">
-                        <p class="card-text" style="color: #a3adaa;margin-left: 15px">${sessionScope.get("bundle").getString("topic")}: ${course.topic}</p>
-                        <h5 class="card-title" style="color: black;margin-left: 15px">${sessionScope.get("bundle").getString("title")}: ${course.title}</h5>
-                        <p class="card-text" style="color: #1b4560;margin-left: 15px;margin-bottom: 15px">${sessionScope.get("bundle").getString("price")}: ${course.price}</p>
-                    </div>
-                </div>
+                <custom:show_Course
+                        bundle="${sessionScope.get('bundle')}"
+                        course="${course}"/>
             </div>
 
         </c:forEach>
@@ -235,15 +225,9 @@
 
         <c:forEach begin="8" end="${11}" var="course" items="${coursesList}">
             <div class="col-sm-2" >
-                <div class="card" style="background-color: white; box-shadow: 5px 5px 10px 2px rgba(22,48,64,0.49);">
-                    <div class="card-body">
-                        <img class="img-rounded" src="data:image/jpg;base64,${course.base64String}"
-                             style="width:100%;height:20%; margin-bottom: 10px;">
-                        <p class="card-text" style="color: #a3adaa;margin-left: 15px">${sessionScope.get("bundle").getString("topic")}: ${course.topic}</p>
-                        <h5 class="card-title" style="color: black;margin-left: 15px">${sessionScope.get("bundle").getString("title")}: ${course.title}</h5>
-                        <p class="card-text" style="color: #1b4560;margin-left: 15px;margin-bottom: 15px">${sessionScope.get("bundle").getString("price")}: ${course.price}</p>
-                    </div>
-                </div>
+                <custom:show_Course
+                        bundle="${sessionScope.get('bundle')}"
+                        course="${course}"/>
             </div>
         </c:forEach>
 

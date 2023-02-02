@@ -1,6 +1,7 @@
 package com.example.final_project.database.dao;
 
 
+import com.example.final_project.controller.session.exceptions.NoAccessProvidedException;
 import com.example.final_project.database.connection.ConnectionPool;
 import com.example.final_project.database.entities.course.Course;
 import com.example.final_project.database.entities.user.User;
@@ -227,8 +228,34 @@ public class CoursesDao {
             e.printStackTrace();
         }
     }
+    public synchronized void userBuyCourse(Course course, User user){
+        TaskDao taskDao = new TaskDao(connectionPool);
+        try {
+            if(course.getMaxStudentsAmount()<=course.getCurrentStudentsAmount()
+            || course.getPrice()>user.getBalance()) throw new NoAccessProvidedException();
+
+            Connection connection = connectionPool.getConnection();
+            PreparedStatement statement = connection.prepareStatement("INSERT into user_has_course  VALUES(?,?,?,?,?)");
+            statement.setString(1, user.getLogin());
+            statement.setString(2, course.getTitle());
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date date = new java.util.Date();
+            statement.setDate(3, java.sql.Date.valueOf(formatter.format(date)));
+            statement.setInt(4,0);
+            statement.setString(5,"Allowed");
+            statement.executeUpdate();
+            increaseStudentsAmount(course);
+            taskDao.getTaskByCourse(course).forEach(task -> taskDao.addStudentToTask(user.getLogin(),task));
+            connectionPool.releaseConnection(connection);
+            new UserDao(connectionPool).updateUserBalance(user,(course.getPrice() * -1));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     public boolean addStudentToCourse(String userLogin, String courseTitle) {
         Course course = findCourse(courseTitle);
+        TaskDao taskDao = new TaskDao(connectionPool);
         if (course.getCurrentStudentsAmount() >= course.getMaxStudentsAmount()) return false;
         try {
             Connection connection = connectionPool.getConnection();
@@ -239,6 +266,7 @@ public class CoursesDao {
 
             statement.executeUpdate();
             increaseStudentsAmount(course);
+            taskDao.getTaskByCourse(course).forEach(task -> taskDao.addStudentToTask(userLogin,task));
             connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             e.printStackTrace();

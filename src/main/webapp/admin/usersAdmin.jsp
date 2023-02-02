@@ -87,23 +87,22 @@
                                 </c:forEach>
                             </td>
                             <td contenteditable="false">
-                                <button class="btn btn-danger"  <c:if
-                                        test="${entry.getKey().blocked_state.ordinal()==1}">
-                                    disabled
-                                </c:if>>
-                                    <a href="/project/controller?command=adminBlockUnlockStudent&login=${entry.getKey().login}&do=block"
-                                       style="color: #EBEFF2">
-                                            ${sessionScope.get("bundle").getString("block")}
-                                    </a>
-                                </button>
-                                <button class="btn btn-success" <c:if
-                                        test="${entry.getKey().blocked_state.ordinal()==2}">
-                                    disabled
-                                </c:if>>
-                                    <a href="/project/controller?command=adminBlockUnlockStudent&login=${entry.getKey().login}&do=unlock"
-                                       style="color: #EBEFF2">
-                                            ${sessionScope.get("bundle").getString("unlock")}
-                                    </a></button>
+                                <a href="/project/controller?command=adminBlockUnlockStudent&login=${entry.getKey().login}&do=block"
+                                   style="color: #EBEFF2">
+                                    <button class="btn btn-danger"  <c:if
+                                            test="${entry.getKey().blocked_state.ordinal()==1}">
+                                        disabled
+                                    </c:if>>${sessionScope.get("bundle").getString("block")}
+                                    </button>
+                                </a>
+                                <a href="/project/controller?command=adminBlockUnlockStudent&login=${entry.getKey().login}&do=unlock"
+                                   style="color: #EBEFF2">
+                                    <button class="btn btn-success" <c:if
+                                            test="${entry.getKey().blocked_state.ordinal()==2}">
+                                        disabled
+                                    </c:if>>${sessionScope.get("bundle").getString("unlock")}
+                                    </button>
+                                </a>
 
                                 <c:if test="${users.compareTo('teachers') == 0}">
 

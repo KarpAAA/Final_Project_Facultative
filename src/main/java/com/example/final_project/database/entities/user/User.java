@@ -21,10 +21,11 @@ public class User {
     private final String phone;
     private byte[] photo;
     private Blocked_State blocked_state;
+    private final int balance;
 
 
     public User(String login, String password, String name, Role role, String email,
-                int age, Date registrationDate, String surname, String phone, byte[] photo, Blocked_State blocked_state) {
+                int age, Date registrationDate, String surname, String phone, byte[] photo, Blocked_State blocked_state, int balance) {
 
         this.login = login;
         this.password = password;
@@ -36,6 +37,7 @@ public class User {
         this.blocked_state = blocked_state;
         this.surname = surname;
         this.phone = phone;
+        this.balance = balance;
         if (photo != null) {
             this.photo = photo;
 
@@ -110,6 +112,7 @@ public class User {
         return photo;
     }
 
-
-
+    public int getBalance() {
+        return balance;
+    }
 }

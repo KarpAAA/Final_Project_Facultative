@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix = "custom" uri = "/WEB-INF/courseTag.tld"%>
 
 <div style="background-color: #EBEFF2">
     <c:choose>
@@ -23,19 +23,9 @@
 
             <a href="/project/controller?command=teacherDetailedCourse&title=${course.title}" style="color:black">
                 <div class="col-sm-3">
-                    <div class="card"
-                         style="background-color: white; box-shadow: 5px 5px 10px 2px rgba(22,48,64,0.49);">
-                        <div class="card-body">
-                            <img class="img-rounded" src="data:image/jpg;base64,${course.base64String}"
-                                 style="width:100%;height:25%; margin-bottom: 10px;">
-                            <p class="card-text"
-                               style="color: #a3adaa;margin-left: 15px">${sessionScope.get("bundle").getString("topic")}: ${course.topic}</p>
-                            <h5 class="card-title"
-                                style="color: black;margin-left: 15px">${sessionScope.get("bundle").getString("title")}: ${course.title}</h5>
-                            <p class="card-text"
-                               style="color: #1b4560;margin-left: 15px;margin-bottom: 15px">${sessionScope.get("bundle").getString("price")}: ${course.price}</p>
-                        </div>
-                    </div>
+                    <custom:show_Course
+                            bundle="${sessionScope.get('bundle')}"
+                            course="${course}"/>
                 </div>
 
             </a>
@@ -50,19 +40,9 @@
         <c:forEach begin="3" end="${5}" var="course" items="${myCourses}">
             <a href="/project/controller?command=teacherDetailedCourse&title=${course.title}" style="color:black">
                 <div class="col-sm-3">
-                    <div class="card"
-                         style="background-color: white; box-shadow: 5px 5px 10px 2px rgba(22,48,64,0.49);">
-                        <div class="card-body">
-                            <img class="img-rounded" src="data:image/jpg;base64,${course.base64String}"
-                                 style="width:100%;height:25%; margin-bottom: 10px;">
-                            <p class="card-text"
-                               style="color: #a3adaa;margin-left: 15px">${sessionScope.get("bundle").getString("topic")}: ${course.topic}</p>
-                            <h5 class="card-title"
-                                style="color: black;margin-left: 15px">${sessionScope.get("bundle").getString("title")}: ${course.title}</h5>
-                            <p class="card-text"
-                               style="color: #1b4560;margin-left: 15px;margin-bottom: 15px">${sessionScope.get("bundle").getString("price")}: ${course.price}</p>
-                        </div>
-                    </div>
+                    <custom:show_Course
+                            bundle="${sessionScope.get('bundle')}"
+                            course="${course}"/>
                 </div>
             </a>
 
@@ -78,19 +58,9 @@
         <c:forEach begin="6" end="${8}" var="course" items="${myCourses}">
             <a href="/project/controller?command=teacherDetailedCourse&title=${course.title}" style="color:black">
                 <div class="col-sm-3">
-                    <div class="card"
-                         style="background-color: white; box-shadow: 5px 5px 10px 2px rgba(22,48,64,0.49);">
-                        <div class="card-body">
-                            <img class="img-rounded" src="data:image/jpg;base64,${course.base64String}"
-                                 style="width:100%;height:25%; margin-bottom: 10px;">
-                            <p class="card-text"
-                               style="color: #a3adaa;margin-left: 15px">${sessionScope.get("bundle").getString("topic")}: ${course.topic}</p>
-                            <h5 class="card-title"
-                                style="color: black;margin-left: 15px">${sessionScope.get("bundle").getString("title")}: ${course.title}</h5>
-                            <p class="card-text"
-                               style="color: #1b4560;margin-left: 15px;margin-bottom: 15px">${sessionScope.get("bundle").getString("price")}: ${course.price}</p>
-                        </div>
-                    </div>
+                    <custom:show_Course
+                            bundle="${sessionScope.get('bundle')}"
+                            course="${course}"/>
                 </div>
             </a>
         </c:forEach>

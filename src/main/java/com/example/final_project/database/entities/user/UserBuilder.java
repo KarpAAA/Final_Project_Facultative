@@ -17,6 +17,7 @@ public class UserBuilder {
     private String surname;
     private String phone;
     private byte[] photo;
+    private int balance;
 
     public UserBuilder setLogin(String login) {
         this.login = login;
@@ -47,7 +48,10 @@ public class UserBuilder {
         this.age = age;
         return this;
     }
-
+    public UserBuilder setBalance(int balance) {
+        this.balance = balance;
+        return this;
+    }
     public UserBuilder setRegistrationDate(Date registrationDate) {
         this.registrationDate = registrationDate;
         return this;
@@ -74,6 +78,6 @@ public class UserBuilder {
     }
 
     public User getUser(){
-        return new User(login,password,name,role,email,age,registrationDate,surname,phone,photo,blocked_state );
+        return new User(login,password,name,role,email,age,registrationDate,surname,phone,photo,blocked_state,balance);
     }
 }

@@ -124,7 +124,7 @@
             </div>
         </nav>
     </div>
-    <div class="col-md-10">
+    <div class="col-md-10" style="background-color: #EBEFF2">
 
         <jsp:include page="${pageToInclude}"/>
 

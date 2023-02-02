@@ -7,6 +7,7 @@ import com.example.final_project.database.entities.user.Role;
 import java.io.*;
 import java.sql.Date;
 import java.util.Base64;
+import java.util.Objects;
 
 public class UserDTO {
     //nec fields
@@ -23,9 +24,10 @@ public class UserDTO {
     private byte[] photo;
     private Blocked_State blocked_state;
     private String base64String;
+    private final int balance;
 
     public UserDTO(String login, String name, Role role, String email,
-                   int age, Date registrationDate, String surname, String phone, byte[] photo, Blocked_State blocked_state) {
+                   int age, Date registrationDate, String surname, String phone, byte[] photo, Blocked_State blocked_state, int balance) {
 
         this.login = login;
         this.name = name;
@@ -37,6 +39,7 @@ public class UserDTO {
         this.surname = surname;
         this.phone = phone;
         this.photo = photo;
+        this.balance = balance;
 
 
         base64String = Base64.getEncoder().encodeToString(this.photo);
@@ -98,8 +101,24 @@ public class UserDTO {
         return photo;
     }
 
+    public int getBalance() {
+        return balance;
+    }
+
     public String getBase64String() {
         return base64String;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDTO userDTO = (UserDTO) o;
+        return Objects.equals(login, userDTO.login);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(login);
+    }
 }

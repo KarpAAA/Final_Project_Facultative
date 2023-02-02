@@ -2,6 +2,8 @@ package com.example.final_project.controller.factory.commands.admin;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
+import com.example.final_project.database.entities.user.Role;
+import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.UserService;
 
 import javax.servlet.ServletException;
@@ -33,8 +35,9 @@ public class AdminBlockUnlockStudent implements Command {
             blockedUsers.remove(login);
         }
 
-        userService.blockOrUnlockStudent(toDo,login);
-        response.sendRedirect("/project/controller?command=adminUsers");
+        UserDTO blockedUser = userService.blockOrUnlockStudent(toDo,login);
+        if(blockedUser.getRole() == Role.Student)response.sendRedirect("/project/controller?command=adminUsers");
+        else response.sendRedirect("/project/controller?command=adminUsers&action=teachers");
     }
 
 }

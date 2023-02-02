@@ -39,5 +39,9 @@ public class AdminUsersCommand implements Command {
         request.getRequestDispatcher("/admin/adminPage.jsp").forward(request, response);
     }
 
+    @Override
+    public boolean securityCheck(HttpServletRequest request, HttpServletResponse response) {
+        return Command.super.securityCheck(request, response);
+    }
 }
 

@@ -14,9 +14,10 @@ import java.util.stream.Collectors;
 public class MeetingsService {
     private final MeetingsDao meetingsDao;
     private final MeetingMapper meetingMapper = Mappers.getMapper(MeetingMapper.class);
-
+    private final ConnectionPool connectionPool;
     public MeetingsService(ConnectionPool connectionPool) {
         this.meetingsDao = new MeetingsDao(connectionPool);
+        this.connectionPool = connectionPool;
     }
 
 
@@ -24,5 +25,10 @@ public class MeetingsService {
         return meetingsDao.findUserMeetings(Mappers.getMapper(UserMapper.class).userDTOToUser(userDTO)).stream()
                 .map(meetingMapper::meetingToMeetingDTO).collect(Collectors.toList());
 
+    }
+    public void addEvent(MeetingDTO meeting){
+        MessagesService messagesService = new MessagesService(connectionPool);
+        messagesService.notifyStudentsAboutMeeting(meeting);
+        meetingsDao.addMeeting(meetingMapper.meetingDTOToMeeting(meeting));
     }
 }

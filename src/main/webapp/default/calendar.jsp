@@ -129,11 +129,11 @@
                 <button class="btn btn-success" style="margin-bottom: 10px;">Add event</button>
             </a>
         </c:if>
-       <div id="holder" class="row"
-               <c:if test="${user.role.name().compareTo('Student') == 0}">
-                     style="margin-top: 50px;"
+        <div id="holder" class="row"
+                <c:if test="${user.role.name().compareTo('Student') == 0}">
+                    style="margin-top: 50px;"
                 </c:if>>
-       </div>
+        </div>
 
 
     </div>
@@ -286,6 +286,7 @@
     </tbody>
     {{ } }}
   </table>
+
 
     </script>
     <script>
@@ -614,11 +615,13 @@
         <c:forEach var="meeting" items="${sessionScope.meetings}">
         data.push({
             title: "${meeting.title}",
-            start: new Date(Number("${meeting.startDate.toLocalDate().getYear()}"),Number("${meeting.startDate.toLocalDate().getMonthValue()-1}"),Number("${meeting.startDate.toLocalDate().getDayOfMonth()}")),
-            end: new Date(Number("${meeting.startDate.toLocalDate().getYear()}"),Number("${meeting.startDate.toLocalDate().getMonthValue()-1}"),Number("${meeting.startDate.toLocalDate().getDayOfMonth()}")),
+            start: new Date(Number("${meeting.startDate.toLocalDate().getYear()}")
+                , Number("${meeting.startDate.toLocalDate().getMonthValue()-1}")
+                , Number("${meeting.startDate.toLocalDate().getDayOfMonth()}")),
+            end: new Date(Number("${meeting.startDate.toLocalDate().getYear()}"), Number("${meeting.startDate.toLocalDate().getMonthValue()-1}"), Number("${meeting.startDate.toLocalDate().getDayOfMonth()}")),
             allDay: !(Math.floor(Math.random() * 2) % 2),
-            text: "${meeting.description}"
-        });
+            text: "${meeting.description}<br>Course: ${meeting.course.title}<br>Link: ${meeting.link}<br>Starts at: ${meeting.time.toLocalTime().toString()}"
+        })
         </c:forEach>
 
 

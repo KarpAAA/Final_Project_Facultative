@@ -3,7 +3,9 @@ package com.example.final_project.controller.factory.commands.teacher;
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
 import com.example.final_project.dto.CourseDTO;
+import com.example.final_project.dto.MessageDTO;
 import com.example.final_project.dto.UserDTO;
+import com.example.final_project.services.MessagesService;
 import com.example.final_project.services.UserService;
 
 import javax.servlet.ServletException;
@@ -28,14 +30,25 @@ public class TeacherMessagesCommand implements Command {
         UserService userService = new UserService(connectionPool);
         UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
 
+        String action = request.getParameter("action");
+        if(action!=null&&action.compareTo("sent") == 0){
+            List<MessageDTO> list = (new MessagesService(connectionPool)).getMessagesBySender(userDTO);
 
-        Map<CourseDTO, List<UserDTO>> map = userService.getAllRegisteredUserToTeacherCourses(userDTO);
-        request.setAttribute("map", map);
+            request.setAttribute("messages", list);
+            request.setAttribute("messagesAmount", list.size());
+
+        }
+        else{
+
+            Map<CourseDTO, List<UserDTO>> map = userService.getAllRegisteredUserToTeacherCourses(userDTO);
+            request.setAttribute("map", map);
 
 
-        AtomicInteger amount = new AtomicInteger();
-        map.values().stream().forEach(userList -> amount.addAndGet(userList.size()));
-        request.setAttribute("messagesAmount", amount.get());
+            AtomicInteger amount = new AtomicInteger();
+            map.values().stream().forEach(userList -> amount.addAndGet(userList.size()));
+            request.setAttribute("messagesAmount", amount.get());
+        }
+
 
 
         request.setAttribute("servlet", "messages");

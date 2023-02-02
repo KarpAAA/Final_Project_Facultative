@@ -25,9 +25,9 @@ public class MessageRequestListener implements ServletRequestListener {
     @Override
     public void requestDestroyed(ServletRequestEvent sre) {
         HttpSession session = ((HttpServletRequest)sre.getServletRequest()).getSession();
-        List<MessageDTO> messageDTOList = (List<MessageDTO>) sre.getServletRequest().getAttribute("messagesList");
+        List<MessageDTO> messageDTOList = (List<MessageDTO>) session.getAttribute("messagesList");
         if(messageDTOList !=null){
-            MessagesService messagesService = new MessagesService((ConnectionPool) session.getAttribute("connectionPool"));
+            MessagesService messagesService = new MessagesService((ConnectionPool) session.getServletContext().getAttribute("connectionPool"));
             messagesService.changeStatus(messageDTOList);
         }
 

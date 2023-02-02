@@ -5,6 +5,7 @@ import com.example.final_project.database.connection.ConnectionPool;
 import com.example.final_project.dto.CourseDTO;
 import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
+import com.example.final_project.services.TaskService;
 import com.example.final_project.services.UserService;
 
 import javax.servlet.ServletException;
@@ -13,34 +14,36 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-
-
 public class StudentDetailedCourseCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         boolean isPost = "POST".equals(request.getMethod());
-        if(isPost)executePost(request,response);
-        else executeGet(request,response);
+        if (isPost) executePost(request, response);
+        else executeGet(request, response);
     }
 
-    private void executePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
+    private void executePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    }
+
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String courseTitle = request.getParameter("title");
-        ConnectionPool connectionPool =  (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         CourseService courseService = new CourseService(connectionPool);
         UserService userService = new UserService(connectionPool);
+        TaskService taskService = new TaskService(connectionPool);
 
         CourseDTO courseDTO = courseService.findCourse(courseTitle);
         UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
 
         String state = userService.getUserRegisteredState(userDTO, courseDTO);
-        if(state!=null){
+        if (state != null) {
             request.setAttribute("registerState", state);
-            int grade = userService.getUserGradeForCourse(userDTO.getLogin(),courseTitle);
+            int grade = userService.getUserGradeForCourse(userDTO.getLogin(), courseTitle);
             request.setAttribute("grade", grade);
         }
 
         request.setAttribute("course", courseDTO);
+        request.setAttribute("tasksList", taskService.getTaskToCourse(courseDTO));
         request.setAttribute("pageToInclude", "/client/detailedCourse.jsp");
 
 

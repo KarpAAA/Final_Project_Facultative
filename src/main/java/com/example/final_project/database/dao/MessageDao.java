@@ -5,6 +5,7 @@ import com.example.final_project.database.entities.message.Message;
 import com.example.final_project.database.entities.user.User;
 import com.example.final_project.database.entities.message.MessageBuilder;
 import com.example.final_project.database.entities.message.Status;
+import com.example.final_project.dto.UserDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class MessageDao {
         Connection connection = connectionPool.getConnection();
         List<Message> messagesList = new ArrayList<>();
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT (idMessage,value,subject, sender,receiver,status) FROM Message WHERE sender = ?");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM Message WHERE sender = ?");
             statement.setString(1, sender.getLogin());
             ResultSet resultSet = statement.executeQuery();
 
@@ -120,6 +121,23 @@ public class MessageDao {
     private static Status validateStatus(String status) {
         if (status.compareToIgnoreCase("read") == 0) return Status.READ;
         else return Status.UNREAD;
+    }
+
+    public void clearUserMessages(User user) {
+
+        try {
+            Connection connection = connectionPool.getConnection();
+            PreparedStatement statement = connection
+                    .prepareStatement("DELETE FROM Message WHERE receiver = ?");
+
+            statement.setString(1, user.getLogin());
+
+            statement.executeUpdate();
+            connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 }

@@ -33,20 +33,12 @@ public class AdminCourseEditingCommand implements Command{
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         String courseTitle = request.getParameter("courseTitle");
-
         CourseService courseService = new CourseService(connectionPool);
-        UserService userService = new UserService(connectionPool);
 
         CourseDTO courseDTO = courseService.getCourseByTitle(courseTitle);
-        Map<Integer, List<UserDTO>> userMap = userService.getUsersMarksMap(courseDTO);
-
-
 
         request.setAttribute("course", courseDTO);
-        request.setAttribute("students", userMap);
         request.setAttribute("pageToInclude", "/admin/editingCourse.jsp");
-
-
         request.getRequestDispatcher("/admin/adminPage.jsp").forward(request, response);
     }
 

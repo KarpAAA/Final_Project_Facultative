@@ -135,41 +135,7 @@
             </div>
         </div>
 
-        <c:if test="${students.size()!=0}">
-            <div id="tableContainer" style="margin-bottom: 50px">
 
-                <div class="card-body">
-                    <div id="table" class="table-editable" style="margin-top: 50px">
-
-                        <table class="table table-bordered table-responsive-md table-striped text-center">
-                            <thead>
-                            <tr>
-                                <th class="text-center">${sessionScope.get("bundle").getString("users")}</th>
-                                <th class="text-center">${sessionScope.get("bundle").getString("mark")}</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            <c:set var="counter" value='${0}'/>
-                            <c:forEach var="entry" items="${students.entrySet()}">
-                                <c:forEach var="listItem" items="${entry.getValue()}">
-
-                                    <tr>
-                                        <td contenteditable="false">${listItem.login}</td>
-                                        <td contenteditable="false">${entry.getKey()}</td>
-                                    </tr>
-
-                                </c:forEach>
-                            </c:forEach>
-
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-
-            </div>
-        </c:if>
     </div>
     <div class="col-sm-1"></div>
 </div>

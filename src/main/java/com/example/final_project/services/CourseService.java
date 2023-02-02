@@ -2,6 +2,7 @@ package com.example.final_project.services;
 
 import com.example.final_project.database.connection.ConnectionPool;
 import com.example.final_project.database.dao.CoursesDao;
+import com.example.final_project.database.dao.MessageDao;
 import com.example.final_project.database.entities.course.Course;
 import com.example.final_project.dto.CourseDTO;
 import com.example.final_project.database.entities.course.State;
@@ -126,6 +127,8 @@ public class CourseService {
 
     public void addOrBanUserToCourse(String ifAdd, String userLogin, String courseTitle) {
         if (ifAdd.compareTo("true") == 0) {
+            new MessagesService(connectionPool)
+                    .notifyUserAddingToCourse( new UserService(connectionPool).findUser(userLogin), findCourse(courseTitle));
             courseDao.addStudentToCourse(userLogin, courseTitle);
         } else {
             courseDao.blockStudentToCourse(userLogin, courseTitle);
@@ -187,5 +190,10 @@ public class CourseService {
 
     public int getTeacherCoursesAmount() {
         return courseDao.getTeacherCoursesAmount();
+    }
+
+    public synchronized void userBuyCourse(CourseDTO courseDTO, UserDTO user) {
+        courseDao.userBuyCourse(courseMapper.courseDTOToCourse(courseDTO),
+                Mappers.getMapper(UserMapper.class).userDTOToUser(user));
     }
 }

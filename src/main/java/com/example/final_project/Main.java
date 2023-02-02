@@ -10,12 +10,18 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Main {
 
 
     public static void main(String[] args) throws SQLException, IOException {
-        System.out.println(LocalDate.now().getMonthValue());
+        String date = "01/17/2023 7:00 AM";
+        String date1 = date.substring(0, 10).replaceAll("/", "-");
+
+
+        Date dat =  Date.valueOf(LocalDate.parse(date1, DateTimeFormatter.ofPattern("MM-dd-yyyy")));
+        System.out.println(dat);
     }
 
 
