@@ -54,7 +54,7 @@ public class TaskDao {
             statement.setString(1, course.getTitle());
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                taskList.add(getTask(resultSet));
+                taskList.add(getTaskFromDb(resultSet));
             }
             connectionPool.releaseConnection(connection);
 
@@ -83,22 +83,6 @@ public class TaskDao {
         addStudentsToTask(lastInserterId(), task);
     }
 
-    private int lastInserterId() {
-        int res = -1;
-        try {
-            Connection connection = connectionPool.getConnection();
-
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT LAST_INSERT_ID()");
-            connectionPool.releaseConnection(connection);
-            resultSet.next();
-            res = resultSet.getInt(1);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return res;
-    }
-
     public void addStudentToTask(String userLogin, Task task) {
         Connection connection = connectionPool.getConnection();
 
@@ -117,27 +101,6 @@ public class TaskDao {
             throw new RuntimeException(e);
         }
     }
-
-    private void addStudentsToTask(int id, Task task) {
-        Connection connection = connectionPool.getConnection();
-
-        try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO user_has_task VALUES(?,?,null,null)");
-
-            for (var student : (new UserDao(connectionPool).selectUsersByCourse(task.getCourse())).entrySet()) {
-                statement.setString(1, student.getKey().getLogin());
-                statement.setInt(2, id);
-                statement.addBatch();
-            }
-
-            statement.executeBatch();
-            connectionPool.releaseConnection(connection);
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void deleteTaskFromCourse(Task task) {
         Connection connection = connectionPool.getConnection();
 
@@ -153,18 +116,24 @@ public class TaskDao {
         }
     }
 
-    public Task getTask(ResultSet resultSet) throws SQLException {
-        TaskBuilder taskBuilder = new TaskBuilder();
-        CoursesDao coursesDao = new CoursesDao(connectionPool);
 
+    public void updateTask(int id, Task task) {
+        Connection connection = connectionPool.getConnection();
 
-        taskBuilder.setId(resultSet.getInt(1))
-                .setCourse(coursesDao.findCourse(resultSet.getString(2)))
-                .setTitle(resultSet.getString(3))
-                .setCondition(resultSet.getString(4));
+        try {
+            PreparedStatement statement = connection.prepareStatement("UPDATE Task " +
+                    "SET title = ?, Task.condition = ?" +
+                    "WHERE id = ?");
+            statement.setString(1, task.getTitle());
+            statement.setString(2, task.getCondition());
+            statement.setInt(3, id);
 
+            statement.executeUpdate();
+            connectionPool.releaseConnection(connection);
 
-        return taskBuilder.buildTask();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void addAnswerToTask(User user, Task task, byte[] file) {
@@ -187,7 +156,6 @@ public class TaskDao {
             throw new RuntimeException(e);
         }
     }
-
     public void updateAnswerToTask(User user, Task task, byte[] file) {
         Connection connection = connectionPool.getConnection();
 
@@ -208,8 +176,7 @@ public class TaskDao {
         }
     }
 
-
-    public Task findTask(int taskId) {
+    public Task getTask(int taskId) {
 
         Task task = null;
         try {
@@ -220,7 +187,7 @@ public class TaskDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                task = getTask(resultSet);
+                task = getTaskFromDb(resultSet);
             }
 
             connectionPool.releaseConnection(connection);
@@ -230,7 +197,6 @@ public class TaskDao {
 
         return task;
     }
-
     public Integer getUserGradeForTask(User user, Task task) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -252,22 +218,53 @@ public class TaskDao {
         return 0;
     }
 
-    public void updateTask(int id, Task task) {
+
+
+    private Task getTaskFromDb(ResultSet resultSet) throws SQLException {
+        TaskBuilder taskBuilder = new TaskBuilder();
+        CoursesDao coursesDao = new CoursesDao(connectionPool);
+
+
+        taskBuilder.setId(resultSet.getInt(1))
+                .setCourse(coursesDao.findCourse(resultSet.getString(2)))
+                .setTitle(resultSet.getString(3))
+                .setCondition(resultSet.getString(4));
+
+
+        return taskBuilder.buildTask();
+    }
+    private void addStudentsToTask(int id, Task task) {
         Connection connection = connectionPool.getConnection();
 
         try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE Task " +
-                    "SET title = ?, Task.condition = ?" +
-                    "WHERE id = ?");
-            statement.setString(1, task.getTitle());
-            statement.setString(2, task.getCondition());
-            statement.setInt(3, id);
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO user_has_task VALUES(?,?,null,null)");
 
-            statement.executeUpdate();
+            for (var student : (new UserDao(connectionPool).selectUsersByCourse(task.getCourse())).entrySet()) {
+                statement.setString(1, student.getKey().getLogin());
+                statement.setInt(2, id);
+                statement.addBatch();
+            }
+
+            statement.executeBatch();
             connectionPool.releaseConnection(connection);
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    private int lastInserterId() {
+        int res = -1;
+        try {
+            Connection connection = connectionPool.getConnection();
+
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT LAST_INSERT_ID()");
+            connectionPool.releaseConnection(connection);
+            resultSet.next();
+            res = resultSet.getInt(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return res;
     }
 }

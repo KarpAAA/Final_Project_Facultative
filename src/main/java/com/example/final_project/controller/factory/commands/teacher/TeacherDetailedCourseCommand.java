@@ -8,6 +8,7 @@ import com.example.final_project.dto.CourseDTO;
 import com.example.final_project.dto.TaskDTO;
 import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
+import com.example.final_project.services.TaskService;
 import com.example.final_project.services.UserService;
 
 import javax.servlet.ServletException;
@@ -44,6 +45,7 @@ public class TeacherDetailedCourseCommand implements Command {
         request.setAttribute("course", courseDTO);
         request.getSession().setAttribute("students", marksMap);
         request.setAttribute("solutionMap", solutionMap);
+        request.setAttribute("tasksList", new TaskService(connectionPool).getTaskToCourse(courseDTO));
         request.setAttribute("userMarks", userMarks);
         request.setAttribute("pageToInclude", "/teacher/detailedCourse.jsp");
 

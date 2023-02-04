@@ -60,7 +60,7 @@ public class TeacherAddEvent implements Command {
     private MeetingDTO formMeeting(ConnectionPool connectionPool, HttpServletRequest request) {
         CourseService courseService = new CourseService(connectionPool);
         String date = request.getParameter("date");
-        date.substring(0, 1);
+
         return Mappers.getMapper(MeetingMapper.class)
                 .meetingToMeetingDTO((new MeetingBuilder())
                         .setCourse(Mappers.getMapper(CourseMapper.class).courseDTOToCourse(courseService.findCourse(request.getParameter("course"))))

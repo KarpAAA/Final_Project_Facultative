@@ -122,8 +122,7 @@
                     <br><br>
                     <p style="text-align: center">${user.name} ${user.surname}</p>
                     <c:if test="${user.balance!=0}">
-                        <p style="text-align: center; margin-top: 5px;">Balance:<br>${user.balance} UAN</p>
-
+                        <p style="text-align: center; margin-top: 5px;">${sessionScope.get("bundle").getString("balance")}:<br>${user.balance} UAN</p>
                     </c:if>
                 </div>
 

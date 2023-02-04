@@ -42,7 +42,8 @@
 
             <div class="container-fluid">
 
-                <form action="/project/controller?command=settings" enctype="multipart/form-data" method="post">
+                <form action="/project/controller?command=settings&action=updateUserPhoto" enctype="multipart/form-data" method="post">
+                    
                     <div style="width:100px;height:170px; margin-top:40px ">
 
                         <img class="img-rounded" src="data:image/jpg;base64,${user.base64String}"
@@ -151,12 +152,12 @@
                             <label for="sum">${sessionScope.get("bundle").getString("sum")}:&#42;</label>
                             <input type="number" class="control-label form-control" id="sum"
                                    placeholder="${sessionScope.get("bundle").getString("enterSum")}"
-                                   name="sum" required>
+                                   name="sum" min="1" required>
 
                         </div>
 
                         <button type="submit" class="btn btn-default"
-                                style="width: 130px;margin-top: 20px;color: white;background-color: #67BF63">${sessionScope.get("bundle").getString("updateBalance")}</button>
+                                style="margin-top: 20px;color: white;background-color: #67BF63">${sessionScope.get("bundle").getString("updateBalance")}</button>
                     </div>
 
 

@@ -12,7 +12,7 @@
         <div class="container-fluid">
 
 
-            <form action="controller?command=settings" enctype="multipart/form-data" method="post">
+            <form action="controller?command=settings&action=updateTeacherPhoto" enctype="multipart/form-data" method="post">
 
                 <div style="width:100px;height:170px; margin-top:40px ">
 

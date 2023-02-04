@@ -5,7 +5,6 @@ import com.example.final_project.database.entities.message.Message;
 import com.example.final_project.database.entities.user.User;
 import com.example.final_project.database.entities.message.MessageBuilder;
 import com.example.final_project.database.entities.message.Status;
-import com.example.final_project.dto.UserDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -36,7 +35,6 @@ public class MessageDao {
         }
         return messagesList;
     }
-
     public List<Message> findMessagesBySender(User sender) {
         Connection connection = connectionPool.getConnection();
         List<Message> messagesList = new ArrayList<>();
@@ -76,10 +74,25 @@ public class MessageDao {
         }
 
     }
+    public void clearUserMessages(User user) {
+
+        try {
+            Connection connection = connectionPool.getConnection();
+            PreparedStatement statement = connection
+                    .prepareStatement("DELETE FROM Message WHERE receiver = ?");
+
+            statement.setString(1, user.getLogin());
+
+            statement.executeUpdate();
+            connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
     public void changeStatus(List<Message> messageList) {
         Connection connection = connectionPool.getConnection();
-
 
         try {
             PreparedStatement statement = connection.prepareStatement("UPDATE message SET status = 'read'WHERE idMessage = ?");
@@ -104,8 +117,8 @@ public class MessageDao {
     private Message getMessage(ResultSet resultSet) throws SQLException {
         MessageBuilder messageBuilder = new MessageBuilder();
         UserDao userDao = new UserDao(connectionPool);
-        User sender = userDao.findUser(resultSet.getString(4));
-        User receiver = userDao.findUser(resultSet.getString(5));
+        User sender = userDao.getUser(resultSet.getString(4));
+        User receiver = userDao.getUser(resultSet.getString(5));
 
         return new Message(
                 resultSet.getInt(1),
@@ -117,27 +130,9 @@ public class MessageDao {
 
         );
     }
-
     private static Status validateStatus(String status) {
         if (status.compareToIgnoreCase("read") == 0) return Status.READ;
         else return Status.UNREAD;
-    }
-
-    public void clearUserMessages(User user) {
-
-        try {
-            Connection connection = connectionPool.getConnection();
-            PreparedStatement statement = connection
-                    .prepareStatement("DELETE FROM Message WHERE receiver = ?");
-
-            statement.setString(1, user.getLogin());
-
-            statement.executeUpdate();
-            connectionPool.releaseConnection(connection);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
     }
 
 }

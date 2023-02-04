@@ -20,15 +20,18 @@ public class AdminBlockUnlockStudent implements Command {
         if(isPost)executePost(request,response);
         else executeGet(request,response);
     }
+
     private void executePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         String login = request.getParameter("login");
         String toDo = request.getParameter("do");
+
         UserService userService = new UserService(connectionPool);
 
-        ArrayList<String> blockedUsers = (ArrayList<String>) request.getServletContext().getAttribute("blockedUsers");
-        if (toDo != null && toDo.compareTo("block") == 0) {
+        ArrayList<String> blockedUsers =
+                (ArrayList<String>) request.getServletContext().getAttribute("blockedUsers");
+        if (toDo.compareTo("block") == 0) {
             blockedUsers.add(login);
         }
         else {
@@ -40,4 +43,8 @@ public class AdminBlockUnlockStudent implements Command {
         else response.sendRedirect("/project/controller?command=adminUsers&action=teachers");
     }
 
+    @Override
+    public boolean securityCheck(HttpServletRequest request, HttpServletResponse response) {
+        return request.getParameter("login") != null && request.getParameter("do") != null;
+    }
 }

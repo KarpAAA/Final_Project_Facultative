@@ -35,7 +35,7 @@ public class TaskService {
     }
 
     public TaskDTO findTask(int taskId) {
-        return taskMapper.taskToTaskDTO(taskDao.findTask(taskId));
+        return taskMapper.taskToTaskDTO(taskDao.getTask(taskId));
     }
 
 

@@ -116,17 +116,16 @@
 
 </style>
 
-
 <div class="page">
 
 
     <div class="container theme-showcase">
-        <h1>Calendar</h1>
+        <h1>${sessionScope.get("bundle").getString("calendar")}:</h1>
 
         <c:if test="${user.role.name().compareTo('Teacher') == 0}">
 
             <a href="/project/controller?command=teacherAddEvent" style="color: white; margin-left: 5px;">
-                <button class="btn btn-success" style="margin-bottom: 10px;">Add event</button>
+                <button class="btn btn-success" style="margin-bottom: 10px;">${sessionScope.get("bundle").getString("toAddEvent")}</button>
             </a>
         </c:if>
         <div id="holder" class="row"

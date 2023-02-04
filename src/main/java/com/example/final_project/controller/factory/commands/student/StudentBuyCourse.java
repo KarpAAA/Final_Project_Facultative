@@ -2,7 +2,6 @@ package com.example.final_project.controller.factory.commands.student;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
-import com.example.final_project.database.entities.user.User;
 import com.example.final_project.dto.CourseDTO;
 import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
@@ -23,13 +22,15 @@ public class StudentBuyCourse implements Command {
     private void executePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
         CourseService courseService = new CourseService(connectionPool);
-        CourseDTO courseDTO = courseService.findCourse(request.getParameter("course"));
+        CourseDTO course = courseService.findCourse(request.getParameter("course"));
+        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
 
-        courseService.userBuyCourse(courseDTO,user);
+        courseService.userBuyCourse(course,user);
+
         request.getSession().removeAttribute("user");
         request.getSession().setAttribute("user",new UserService(connectionPool).findUser(user.getLogin()));
+
         response.sendRedirect("/project/controller?command=studentCourses");
     }
 

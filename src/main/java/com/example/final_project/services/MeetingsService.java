@@ -22,7 +22,7 @@ public class MeetingsService {
 
 
     public List<MeetingDTO> getUserMeetings(UserDTO userDTO) {
-        return meetingsDao.findUserMeetings(Mappers.getMapper(UserMapper.class).userDTOToUser(userDTO)).stream()
+        return meetingsDao.getUserMeetings(Mappers.getMapper(UserMapper.class).userDTOToUser(userDTO)).stream()
                 .map(meetingMapper::meetingToMeetingDTO).collect(Collectors.toList());
 
     }

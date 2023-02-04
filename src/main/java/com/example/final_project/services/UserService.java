@@ -159,7 +159,7 @@ public class UserService {
     }
 
     public UserDTO findUser(String userLogin) {
-        return userMapper.userToUserDTO(userDao.findUser(userLogin));
+        return userMapper.userToUserDTO(userDao.getUser(userLogin));
     }
 
     public UserDTO identifyUser(String login, String pwd) {

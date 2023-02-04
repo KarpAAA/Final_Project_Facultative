@@ -25,12 +25,13 @@ public class UserDeleteAccount implements Command {
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
+
         if (request.getParameter("teacher") != null) {
             userService.deleteUser(userService.findUser(request.getParameter("teacher")));
-            response.sendRedirect("/project/controller?command=adminUsers&action=teachers");
             ArrayList<String> blockedUsers = (ArrayList<String>) request.getServletContext().getAttribute("blockedUsers");
             blockedUsers.add(request.getParameter("teacher"));
 
+            response.sendRedirect("/project/controller?command=adminUsers&action=teachers");
 
         } else {
             userService.deleteUser((UserDTO) request.getSession().getAttribute("user"));

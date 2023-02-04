@@ -45,9 +45,8 @@ public class AdminCourseEditingCommand implements Command{
     private void executePost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) req.getServletContext().getAttribute("connectionPool");
         CourseService courseService = new CourseService(connectionPool);
-        if(req.getParameter("action") != null && req.getParameter("action").compareTo("editCourse") == 0){
 
-
+        if(req.getParameter("action").compareTo("editCourse") == 0){
 
             Course course = formCourse(connectionPool, req);
             List<String> errorList = courseService.validateCourse(course);
@@ -58,7 +57,6 @@ public class AdminCourseEditingCommand implements Command{
             if(errorList.size()==0){
                 courseService.updateCourse(connectionPool, course);
                 resp.sendRedirect("/project/controller?command=adminEditingCourse&courseTitle="+ course.getTitle());
-
 
             }
             else {
@@ -74,8 +72,8 @@ public class AdminCourseEditingCommand implements Command{
             CourseDTO courseDTO = courseService.getCourseByTitle(req.getParameter("courseTitle"));
             courseService.addPhotoToCourse(req, courseDTO);
             resp.sendRedirect("/project/controller?command=adminEditingCourse&courseTitle="+ courseDTO.getTitle());
-
         }
+
     }
     private Course formCourse(ConnectionPool connectionPool, HttpServletRequest req) {
         UserService userService = new UserService(connectionPool);
@@ -104,4 +102,14 @@ public class AdminCourseEditingCommand implements Command{
         return courseBuilder.buildCourse();
     }
 
+    @Override
+    public boolean securityCheck(HttpServletRequest request, HttpServletResponse response) {
+        if(request.getMethod().compareToIgnoreCase("post") == 0){
+            return request.getParameter("action") != null
+                    && request.getParameter("courseTitle")!=null;
+        }
+        else{
+            return request.getParameter("courseTitle")!=null;
+        }
+    }
 }

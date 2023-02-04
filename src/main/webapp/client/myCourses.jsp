@@ -4,7 +4,7 @@
 
 
 
-<div style="background-color:#EBEFF2;">
+<div style="height: 100vh; background-color:#EBEFF2;">
 <c:choose>
     <c:when test="${servlet == 'myCourses' }">
         <div style="padding-left: 70px;background-color:#EBEFF2;">
@@ -270,12 +270,12 @@
 
 
 <c:if test="${myCourses.size() == 0}">
-    <div class="row" style="height: 700px">
-        <div class="col-sm-4"></div>
+    <div class="row">
+        <div class="col-sm-5"></div>
         <div class="col-sm-3">
             <h1 style="color: grey;font-size: 35px;">${sessionScope.get("bundle").getString("empty")}</h1>
         </div>
-        <div class="col-sm-5"></div>
+        <div class="col-sm-4"></div>
     </div>
 </c:if>
 

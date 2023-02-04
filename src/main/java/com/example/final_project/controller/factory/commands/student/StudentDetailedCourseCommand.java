@@ -28,22 +28,23 @@ public class StudentDetailedCourseCommand implements Command {
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String courseTitle = request.getParameter("title");
         ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
+
         CourseService courseService = new CourseService(connectionPool);
         UserService userService = new UserService(connectionPool);
         TaskService taskService = new TaskService(connectionPool);
 
-        CourseDTO courseDTO = courseService.findCourse(courseTitle);
-        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
+        CourseDTO course = courseService.findCourse(courseTitle);
+        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
 
-        String state = userService.getUserRegisteredState(userDTO, courseDTO);
+        String state = userService.getUserRegisteredState(user, course);
         if (state != null) {
             request.setAttribute("registerState", state);
-            int grade = userService.getUserGradeForCourse(userDTO.getLogin(), courseTitle);
+            int grade = userService.getUserGradeForCourse(user.getLogin(), courseTitle);
             request.setAttribute("grade", grade);
         }
 
-        request.setAttribute("course", courseDTO);
-        request.setAttribute("tasksList", taskService.getTaskToCourse(courseDTO));
+        request.setAttribute("course", course);
+        request.setAttribute("tasksList", taskService.getTaskToCourse(course));
         request.setAttribute("pageToInclude", "/client/detailedCourse.jsp");
 
 

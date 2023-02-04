@@ -18,14 +18,9 @@ public class CourseBuilder {
     private byte[] photo;
 
     public Course buildCourse(){
-        /*if(!validationOfNecessaryFields())
-            throw new IllegalArgumentException("Not all necessary fields entered");*/
 
         return new Course(title,topic,description,teacher,startDate,
                 finishDate,maxStudentsAmount,currentStudentsAmount,price,state, photo);
-    }
-    private boolean validationOfNecessaryFields(){
-        return !title.equals("") && !topic.equals("") && maxStudentsAmount != 0;
     }
 
     public CourseBuilder setTitle(String title) {

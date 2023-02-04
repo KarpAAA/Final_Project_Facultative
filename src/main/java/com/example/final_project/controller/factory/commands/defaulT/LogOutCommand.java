@@ -17,6 +17,7 @@ public class LogOutCommand implements Command {
     }
     private void executePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+
         request.getSession().removeAttribute("user");
         request.getSession().removeAttribute("coursesFilter");
         response.sendRedirect("/project/controller?command=default");

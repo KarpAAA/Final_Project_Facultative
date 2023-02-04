@@ -25,7 +25,7 @@ public class UserDao {
     }
 
 
-    private User getUser(ResultSet resultSet) throws SQLException {
+    private User getUserFromDb(ResultSet resultSet) throws SQLException {
         Blob blob = resultSet.getBlob(11);
 
         return new User(
@@ -60,7 +60,7 @@ public class UserDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                user = getUser(resultSet);
+                user = getUserFromDb(resultSet);
             }
 
             connectionPool.releaseConnection(connection);
@@ -71,7 +71,7 @@ public class UserDao {
         return user;
     }
 
-    public User findUser(String login) {
+    public User getUser(String login) {
 
         User user = null;
         try {
@@ -86,7 +86,7 @@ public class UserDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                user = getUser(resultSet);
+                user = getUserFromDb(resultSet);
             }
 
             connectionPool.releaseConnection(connection);
@@ -137,6 +137,18 @@ public class UserDao {
 
     }
 
+    public void deleteUser(User user) {
+        try {
+            Connection connection = connectionPool.getConnection();
+            PreparedStatement statement = connection.prepareStatement("DELETE from user where login = ?");
+            statement.setString(1, user.getLogin());
+            statement.executeUpdate();
+            connectionPool.releaseConnection(connection);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
     public void updateUserPhoto(User user) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -151,18 +163,7 @@ public class UserDao {
         }
     }
 
-    public void deleteUser(User user) {
-        try {
-            Connection connection = connectionPool.getConnection();
-            PreparedStatement statement = connection.prepareStatement("DELETE from user where login = ?");
-            statement.setString(1, user.getLogin());
-            statement.executeUpdate();
-            connectionPool.releaseConnection(connection);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-    }
 
     private void addAdditionalFieldsToUser(Connection connection, User user) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("INSERT into Additional_Info (User_login,age,surname,registration_date,phone, photo) VALUES(?,?,?,?,?,?)");
@@ -175,7 +176,6 @@ public class UserDao {
         statement.setBlob(6, new ByteArrayInputStream(user.getPhoto()));
         statement.executeUpdate();
     }
-
     private void updateAdditionalFieldsToUser(Connection connection, User user) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("UPDATE Additional_Info " +
                 "SET age = ?, " +
@@ -192,7 +192,6 @@ public class UserDao {
         statement.executeUpdate();
 
     }
-
     public void updateUserPassword(User user, String pwd) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -223,7 +222,7 @@ public class UserDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                userList.add(getUser(resultSet));
+                userList.add(getUserFromDb(resultSet));
             }
 
             connectionPool.releaseConnection(connection);
@@ -244,7 +243,7 @@ public class UserDao {
                     "LEFT JOIN role ON User.role_id = role.id\n");
 
             while (resultSet.next()) {
-                userList.add(getUser(resultSet));
+                userList.add(getUserFromDb(resultSet));
             }
 
             connectionPool.releaseConnection(connection);
@@ -265,7 +264,7 @@ public class UserDao {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                userMap.put(findUser(resultSet.getString(1)), resultSet.getInt(2));
+                userMap.put(getUser(resultSet.getString(1)), resultSet.getInt(2));
             }
 
             connectionPool.releaseConnection(connection);
@@ -286,7 +285,7 @@ public class UserDao {
 
 
             while (resultSet.next()) {
-                userList.add(findUser(resultSet.getString(1)));
+                userList.add(getUser(resultSet.getString(1)));
             }
 
             connectionPool.releaseConnection(con);

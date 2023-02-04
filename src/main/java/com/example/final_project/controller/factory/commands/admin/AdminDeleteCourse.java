@@ -18,8 +18,7 @@ public class AdminDeleteCourse implements Command {
         else executeGet(request, response);
     }
 
-    private void executePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    }
+    private void executePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");

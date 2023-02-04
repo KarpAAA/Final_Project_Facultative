@@ -2,13 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
-<style>
-    .page {
-        min-height: 100%;
-        position: relative;
-        background-color: #EBEFF2;
-    }
-</style>
+
 
 <div class="modal" tabindex="-1" role="dialog" id="deleteDialog">
     <div class="modal-dialog" role="document">
@@ -34,7 +28,7 @@
     </div>
 </div>
 
-<div class="page">
+<div style="height: 100vh; background-color:#EBEFF2;">
 
         <div style="width: 1500px;height: 50px; padding-top: 50px; position: sticky; margin-left: 70px;">
             <h1 style="font-size: 35px">${sessionScope.get("bundle").getString("myMessages")}: </h1>
@@ -88,7 +82,7 @@
             <div class="col-sm-1"></div>
         </div>
         <c:if test="${messagesList.size()==0}">
-            <div class="row" style="height: 700px; margin-top: 200px;">
+            <div class="row" style="margin-top: 200px;">
                 <div class="col-sm-4"></div>
                 <div class="col-sm-4">
                     <h1 style="color: grey;font-size: 35px;">${sessionScope.get("bundle").getString("noNewMessages")}</h1>

@@ -27,8 +27,7 @@ public class SettingsCommand implements Command {
         ConnectionPool connectionPool = (ConnectionPool) req.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
 
-        if (req.getParameter("action") != null
-                && req.getParameter("action").compareToIgnoreCase("updateUserFields") == 0) {
+        if (req.getParameter("action").compareToIgnoreCase("updateUserFields") == 0) {
 
             User user = formUser(req);
             List<String> errorList = userService.validateUser(req.getParameter("cpwd"), user);
@@ -47,8 +46,7 @@ public class SettingsCommand implements Command {
                 req.getRequestDispatcher((String) req.getAttribute("toForward")).forward(req, resp);
             }
         }
-        else if(req.getParameter("action") != null
-                && req.getParameter("action").compareToIgnoreCase("updateUserPassword") == 0){
+        else if(req.getParameter("action").compareToIgnoreCase("updateUserPassword") == 0){
             String pwd = req.getParameter("pwd");
             String cPwd = req.getParameter("cpwd");
 
@@ -84,6 +82,13 @@ public class SettingsCommand implements Command {
         req.getRequestDispatcher((String) req.getAttribute("toForward")).forward(req, resp);
     }
 
+    @Override
+    public boolean securityCheck(HttpServletRequest request, HttpServletResponse response) {
+        if(request.getMethod().compareToIgnoreCase("post") == 0){
+            return request.getParameter("action") != null;
+        }
+        else return true;
+    }
 
     private User formUser(HttpServletRequest req) {
         UserBuilder userBuilder = DirectorBuilder.buildStudent(

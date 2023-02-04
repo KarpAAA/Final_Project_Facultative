@@ -27,15 +27,15 @@ public class AdminCoursesCommand implements Command{
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
-        UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
         UserService userService = new UserService(connectionPool);
         CourseService courseService = new CourseService(connectionPool);
+
         int page = 1;
         int recordsPerPage = 9;
+
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
         }
-
 
         CoursesFilter coursesFilter = (CoursesFilter) request.getSession().getAttribute("coursesFilter");
         if (coursesFilter == null) {
@@ -43,7 +43,6 @@ public class AdminCoursesCommand implements Command{
         }
         coursesFilter.setOffset((page - 1) * recordsPerPage);
         coursesFilter.setCoursesPerPage(recordsPerPage);
-
 
 
         List<CourseDTO> list = courseService.selectCoursesByCondition(coursesFilter);
@@ -63,6 +62,7 @@ public class AdminCoursesCommand implements Command{
         request.getRequestDispatcher("/admin/adminPage.jsp").forward(request, response);
 
     }
-    private void executePost(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {}
+    private void executePost(HttpServletRequest request, HttpServletResponse resp)
+            throws ServletException, IOException {}
 
 }

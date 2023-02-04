@@ -46,7 +46,6 @@ public class StudentReceiveCerteficate implements Command {
         UserDTO user = (UserDTO) request.getSession().getAttribute("user");
 
 
-
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream(new File("C:\\Users\\ivank\\IdeaProjects\\Final_Project\\iText.pdf")));
         document.open();

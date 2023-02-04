@@ -4,9 +4,6 @@ import com.example.final_project.database.connection.ConnectionPool;
 import com.example.final_project.database.entities.course.Course;
 import com.example.final_project.database.entities.meeting.Meeting;
 import com.example.final_project.database.entities.meeting.MeetingBuilder;
-import com.example.final_project.database.entities.message.Message;
-import com.example.final_project.database.entities.message.MessageBuilder;
-import com.example.final_project.database.entities.message.Status;
 import com.example.final_project.database.entities.user.Role;
 import com.example.final_project.database.entities.user.User;
 
@@ -24,7 +21,7 @@ public class MeetingsDao {
         this.connectionPool = connectionPool;
     }
 
-    public List<Meeting> findUserMeetings(User user) {
+    public List<Meeting> getUserMeetings(User user) {
         CoursesDao coursesDao = new CoursesDao(connectionPool);
         List<Course> courseList = new ArrayList<>();
 
@@ -57,8 +54,6 @@ public class MeetingsDao {
         return meetingsList;
 
     }
-
-
     public void addMeeting(Meeting meeting) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -79,9 +74,6 @@ public class MeetingsDao {
         }
 
     }
-
-
-
 
     private Meeting getMeeting(ResultSet resultSet) throws SQLException {
         MeetingBuilder meetingBuilder = new MeetingBuilder();

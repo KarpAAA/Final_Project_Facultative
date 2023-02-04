@@ -10,7 +10,7 @@ public class TaskDTO {
     private final String title;
     private final String condition;
     private final Course course;
-    private int mark;
+
     private byte[] file;
 
 
@@ -36,14 +36,6 @@ public class TaskDTO {
 
     public int getId() {
         return id;
-    }
-
-    public int getMark() {
-        return mark;
-    }
-
-    public void setMark(int mark) {
-        this.mark = mark;
     }
 
     public byte[] getFile() {

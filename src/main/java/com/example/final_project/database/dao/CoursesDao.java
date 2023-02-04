@@ -408,7 +408,7 @@ public class CoursesDao {
 
         Blob blob = resultSet.getBlob(12);
         UserDao userDao = new UserDao(connectionPool);
-        User teacher = userDao.findUser(resultSet.getString(10));
+        User teacher = userDao.getUser(resultSet.getString(10));
 
         return new Course(
                 resultSet.getString(1),

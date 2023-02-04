@@ -1,17 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<html lang="en">
-<head>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
 
-<body style="background-color: #EBEFF2">
-<div class="row">
+
+<div class="row" style="height: 100vh; background-color: #EBEFF2">
     <div class="col-sm-1"></div>
     <div class="col-sm-10">
         <div class="container-fluid" style="text-align: left; padding-top: 15px">
@@ -19,7 +11,7 @@
         </div>
 
         <div class="container-fluid" style="margin-bottom: 50px;">
-            <form action="/project/controller?command=adminEditingCourse&courseTitle=${course.title}" enctype="multipart/form-data" method="post">
+            <form action="/project/controller?command=adminEditingCourse&courseTitle=${course.title}&action=editingCoursePhoto" enctype="multipart/form-data" method="post">
                 <div style="width:100px;height:170px; margin-top:40px ">
                     <input type="text" hidden="hidden" value="editCourse" name="action">
                     <img class="img-rounded" src="data:image/jpg;base64,${course.base64String}"
@@ -139,5 +131,4 @@
     </div>
     <div class="col-sm-1"></div>
 </div>
-</body>
-</html>
+

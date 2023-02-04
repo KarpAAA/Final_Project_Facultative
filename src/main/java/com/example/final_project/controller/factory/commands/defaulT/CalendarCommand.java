@@ -3,6 +3,7 @@ package com.example.final_project.controller.factory.commands.defaulT;
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
 import com.example.final_project.database.entities.user.Role;
+import com.example.final_project.dto.MeetingDTO;
 import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.MeetingsService;
 
@@ -10,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 
 public class CalendarCommand implements Command {
@@ -25,9 +27,10 @@ public class CalendarCommand implements Command {
         MeetingsService meetingsService =
                 new MeetingsService((ConnectionPool) request.getServletContext().getAttribute("connectionPool"));
 
-        var list = meetingsService.getUserMeetings(userDTO);
-        request.getSession().setAttribute("meetings", list);
+
+        request.getSession().setAttribute("meetings", meetingsService.getUserMeetings(userDTO));
         request.setAttribute("pageToInclude", "/default/calendar.jsp");
+
         if(userDTO.getRole() == Role.Student)request.getRequestDispatcher("/client/clientPage.jsp").forward(request, response);
         else request.getRequestDispatcher("/teacher/teacherPage.jsp").forward(request,response);
     }

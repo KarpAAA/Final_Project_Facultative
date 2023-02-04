@@ -108,7 +108,7 @@
                     </a>
 
                     <br>
-                    <a href="/project/controller?command=adminUsers">
+                    <a href="/project/controller?command=adminUsers&action=students">
                         <button type="button" class="myButton">
                             <span class="glyphicon glyphicon-user"></span> ${sessionScope.get("bundle").getString("users")}
                         </button>

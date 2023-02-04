@@ -22,9 +22,11 @@ public class AdminAddTeacher implements Command {
         if(isPost)executePost(request,response);
         else executeGet(request,response);
     }
+
     private void executeGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/admin/teacherRegistration.jsp").forward(req,resp);
     }
+
     private void executePost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) req.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
@@ -45,8 +47,6 @@ public class AdminAddTeacher implements Command {
         }
 
     }
-
-
 
     private User formUser(HttpServletRequest req){
 

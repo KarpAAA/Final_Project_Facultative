@@ -24,8 +24,8 @@ public class AdminUsersCommand implements Command {
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         UserService userService = new UserService(connectionPool);
-        if(request.getParameter("action")!=null
-        && request.getParameter("action").compareToIgnoreCase("teachers") == 0){
+
+        if(request.getParameter("action").compareToIgnoreCase("teachers") == 0){
             request.setAttribute("map", userService.getUserToCourseMapByRole(Role.Teacher));
             request.setAttribute("users", "teachers");
         }
@@ -41,7 +41,7 @@ public class AdminUsersCommand implements Command {
 
     @Override
     public boolean securityCheck(HttpServletRequest request, HttpServletResponse response) {
-        return Command.super.securityCheck(request, response);
+        return request.getParameter("action")!=null;
     }
 }
 

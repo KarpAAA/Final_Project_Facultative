@@ -20,11 +20,12 @@ public class StudentFillBalance implements Command {
 
     private void executePost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
-        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
         UserService userService = new UserService(connectionPool);
+        UserDTO user = (UserDTO) request.getSession().getAttribute("user");
 
 
-        userService.updateBalance(user,Integer.valueOf(request.getParameter("sum")));
+
+        userService.updateBalance(user,Integer.parseInt(request.getParameter("sum")));
         request.getSession().removeAttribute("user");
         request.getSession().setAttribute("user",userService.findUser(user.getLogin()));
         response.sendRedirect("/project/controller?command=settings");
