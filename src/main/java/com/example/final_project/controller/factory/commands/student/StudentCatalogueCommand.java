@@ -59,8 +59,8 @@ public class StudentCatalogueCommand implements Command {
         request.setAttribute("servlet", "catalogue");
 
 
-        request.setAttribute("pageToInclude", "/client/myCourses.jsp");
-        request.getRequestDispatcher("/client/clientPage.jsp").forward(request, response);
+        request.setAttribute("pageToInclude", "/student/studentCourses.jsp");
+        request.getRequestDispatcher("/student/studentPage.jsp").forward(request, response);
 
 
     }

@@ -43,7 +43,7 @@ public class TeacherAddEvent implements Command {
         List<CourseDTO> coursesList = (new CourseService(connectionPool)).getAllTeacherCourses(user, 0, Integer.MAX_VALUE);
 
         request.setAttribute("coursesList", coursesList);
-        request.setAttribute("pageToInclude", "/teacher/addEvent.jsp");
+        request.setAttribute("pageToInclude", "/teacher/teacherAddEvent.jsp");
         request.getRequestDispatcher("/teacher/teacherPage.jsp").forward(request, response);
     }
 

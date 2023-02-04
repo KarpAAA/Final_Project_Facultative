@@ -47,7 +47,7 @@ public class TeacherDetailedCourseCommand implements Command {
         request.setAttribute("solutionMap", solutionMap);
         request.setAttribute("tasksList", new TaskService(connectionPool).getTaskToCourse(courseDTO));
         request.setAttribute("userMarks", userMarks);
-        request.setAttribute("pageToInclude", "/teacher/detailedCourse.jsp");
+        request.setAttribute("pageToInclude", "/teacher/teacherDetailedCourse.jsp");
 
 
         request.getRequestDispatcher("/teacher/teacherPage.jsp").forward(request, response);

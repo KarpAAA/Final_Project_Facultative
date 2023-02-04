@@ -39,7 +39,7 @@ public class TeacherCoursesCommand implements Command {
         request.setAttribute("amountOfPages", noOfPages);
         request.setAttribute("currentPage", page);
 
-        request.setAttribute("pageToInclude", "/teacher/myCourses.jsp");
+        request.setAttribute("pageToInclude", "/teacher/teacherCourses.jsp");
         request.setAttribute("myCourses", courseService.getAllTeacherCourses(userDTO, (page - 1) * recordsPerPage,recordsPerPage));
         request.setAttribute("servlet", "teacherCourses");
 

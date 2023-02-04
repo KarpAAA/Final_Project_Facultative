@@ -38,7 +38,7 @@ public class AdminCourseEditingCommand implements Command{
         CourseDTO courseDTO = courseService.getCourseByTitle(courseTitle);
 
         request.setAttribute("course", courseDTO);
-        request.setAttribute("pageToInclude", "/admin/editingCourse.jsp");
+        request.setAttribute("pageToInclude", "/admin/adminEditingCourse.jsp");
         request.getRequestDispatcher("/admin/adminPage.jsp").forward(request, response);
     }
 
@@ -61,7 +61,7 @@ public class AdminCourseEditingCommand implements Command{
             }
             else {
                 req.setAttribute("course", Mappers.getMapper(CourseMapper.class).courseToCourseDTO(course));
-                req.setAttribute("pageToInclude", "/admin/editingCourse.jsp");
+                req.setAttribute("pageToInclude", "/admin/adminEditingCourse.jsp");
                 req.getRequestDispatcher("/admin/adminPage.jsp").forward(req, resp);
 
             }

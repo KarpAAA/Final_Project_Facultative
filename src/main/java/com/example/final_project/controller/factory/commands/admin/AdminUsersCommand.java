@@ -35,7 +35,7 @@ public class AdminUsersCommand implements Command {
         }
 
 
-        request.setAttribute("pageToInclude", "/admin/usersAdmin.jsp");
+        request.setAttribute("pageToInclude", "/admin/adminUsersAdmin.jsp");
         request.getRequestDispatcher("/admin/adminPage.jsp").forward(request, response);
     }
 

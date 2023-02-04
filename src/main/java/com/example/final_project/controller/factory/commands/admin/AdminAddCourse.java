@@ -48,7 +48,7 @@ public class AdminAddCourse implements Command {
             resp.sendRedirect("/project/controller?command=adminCourses");
         }
         else {
-            request.setAttribute("pageToInclude", "/admin/addCourse.jsp");
+            request.setAttribute("pageToInclude", "/admin/adminAddCourse.jsp");
             request.getRequestDispatcher("/admin/adminPage.jsp").forward(request, resp);
         }
 
@@ -56,7 +56,7 @@ public class AdminAddCourse implements Command {
     }
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("pageToInclude", "/admin/addCourse.jsp");
+        request.setAttribute("pageToInclude", "/admin/adminAddCourse.jsp");
         request.getRequestDispatcher("/admin/adminPage.jsp").forward(request, response);
     }
 

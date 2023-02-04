@@ -24,13 +24,13 @@ public class StudentsMessagesCommand implements Command {
         ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
 
-        request.setAttribute("pageToInclude", "/client/userMessages.jsp");
+        request.setAttribute("pageToInclude", "/student/studentMessages.jsp");
         request.getSession().setAttribute("messagesList",
                 new MessagesService(connectionPool).getUserMessages(userDTO));
         request.setAttribute("servlet", "messages");
 
         RequestDispatcher view
-                = request.getRequestDispatcher("/client/clientPage.jsp");
+                = request.getRequestDispatcher("/student/studentPage.jsp");
         view.forward(request, response);
     }
 }

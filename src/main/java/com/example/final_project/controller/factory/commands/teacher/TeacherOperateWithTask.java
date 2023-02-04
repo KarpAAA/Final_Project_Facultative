@@ -35,7 +35,7 @@ public class TeacherOperateWithTask implements Command {
                 && request.getParameter("action").compareTo("edit") == 0) {
             request.setAttribute("task", taskService.findTask(Integer.parseInt(request.getParameter("task"))));
         }
-        request.setAttribute("pageToInclude", "/teacher/addTask.jsp");
+        request.setAttribute("pageToInclude", "/teacher/teacherAddTask.jsp");
         request.getRequestDispatcher("/teacher/teacherPage.jsp").forward(request, response);
     }
 

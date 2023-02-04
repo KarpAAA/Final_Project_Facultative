@@ -24,7 +24,7 @@ public class AdminAddTeacher implements Command {
     }
 
     private void executeGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("/admin/teacherRegistration.jsp").forward(req,resp);
+        req.getRequestDispatcher("/admin/adminTeacherRegistration.jsp").forward(req,resp);
     }
 
     private void executePost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -43,7 +43,7 @@ public class AdminAddTeacher implements Command {
             resp.sendRedirect("/project/controller?command=adminUsers&action=teachers");
         }
         else{
-            req.getRequestDispatcher("/admin/teacherRegistration.jsp").forward(req,resp);
+            req.getRequestDispatcher("/admin/adminTeacherRegistration.jsp").forward(req,resp);
         }
 
     }

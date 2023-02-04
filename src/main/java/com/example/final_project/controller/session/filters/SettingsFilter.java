@@ -27,18 +27,18 @@ public class SettingsFilter implements Filter {
                 && servletRequest.getParameter("command").compareTo("settings") == 0) {
             HttpServletRequest req = (HttpServletRequest) servletRequest;
             if(((UserDTO)req.getSession().getAttribute("user")).getRole() == Role.Student){
-                req.setAttribute("toInclude", "/client/settings.jsp");
-                req.setAttribute("toForward", "/client/clientPage.jsp");
+                req.setAttribute("toInclude", "/student/studentSettings.jsp");
+                req.setAttribute("toForward", "/student/studentPage.jsp");
 
 
             }
             else if(((UserDTO)req.getSession().getAttribute("user")).getRole() == Role.Teacher){
-                req.setAttribute("toInclude", "/teacher/teacherSettings.jsp");
+                req.setAttribute("toInclude", "/teacher/teacher_admin_Settings.jsp");
                 req.setAttribute("toForward", "/teacher/teacherPage.jsp");
 
             }
             else{
-                req.setAttribute("toInclude", "/teacher/teacherSettings.jsp");
+                req.setAttribute("toInclude", "/teacher/teacher_admin_Settings.jsp");
                 req.setAttribute("toForward", "/admin/adminPage.jsp");
 
             }

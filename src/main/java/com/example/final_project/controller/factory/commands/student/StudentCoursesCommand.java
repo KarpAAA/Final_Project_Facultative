@@ -45,14 +45,14 @@ public class StudentCoursesCommand implements Command {
 
         request.setAttribute("amountOfPages", noOfPages);
         request.setAttribute("currentPage", page);
-        request.setAttribute("pageToInclude", "/client/myCourses.jsp");
+        request.setAttribute("pageToInclude", "/student/studentCourses.jsp");
 
         request.setAttribute("myCourses", coursesList);
         request.setAttribute("amountOfPages", noOfPages);
         request.setAttribute("servlet", "myCourses");
 
         RequestDispatcher view
-                = request.getRequestDispatcher("/client/clientPage.jsp");
+                = request.getRequestDispatcher("/student/studentPage.jsp");
         view.forward(request, response);
     }
 

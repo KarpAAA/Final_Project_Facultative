@@ -45,10 +45,10 @@ public class StudentDetailedCourseCommand implements Command {
 
         request.setAttribute("course", course);
         request.setAttribute("tasksList", taskService.getTaskToCourse(course));
-        request.setAttribute("pageToInclude", "/client/detailedCourse.jsp");
+        request.setAttribute("pageToInclude", "/student/studentDetailedCourse.jsp");
 
 
-        request.getRequestDispatcher("/client/clientPage.jsp").forward(request, response);
+        request.getRequestDispatcher("/student/studentPage.jsp").forward(request, response);
     }
 
 }

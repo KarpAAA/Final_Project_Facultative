@@ -41,7 +41,7 @@ public class TeacherWriteMessage implements Command {
     }
 
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("pageToInclude", "/teacher/writeMessage.jsp");
+        request.setAttribute("pageToInclude", "/teacher/teacherWriteMessage.jsp");
         request.getRequestDispatcher("/teacher/teacherPage.jsp").forward(request, response);
     }
 
