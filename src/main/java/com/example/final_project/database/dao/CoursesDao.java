@@ -228,6 +228,7 @@ public class CoursesDao {
             e.printStackTrace();
         }
     }
+
     public synchronized void userBuyCourse(Course course, User user){
         TaskDao taskDao = new TaskDao(connectionPool);
         try {

@@ -30,10 +30,8 @@ public class MeetingsDao {
 
         Connection connection = connectionPool.getConnection();
         List<Meeting> meetingsList = new ArrayList<>();
+
         try {
-
-
-
             StringBuilder request =  new StringBuilder("SELECT * FROM Meeting WHERE Course_title = ");
             if(courseList.size() == 0){return meetingsList;}
             else{

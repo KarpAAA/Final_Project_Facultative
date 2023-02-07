@@ -126,7 +126,7 @@ class UserDaoTest {
     }
 
     @Test
-    void updatePhoto() throws SQLException {
+    void updateUserPhoto() throws SQLException {
         userDao.updateUserPhoto(getTestUser());
 
         verify(mockConnectionPool, times(1)).getConnection();
@@ -224,4 +224,46 @@ class UserDaoTest {
         verify(mockConnectionPool, times(1)).releaseConnection(mockConnection);
 
     }
+
+    @Test
+    void identifyUser() throws SQLException {
+        userDao.identifyUser(getTestUser().getLogin(), getTestUser().getPassword());
+        verify(mockConnectionPool, times(1)).getConnection();
+        verify(mockConnection, times(1)).prepareStatement(anyString());
+        verify(mockPreparedStmnt, times(2)).setString(anyInt(), anyString());
+
+        verify(mockPreparedStmnt, times(1)).executeQuery();
+        verify(mockResultSet,atLeast(1)).next();
+        verify(mockConnectionPool, times(1)).releaseConnection(mockConnection);
+    }
+
+
+    @Test
+    void updateUserPassword() throws SQLException {
+        userDao.updateUserPassword(getTestUser(), getTestUser().getPassword());
+        verify(mockConnectionPool, times(1)).getConnection();
+        verify(mockConnection, times(1)).prepareStatement(anyString());
+        verify(mockPreparedStmnt, times(2)).setString(anyInt(), anyString());
+
+        verify(mockPreparedStmnt, times(1)).executeUpdate();
+        verify(mockConnectionPool, times(1)).releaseConnection(mockConnection);
+    }
+
+    @Test
+    void saveTaskMarks()  throws SQLException {
+        Map<User, Map<Task,Integer>> map = new HashMap<>();
+        Map<Task,Integer> taskMap = new HashMap<>();
+        taskMap.put(new Task(1,"title","condition",getTestCourse()),10);
+        map.put(getTestUser(),taskMap);
+        userDao.saveTaskMarks(map);
+        verify(mockConnectionPool, atLeast(1)).getConnection();
+        verify(mockConnection, atLeast(1)).prepareStatement(anyString());
+        verify(mockPreparedStmnt, atLeast(1)).setString(anyInt(), anyString());
+        verify(mockPreparedStmnt, atLeast(2)).setInt(anyInt(), anyInt());
+        verify(mockPreparedStmnt, atLeast(1)).addBatch();
+
+        verify(mockPreparedStmnt, times(1)).executeBatch();
+        verify(mockConnectionPool, atLeast(1)).releaseConnection(mockConnection);
+    }
+
 }

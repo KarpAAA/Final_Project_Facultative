@@ -34,13 +34,13 @@ class CoursesDaoTest {
     private Course getTestCourse() {
         return new Course("title", "topic", "description",
                 new User("login", "password", "name", Role.Student, "1@1", 18, new Date(1), "Surname",
-                        "+3809641345", new byte[]{1, 2, 3}, Blocked_State.UNLOCKED, 100)
-                , new Date(1), new Date(1), 120, 120, 120, State.InProgress, new byte[]{1, 2, 3});
+                        "+3809641345", new byte[]{1, 2, 3}, Blocked_State.UNLOCKED, 1000)
+                , new Date(1), new Date(1), 120, 110, 120, State.InProgress, new byte[]{1, 2, 3});
     }
 
     private User getTestUser() {
         return new User("login", "password", "name", Role.Student, "1@1", 18, new Date(1), "Surname",
-                "+3809641345", new byte[]{1, 2, 3}, Blocked_State.UNLOCKED, 100);
+                "+3809641345", new byte[]{1, 2, 3}, Blocked_State.UNLOCKED, 1000);
     }
     @BeforeEach
     void setUp() throws SQLException {
@@ -57,7 +57,7 @@ class CoursesDaoTest {
     }
 
     @Test
-    void addCourseNormalCase() throws SQLException {
+    void addCourse() throws SQLException {
 
         coursesDao.addCourse(getTestCourse());
         verify(mockConnectionPool).getConnection();
@@ -74,7 +74,7 @@ class CoursesDaoTest {
 
 
     @Test
-    void updateCourseNormalCase() throws SQLException {
+    void updateCourse() throws SQLException {
         coursesDao.updateCourse(getTestCourse());
         verify(mockConnectionPool).getConnection();
         verify(mockConnection).prepareStatement(anyString());
@@ -211,4 +211,57 @@ class CoursesDaoTest {
         verify(mockResultSet,atLeast(1)).next();
         verify(mockConnectionPool, atLeast(1)).releaseConnection(mockConnection);
     }
+
+
+
+
+
+    @Test
+    void userBuyCourse() throws SQLException {
+        coursesDao.userBuyCourse(getTestCourse(),getTestUser());
+
+        verify(mockConnectionPool,atLeast(1)).getConnection();
+        verify(mockConnection,atLeast(1)).prepareStatement(anyString());
+        verify(mockPreparedStmnt, atLeast(3)).setString(anyInt(),anyString());
+        verify(mockPreparedStmnt, atLeast(1)).setInt(anyInt(),anyInt());
+        verify(mockPreparedStmnt, atLeast(1)).setDate(anyInt(),any());
+        verify(mockPreparedStmnt,atLeast(1)).executeQuery();
+        verify(mockResultSet,atLeast(1)).next();
+
+        verify(mockConnectionPool,atLeast(1)).releaseConnection(mockConnection);
+    }
+
+
+    @Test
+    void addStudentToCourse() throws SQLException {
+        coursesDao.userBuyCourse(getTestCourse(),getTestUser());
+
+        verify(mockConnectionPool,atLeast(1)).getConnection();
+        verify(mockConnection,atLeast(1)).prepareStatement(anyString());
+        verify(mockPreparedStmnt, atLeast(3)).setString(anyInt(),anyString());
+        verify(mockPreparedStmnt, atLeast(1)).setInt(anyInt(),anyInt());
+        verify(mockPreparedStmnt, atLeast(1)).setDate(anyInt(),any());
+        verify(mockPreparedStmnt,atLeast(1)).executeQuery();
+        verify(mockResultSet,atLeast(1)).next();
+
+        verify(mockConnectionPool,atLeast(1)).releaseConnection(mockConnection);
+    }
+
+
+
+    @Test
+    void getUserCourses() throws SQLException {
+        coursesDao.getUserCourses(getTestUser());
+
+        verify(mockConnectionPool,atLeast(1)).getConnection();
+        verify(mockConnection,atLeast(1)).prepareStatement(anyString());
+        verify(mockPreparedStmnt, atLeast(1)).setString(anyInt(),anyString());
+
+        verify(mockPreparedStmnt,atLeast(1)).executeQuery();
+        verify(mockResultSet,atLeast(1)).next();
+
+        verify(mockConnectionPool,atLeast(1)).releaseConnection(mockConnection);
+    }
+
+
 }

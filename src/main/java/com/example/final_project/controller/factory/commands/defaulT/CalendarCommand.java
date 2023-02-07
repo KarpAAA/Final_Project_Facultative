@@ -31,7 +31,7 @@ public class CalendarCommand implements Command {
         request.getSession().setAttribute("meetings", meetingsService.getUserMeetings(userDTO));
         request.setAttribute("pageToInclude", "/default/calendar.jsp");
 
-        if(userDTO.getRole() == Role.Student)request.getRequestDispatcher("/client/studentPage.jsp").forward(request, response);
+        if(userDTO.getRole() == Role.Student)request.getRequestDispatcher("/student/studentPage.jsp").forward(request, response);
         else request.getRequestDispatcher("/teacher/teacherPage.jsp").forward(request,response);
     }
 

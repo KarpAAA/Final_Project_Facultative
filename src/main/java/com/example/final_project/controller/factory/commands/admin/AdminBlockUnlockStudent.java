@@ -39,7 +39,7 @@ public class AdminBlockUnlockStudent implements Command {
         }
 
         UserDTO blockedUser = userService.blockOrUnlockStudent(toDo,login);
-        if(blockedUser.getRole() == Role.Student)response.sendRedirect("/project/controller?command=adminUsers");
+        if(blockedUser.getRole() == Role.Student)response.sendRedirect("/project/controller?command=adminUsers&action=students");
         else response.sendRedirect("/project/controller?command=adminUsers&action=teachers");
     }
 
