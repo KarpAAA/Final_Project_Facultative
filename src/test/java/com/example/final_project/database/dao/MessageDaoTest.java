@@ -106,4 +106,14 @@ class MessageDaoTest {
         verify(mockPreparedStmnt, times(2)).executeUpdate();
         verify(mockConnectionPool).releaseConnection(mockConnection);
     }
+
+    @Test
+    void clearUserMessages() throws SQLException {
+        messagesDao.clearUserMessages(getTestUser());
+        verify(mockConnectionPool).getConnection();
+        verify(mockConnection).prepareStatement(anyString());
+        verify(mockPreparedStmnt, times(1)).setString(anyInt(), anyString());
+        verify(mockPreparedStmnt, times(1)).executeUpdate();
+        verify(mockConnectionPool).releaseConnection(mockConnection);
+    }
 }
