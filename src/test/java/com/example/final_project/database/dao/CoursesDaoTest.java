@@ -120,10 +120,10 @@ class CoursesDaoTest {
         verify(mockPreparedStmnt, times(2)).executeQuery();
 
         verify(mockResultSet,times(3)).next();
-        verify(mockResultSet,times(5)).getString(anyInt());
-        verify(mockResultSet,times(2)).getDate(anyInt());
-        verify(mockResultSet,times(3)).getInt(anyInt());
-        verify(mockResultSet,times(1)).getBlob(anyInt());
+        verify(mockResultSet,times(4)).getString(anyString());
+        verify(mockResultSet,times(2)).getDate(anyString());
+        verify(mockResultSet,times(4)).getInt(anyString());
+        verify(mockResultSet,times(1)).getBlob(anyString());
         verify(mockConnectionPool, times(2)).releaseConnection(mockConnection);
 
 
@@ -178,10 +178,10 @@ class CoursesDaoTest {
         verify(mockPreparedStmnt,times(2)).executeQuery();
 
         verify(mockResultSet,atLeast(1)).next();
-        verify(mockResultSet,times(5)).getString(anyInt());
-        verify(mockResultSet,times(2)).getDate(anyInt());
-        verify(mockResultSet,times(3)).getInt(anyInt());
-        verify(mockResultSet,times(1)).getBlob(anyInt());
+        verify(mockResultSet,times(4)).getString(anyString());
+        verify(mockResultSet,times(2)).getDate(anyString());
+        verify(mockResultSet,times(4)).getInt(anyString());
+        verify(mockResultSet,times(1)).getBlob(anyString());
         verify(mockConnectionPool, times(2)).releaseConnection(mockConnection);
     }
 

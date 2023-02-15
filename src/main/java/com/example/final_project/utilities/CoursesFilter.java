@@ -5,6 +5,10 @@ import com.example.final_project.database.entities.course.State;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Course Filter class used to form request to database
+ * with entered filter options by user
+ */
 public class CoursesFilter {
     public enum SortBy {
         AZ, ZA, NONE
@@ -62,6 +66,11 @@ public class CoursesFilter {
     public void setSearch(String search) {
         this.search = search;
     }
+
+    /**
+     * form request string to database by stated by user options
+     * @return request string to database
+     */
     public String formCondition() {
         StringBuilder stringBuilder = new StringBuilder();
         boolean ifFilterAvailable = checkIfFilterFilled();

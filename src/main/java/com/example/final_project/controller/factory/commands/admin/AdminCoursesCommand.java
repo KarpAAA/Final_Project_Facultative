@@ -15,7 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-
+/**
+ * Command of admin role
+ * Using to show all courses to admin
+ */
 public class AdminCoursesCommand implements Command{
 
     @Override

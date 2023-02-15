@@ -18,11 +18,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * CourseDAO which implements functions to interact with database
+ */
 public class CoursesDao {
     private int coursesAmount;
     private int teacherCoursesAmount;
     private final ConnectionPool connectionPool;
 
+    /**
+     * @param connectionPool pool of connections used to request to database
+     */
     public CoursesDao(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
@@ -30,16 +36,22 @@ public class CoursesDao {
     public int getCoursesAmount() {
         return coursesAmount;
     }
+
     public int getTeacherCoursesAmount() {
         return teacherCoursesAmount;
     }
 
 
+    /**
+     * Function add course to database
+     *
+     * @param course to be added
+     */
     public void addCourse(Course course) {
         try {
             Connection connection = connectionPool.getConnection();
             PreparedStatement statement = connection.prepareStatement("INSERT INTO Course " +
-                    "(title, start_date,finish_date,max_students_amount,topic,price,students_amount, description, State_id, teacher, duration, photo) "+
+                    "(title, start_date,finish_date,max_students_amount,topic,price,students_amount, description, State_id, teacher, duration, photo) " +
                     " VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ");
 
             statement.setString(1, course.getTitle());
@@ -63,6 +75,12 @@ public class CoursesDao {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Function update course in database
+     *
+     * @param course to be updated
+     */
     public void updateCourse(Course course) {
 
         try {
@@ -91,6 +109,12 @@ public class CoursesDao {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Function delete course from database
+     *
+     * @param courseTitle title of course to be deleted
+     */
     public void deleteCourse(String courseTitle) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -103,6 +127,12 @@ public class CoursesDao {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Function update course photo in database
+     *
+     * @param course to be updated
+     */
     public void setPhotoToCourse(Course course) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -119,6 +149,12 @@ public class CoursesDao {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Function look for course in database
+     *
+     * @param title of course to be found
+     */
     public Course findCourse(String title) {
 
         Course course = null;
@@ -144,6 +180,10 @@ public class CoursesDao {
         return course;
     }
 
+
+    /**
+     * @return all courses from database
+     */
     public List<Course> selectAllCourses() {
 
         Connection connection = connectionPool.getConnection();
@@ -163,6 +203,11 @@ public class CoursesDao {
         }
         return courseList;
     }
+
+    /**
+     * @param coursesFilter filter which applied to courses selection
+     * @return all courses by filter from database
+     */
     public List<Course> selectCoursesByCondition(CoursesFilter coursesFilter) {
         List<Course> list = new ArrayList<>();
         try {
@@ -185,6 +230,15 @@ public class CoursesDao {
 
         return list;
     }
+
+
+    /**
+     * @param user   whose courses will be selected
+     * @param offset start position of selection
+     * @param amount selection amount
+     * @param state  state of courses to be selected
+     * @return selected courses
+     */
     public List<Course> selectStatedAmountOfUserCourses(User user, int offset, int amount, State state) {
         List<Course> list = new ArrayList<>();
         try {
@@ -210,6 +264,12 @@ public class CoursesDao {
         return list;
     }
 
+    /**
+     * Register student to course
+     *
+     * @param userLogin   user who will be registered
+     * @param courseTitle title of course to which user will register
+     */
     public void registerStudentToCourse(String userLogin, String courseTitle) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -229,11 +289,17 @@ public class CoursesDao {
         }
     }
 
-    public synchronized void userBuyCourse(Course course, User user){
+    /**
+     * Purchasing course by student
+     *
+     * @param course which user will buy
+     * @param user   who buy course
+     */
+    public synchronized void userBuyCourse(Course course, User user) {
         TaskDao taskDao = new TaskDao(connectionPool);
         try {
-            if(course.getMaxStudentsAmount()<=course.getCurrentStudentsAmount()
-            || course.getPrice()>user.getBalance()) throw new NoAccessProvidedException();
+            if (course.getMaxStudentsAmount() <= course.getCurrentStudentsAmount()
+                    || course.getPrice() > user.getBalance()) throw new NoAccessProvidedException();
 
             Connection connection = connectionPool.getConnection();
             PreparedStatement statement = connection.prepareStatement("INSERT into user_has_course  VALUES(?,?,?,?,?)");
@@ -243,17 +309,24 @@ public class CoursesDao {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             java.util.Date date = new java.util.Date();
             statement.setDate(3, java.sql.Date.valueOf(formatter.format(date)));
-            statement.setInt(4,0);
-            statement.setString(5,"Allowed");
+            statement.setString(4, "Allowed");
+            statement.setInt(5, 0);
+
             statement.executeUpdate();
             increaseStudentsAmount(course);
-            taskDao.getTaskByCourse(course).forEach(task -> taskDao.addStudentToTask(user.getLogin(),task));
+            taskDao.getTaskByCourse(course).forEach(task -> taskDao.addStudentToTask(user.getLogin(), task));
             connectionPool.releaseConnection(connection);
-            new UserDao(connectionPool).updateUserBalance(user,(course.getPrice() * -1));
+            new UserDao(connectionPool).updateUserBalance(user, (course.getPrice() * -1));
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    /**
+     * @param userLogin   user who will be admitted to course
+     * @param courseTitle course to which user will be admitted
+     * @return if user was added successfully
+     */
     public boolean addStudentToCourse(String userLogin, String courseTitle) {
         Course course = findCourse(courseTitle);
         TaskDao taskDao = new TaskDao(connectionPool);
@@ -267,13 +340,18 @@ public class CoursesDao {
 
             statement.executeUpdate();
             increaseStudentsAmount(course);
-            taskDao.getTaskByCourse(course).forEach(task -> taskDao.addStudentToTask(userLogin,task));
+            taskDao.getTaskByCourse(course).forEach(task -> taskDao.addStudentToTask(userLogin, task));
             connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return true;
     }
+
+    /**
+     * @param userLogin   user who will be deleted from course
+     * @param courseTitle course from which user will be deleted
+     */
     public void removeStudentFromCourse(String userLogin, String courseTitle) {
 
         try {
@@ -290,6 +368,11 @@ public class CoursesDao {
         }
 
     }
+
+    /**
+     * @param userLogin   user who will be blocked to course
+     * @param courseTitle course to which user will be blocked
+     */
     public void blockStudentToCourse(String userLogin, String courseTitle) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -304,6 +387,10 @@ public class CoursesDao {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Function changing course state by date
+     */
     public void changeCoursesState() {
         List<Course> courseList = selectAllCourses();
         java.util.Date date = new java.util.Date();
@@ -342,12 +429,19 @@ public class CoursesDao {
         }
     }
 
+
+    /**
+     * @param user   teacher whose courses will be selected
+     * @param offset start position of selection
+     * @param amount selection amount
+     * @return selected courses
+     */
     public List<Course> getAllTeacherCourses(User user, int offset, int amount) {
         Connection connection = connectionPool.getConnection();
         List<Course> courseList = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement("SELECT SQL_CALC_FOUND_ROWS * FROM Course LEFT join state ON state.id = Course.state_id WHERE Course.teacher = ?"
-            + " LIMIT " + offset + ", " + amount);
+                    + " LIMIT " + offset + ", " + amount);
             statement.setString(1, user.getLogin());
             ResultSet resultSet = statement.executeQuery();
 
@@ -358,7 +452,7 @@ public class CoursesDao {
             resultSet.close();
             resultSet = statement.executeQuery("SELECT FOUND_ROWS()");
 
-            if (resultSet!=null && resultSet.next())
+            if (resultSet != null && resultSet.next())
                 this.teacherCoursesAmount = resultSet.getInt(1);
             connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
@@ -366,6 +460,11 @@ public class CoursesDao {
         }
         return courseList;
     }
+
+    /**
+     * @param user whose courses will be selected
+     * @return user courses
+     */
     public List<Course> getUserCourses(User user) {
         Connection connection = connectionPool.getConnection();
         List<Course> courseList = new ArrayList<>();
@@ -386,6 +485,10 @@ public class CoursesDao {
         }
         return courseList;
     }
+
+    /**
+     * @return range of course topics
+     */
     public List<String> getAllTopics() {
         Connection connection = connectionPool.getConnection();
         Set<String> topicsList = new HashSet<>();
@@ -404,34 +507,41 @@ public class CoursesDao {
         return topicsList.stream().toList();
     }
 
-
+    /**
+     * @param resultSet received dataSet from database
+     * @return course from Result Set
+     */
     private Course getCourse(ResultSet resultSet) throws SQLException {
 
-        Blob blob = resultSet.getBlob(12);
+        Blob blob = resultSet.getBlob("photo");
         UserDao userDao = new UserDao(connectionPool);
-        User teacher = userDao.getUser(resultSet.getString(10));
+        User teacher = userDao.getUser(resultSet.getString("teacher"));
 
         return new Course(
-                resultSet.getString(1),
-                resultSet.getString(5),
-                resultSet.getString(8),
+                resultSet.getString("title"),
+                resultSet.getString("topic"),
+                resultSet.getString("description"),
                 teacher,
-                resultSet.getDate(2),
-                resultSet.getDate(3),
-                resultSet.getInt(4),
-                resultSet.getInt(7),
-                resultSet.getInt(6),
-                indentifyState(resultSet.getString(14)),
-                blob == null ? null:blob.getBytes(1,(int) blob.length())
+                resultSet.getDate("start_date"),
+                resultSet.getDate("finish_date"),
+                resultSet.getInt("max_students_amount"),
+                resultSet.getInt("students_amount"),
+                resultSet.getInt("price"),
+                identifyState(resultSet.getInt("State_id")),
+                blob == null ? null : blob.getBytes(1, (int) blob.length())
 
         );
 
     }
 
-    public  boolean checkIfTitleAvailable(String title) {
+    /**
+     * check if title is available(Primary Key)
+     * @return if title is available
+     */
+    public boolean checkIfTitleAvailable(String title) {
         Connection con = connectionPool.getConnection();
         try {
-            PreparedStatement statement = con.prepareStatement("SELECT * FROM Course WHERE title=?");
+            PreparedStatement statement = con.prepareStatement("SELECT * FROM Course WHERE title = ?");
             statement.setString(1, title);
             ResultSet resultSet = statement.executeQuery();
             int counter = 0;
@@ -446,6 +556,9 @@ public class CoursesDao {
         }
     }
 
+    /**
+     * increase students amount of course(when student is admitted)
+     */
     private void increaseStudentsAmount(Course course) {
 
         try {
@@ -463,6 +576,10 @@ public class CoursesDao {
         }
 
     }
+
+    /**
+     * increase decrease amount of course(when student is deleted)
+     */
     private void decreaseStudentsAmount(Course course) {
 
         try {
@@ -480,11 +597,15 @@ public class CoursesDao {
         }
 
     }
-    private State indentifyState(String string) {
-        if (string == null) return null;
-        if (string.compareToIgnoreCase("In progress") == 0) return State.InProgress;
-        else if (string.compareToIgnoreCase("Not begun") == 0) return State.NotStarted;
-        else return State.Finished;
+
+    /**
+     * function identify course state by id(enum)
+     */
+    private State identifyState(int id) {
+        for (int i = 0; i < State.values().length; ++i) {
+            if (id == State.values()[i].ordinal()) return State.values()[i];
+        }
+        return null;
     }
 
 }

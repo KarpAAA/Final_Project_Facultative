@@ -86,10 +86,7 @@
             <div class="col-sm-3">
                 <ul class="pagination pagination-sm">
                     <c:forEach begin="0" end="${amountOfPages-1}" var="i">
-
-
                         <li><a href="/project/controller?command=teacherCourses&page=${i+1}">${i+1}</a></li>
-
                     </c:forEach>
                 </ul>
             </div>

@@ -79,14 +79,14 @@ class UserDaoTest {
     @Test
     void insertUser() throws SQLException {
         userDao.insertUser(getTestUser());
-        verify(mockConnectionPool).getConnection();
+        verify(mockConnectionPool, atLeast(1)).getConnection();
         verify(mockConnection, atLeast(1)).prepareStatement(anyString());
         verify(mockPreparedStmnt, atLeast(4)).setString(anyInt(), anyString());
         verify(mockPreparedStmnt, atLeast(1)).setInt(anyInt(), anyInt());
         verify(mockPreparedStmnt, atLeast(1)).executeUpdate();
 
 
-        verify(mockConnectionPool).releaseConnection(mockConnection);
+        verify(mockConnectionPool, atLeast(2)).releaseConnection(mockConnection);
     }
 
     @Test

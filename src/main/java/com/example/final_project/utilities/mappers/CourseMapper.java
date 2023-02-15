@@ -8,6 +8,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 
+/**
+ * Mapper interface user to generate Course Mapper class
+ * To 1)Move from CourseDTO type to Course type
+ *    2)Move from Course type to CourseDTO type
+ */
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CourseMapper {
 

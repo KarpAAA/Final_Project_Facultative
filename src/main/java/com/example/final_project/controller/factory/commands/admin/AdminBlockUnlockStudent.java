@@ -13,6 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
+/**
+ * Command of admin role
+ * Using to block or unlock user
+ */
 public class AdminBlockUnlockStudent implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

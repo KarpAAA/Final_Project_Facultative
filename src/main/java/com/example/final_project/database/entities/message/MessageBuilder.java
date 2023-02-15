@@ -3,6 +3,9 @@ package com.example.final_project.database.entities.message;
 
 import com.example.final_project.database.entities.user.User;
 
+/**
+ * Message builder which creates message entity
+ */
 public class MessageBuilder {
     private int id;
     private String text;
@@ -11,8 +14,6 @@ public class MessageBuilder {
     private User receiver;
     private Status status;
     public Message buildMessage() {
-        /*if (!validationOfNecessaryFields())
-            throw new IllegalArgumentException("Not all necessary fields entered");*/
 
         return new Message(id, text, subject, sender, receiver,status.toString());
     }
@@ -25,10 +26,6 @@ public class MessageBuilder {
     public MessageBuilder setId(int id) {
         this.id = id;
         return this;
-    }
-
-    private boolean validationOfNecessaryFields() {
-        return !text.equals("") && sender != null && receiver != null;
     }
 
     public MessageBuilder setText(String text) {

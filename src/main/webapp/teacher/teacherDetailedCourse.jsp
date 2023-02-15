@@ -86,68 +86,70 @@
 
         <div class="col-sm-2"></div>
     </div>
-    <div id="taskTable" class="row">
-        <div class="col-sm-2"></div>
+    <c:if test="${course.state.name().compareTo('InProgress') == 0}">
+        <div id="taskTable" class="row">
+            <div class="col-sm-2"></div>
 
-        <div class="col-sm-8">
-            <div style="margin-bottom: 15px;">
-                <a href="/project/controller?command=operateWithTask&course=${course.title}&action=add">
-                    <button class="btn btn-success">
-                        ${sessionScope.get("bundle").getString("addTaskToCourse")}
-                    </button>
-                </a>
-            </div>
+            <div class="col-sm-8">
+                <div style="margin-bottom: 15px;">
+                    <a href="/project/controller?command=operateWithTask&course=${course.title}&action=add">
+                        <button class="btn btn-success">
+                                ${sessionScope.get("bundle").getString("addTaskToCourse")}
+                        </button>
+                    </a>
+                </div>
 
-            <div class="table-editable">
-                <table class="table table-bordered table-responsive-md text-center">
-                    <thead>
-                    <tr style="background-color: #163040;color: white">
-                        <th class="text-center">${sessionScope.get("bundle").getString("title")}</th>
-                        <th class="text-center">${sessionScope.get("bundle").getString("condition")}</th>
-                        <th class="text-center">${sessionScope.get("bundle").getString("operate")}</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                <div class="table-editable">
+                    <table class="table table-bordered table-responsive-md text-center">
+                        <thead>
+                        <tr style="background-color: #163040;color: white">
+                            <th class="text-center">${sessionScope.get("bundle").getString("title")}</th>
+                            <th class="text-center">${sessionScope.get("bundle").getString("condition")}</th>
+                            <th class="text-center">${sessionScope.get("bundle").getString("operate")}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                    <c:forEach var="task" items="${tasksList}">
-                        <tr style="background-color: white">
-                            <td contenteditable="false">${task.title}</td>
-                            <td contenteditable="false">${task.condition}</td>
-                            <td>
+                        <c:forEach var="task" items="${tasksList}">
+                            <tr style="background-color: white">
+                                <td contenteditable="false">${task.title}</td>
+                                <td contenteditable="false">${task.condition}</td>
+                                <td>
 
-                                <button class="btn btn-default" type="submit"
-                                        style="background-color: white; border-color: #163040">
-                                    <a href="/project/controller?command=operateWithTask&action=edit&course=${course.title}&task=${task.id}">
-                                        <span class="glyphicon glyphicon-edit" style="color: #163040"></span>
-                                    </a>
-                                </button>
-
-
-                                <form method="post" action="controller" style="margin-top: 5px;">
-                                    <input hidden="hidden" name="command" value="operateWithTask"/>
-                                    <input hidden="hidden" name="action" value="delete"/>
-                                    <input hidden="hidden" name="task" value="${task.id}"/>
-                                    <input hidden="hidden" name="course" value="${course.title}"/>
-
-                                    <button class="btn btn-danger" type="submit" style="background-color: white">
-                                        <span class="glyphicon glyphicon-trash" style="color: red;"></span>
+                                    <button class="btn btn-default" type="submit"
+                                            style="background-color: white; border-color: #163040">
+                                        <a href="/project/controller?command=operateWithTask&action=edit&course=${course.title}&task=${task.id}">
+                                            <span class="glyphicon glyphicon-edit" style="color: #163040"></span>
+                                        </a>
                                     </button>
 
-                                </form>
 
-                            </td>
-                        </tr>
-                    </c:forEach>
+                                    <form method="post" action="controller" style="margin-top: 5px;">
+                                        <input hidden="hidden" name="command" value="operateWithTask"/>
+                                        <input hidden="hidden" name="action" value="delete"/>
+                                        <input hidden="hidden" name="task" value="${task.id}"/>
+                                        <input hidden="hidden" name="course" value="${course.title}"/>
 
-                    </tbody>
-                </table>
+                                        <button class="btn btn-danger" type="submit" style="background-color: white">
+                                            <span class="glyphicon glyphicon-trash" style="color: red;"></span>
+                                        </button>
+
+                                    </form>
+
+                                </td>
+                            </tr>
+                        </c:forEach>
+
+                        </tbody>
+                    </table>
+
+                </div>
 
             </div>
 
+            <div class="col-sm-2"></div>
         </div>
-
-        <div class="col-sm-2"></div>
-    </div>
+    </c:if>
     <c:if test="${course.state.name().compareTo('InProgress') == 0}">
         <div class="row">
             <div class="col-sm-2"></div>

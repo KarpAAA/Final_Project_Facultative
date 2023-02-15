@@ -6,7 +6,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Deleting account</h5>
+                <h5 class="modal-title">${sessionScope.get("bundle").getString("coursePurchasing")}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -104,7 +104,7 @@
 
 <c:if test="${requestScope.registerState.compareToIgnoreCase('Allowed')==0}">
 
-    <c:if test="${tasksList.size()!=0 && course.state.name().compareTo('Finished') != 0}">
+    <c:if test="${tasksList.size()!=0 && course.state.name().compareTo('InProgress') == 0}">
         <div class="row">
             <div class="col-sm-2"></div>
             <div class="col-sm-8" id="table" style="margin-top: 50px">

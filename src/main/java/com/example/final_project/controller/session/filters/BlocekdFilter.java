@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Filter where is a check if user is not blocked by admin
+ */
 @WebFilter(filterName = "encodingFilter", urlPatterns = {"/*"},
         initParams = {@WebInitParam(name = "encoding", value = "UTF-8")})
 public class BlocekdFilter implements Filter {

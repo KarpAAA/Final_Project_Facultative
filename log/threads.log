@@ -1,0 +1,3 @@
+2023-02-15T15:39:47.312+0200 WARN User KarpAAA has tried to access: studentCses command
+2023-02-15T19:16:29.301+0200 WARN Unidentified user has tried to access: teacherDownloadStudentSolution command
+2023-02-15T19:16:44.788+0200 WARN Unidentified user has tried to access: adminCourses command

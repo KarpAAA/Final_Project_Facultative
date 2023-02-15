@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Connection pool which used to create and reuse connection
+ * Pool_size = 10
+ */
 public class ConnectionPool {
 
     private final List<Connection> connectionPool;

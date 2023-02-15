@@ -1,6 +1,5 @@
 package com.example.final_project.controller.session.filters;
 
-import com.example.final_project.database.connection.ConnectionPool;
 import com.example.final_project.database.entities.user.Role;
 import com.example.final_project.dto.UserDTO;
 
@@ -10,8 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 
+/**
+ * Filter used to switch interface language
+ */
 @WebFilter(filterName = "loggingFilter", urlPatterns = {"/controller"})
-//?command=users
 public class LoggingFilter implements Filter {
 
 

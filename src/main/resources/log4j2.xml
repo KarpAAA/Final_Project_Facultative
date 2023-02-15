@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="30">
+
+    <!-- Logging Properties -->
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} %p %m%n</Property>
+        <Property name="LOG_DIR">C:\Users\ivank\IdeaProjects\Final_Project\log</Property>
+    </Properties>
+
+    <Appenders>
+
+        <!-- Console Appender -->
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <!-- File Appenders on need basis -->
+        <RollingFile name="requests" fileName="${LOG_DIR}/requests.log"
+                     filePattern="${LOG_DIR}/app-debug-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        <RollingFile name="audit_trail" fileName="${LOG_DIR}/audit_trail.log"
+                     filePattern="${LOG_DIR}/app-debug-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        <RollingFile name="errors" fileName="${LOG_DIR}/errors.log"
+                     filePattern="${LOG_DIR}/app-debug-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        <RollingFile name="threads" fileName="${LOG_DIR}/threads.log"
+                     filePattern="${LOG_DIR}/app-debug-%d{yyyy-MM-dd}-%i.log">
+
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="19500KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+
+    </Appenders>
+
+    <Loggers>
+
+
+        <Logger name="LogRequest" level="debug">
+            <AppenderRef ref="requests"/>
+        </Logger>
+        <Logger name="LogAuditTrail" level="debug">
+            <AppenderRef ref="audit_trail"/>
+        </Logger>
+        <Logger name="LogAvailability" level="debug">
+            <AppenderRef ref="errors"/>
+        </Logger>
+        <Logger name="LogThreads" level="debug">
+            <AppenderRef ref="threads"/>
+        </Logger>
+        <Root level="warn">
+            <AppenderRef ref="Console"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>

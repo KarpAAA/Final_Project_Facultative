@@ -2,6 +2,8 @@ package com.example.final_project.controller.factory.commands.student;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
+import com.example.final_project.database.entities.course.State;
+import com.example.final_project.dto.CourseDTO;
 import com.example.final_project.dto.UserDTO;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.TaskService;
@@ -23,6 +25,11 @@ import java.sql.Connection;
 import java.util.Iterator;
 import java.util.List;
 
+
+/**
+ * Command of student role
+ * Using to attach solution file to task by student
+ */
 public class StudentPassTask implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -42,9 +49,22 @@ public class StudentPassTask implements Command {
                 + new CourseService(connectionPool).findCourse(request.getParameter("course")).getTitle());
     }
 
+    @Override
+    public boolean securityCheck(HttpServletRequest request, HttpServletResponse response) {
+        ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
+        CourseService courseService = new CourseService(connectionPool);
+        CourseDTO course = courseService.findCourse(request.getParameter("course"));
+        return course.getState() == State.InProgress;
+    }
+
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     }
 
+    /**
+     * @param request received from user
+     * request contains chosen by user file(as bytes)
+     * @return file(as bytes)
+     */
     private byte[] readFileFromUser(HttpServletRequest request) {
         String file_name = null;
         FileItemFactory factory = new DiskFileItemFactory();

@@ -90,7 +90,7 @@
                 <div class="form-group ${errorList.contains('maxStudentsAmount')? " has-error": "has-success"}">
                     <label for="maxStudentsAmount"
                            class="${errorList.contains('maxStudentsAmount')? "text-danger": "text-success"}">${sessionScope.get("bundle").getString("maxStudentsAmount")}:&#42;</label>
-                    <input type="number" min="0" class="control-label form-control" id="maxStudentsAmount"
+                    <input type="number" min="1" class="control-label form-control" id="maxStudentsAmount"
                            placeholder="${sessionScope.get("bundle").getString("enterMaxStudentsAmount")}"
                            name="maxStudentsAmount"
                            value="${course.maxStudentsAmount}" required>

@@ -58,12 +58,13 @@ class MessageDaoTest {
         when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
         when(mockResultSet.next()).thenReturn(Boolean.TRUE, Boolean.FALSE);
         when(mockResultSet.getString(6)).thenReturn("READ");
-
+        when(mockResultSet.getString("status")).thenReturn("read");
 
     }
 
     @Test
     void findMessagesByReceiver() throws SQLException {
+
         messagesDao.findMessagesByReceiver(getTestUser());
         verify(mockConnectionPool, atLeast(1)).getConnection();
         verify(mockConnection, atLeast(1)).prepareStatement(anyString());
@@ -76,6 +77,7 @@ class MessageDaoTest {
 
     @Test
     void findMessagesBySender() throws SQLException {
+
         messagesDao.findMessagesBySender(getTestUser());
         verify(mockConnectionPool, atLeast(1)).getConnection();
         verify(mockConnection, atLeast(1)).prepareStatement(anyString());

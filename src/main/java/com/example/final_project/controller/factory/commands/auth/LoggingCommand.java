@@ -12,6 +12,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
+/**
+ * Command of default role
+ * Using to log into site
+ */
 public class LoggingCommand implements Command {
 
     @Override

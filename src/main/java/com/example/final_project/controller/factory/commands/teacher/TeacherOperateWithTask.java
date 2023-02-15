@@ -3,7 +3,9 @@ package com.example.final_project.controller.factory.commands.teacher;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
+import com.example.final_project.database.entities.course.State;
 import com.example.final_project.database.entities.task.TaskBuilder;
+import com.example.final_project.dto.CourseDTO;
 import com.example.final_project.dto.TaskDTO;
 import com.example.final_project.services.CourseService;
 import com.example.final_project.services.TaskService;
@@ -16,7 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+/**
+ * Command of teacher role
+ * Using to add update or delete task of course by teacher
+ */
 public class TeacherOperateWithTask implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -60,6 +65,17 @@ public class TeacherOperateWithTask implements Command {
 
         response.sendRedirect("/project/controller?command=teacherDetailedCourse&title="
                 + request.getParameter("course"));
+    }
+
+    @Override
+    public boolean securityCheck(HttpServletRequest request, HttpServletResponse response) {
+        if(request.getParameter("action").compareTo("add") == 0){
+            ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
+            CourseService courseService = new CourseService(connectionPool);
+            CourseDTO course = courseService.findCourse(request.getParameter("course"));
+            return course.getState() == State.InProgress;
+        }
+        return true;
     }
 
     private TaskDTO formTask(ConnectionPool connectionPool, HttpServletRequest request) {

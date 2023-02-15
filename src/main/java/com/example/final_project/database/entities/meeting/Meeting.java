@@ -8,7 +8,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
-
+/**
+ * Meeting entity represents meeting in database
+ */
 public class Meeting {
     private final String title;
     private final String description;
@@ -18,6 +20,14 @@ public class Meeting {
     private final Time time;
 
 
+    /**
+     * @param title meeting title
+     * @param description description of meeting
+     * @param link meeting link
+     * @param course course to which meeting is related
+     * @param startDate meeting date
+     * @param time meeting start time
+     */
     public Meeting(String title, String description, String link, Course course, Date startDate, Time time) {
         this.title = title;
         this.description = description;

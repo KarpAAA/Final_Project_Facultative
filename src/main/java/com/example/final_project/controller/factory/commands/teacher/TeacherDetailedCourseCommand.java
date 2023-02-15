@@ -19,7 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Command of teacher role
+ * Using to show detailed course information with ability to place marks to students
+ */
 public class TeacherDetailedCourseCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -58,22 +61,22 @@ public class TeacherDetailedCourseCommand implements Command {
         String courseTitle = request.getParameter("title");
         UserService userService = new UserService(connectionPool);
 
-//        if (request.getParameter("action") != null && request.getParameter("action").compareTo("saveChanges") == 0) {
-            Map<UserDTO, Map<TaskDTO,Integer>> newMarks =
-                    (Map<UserDTO, Map<TaskDTO,Integer>>) request.getSession().getAttribute("students");
 
-            for(var entry : newMarks.entrySet()){
-                for(var entry1:entry.getValue().entrySet()){
-                    String mark = request.getParameter("mark_" +
-                            entry1.getKey().getId()+"_" +
-                            entry.getKey().getLogin());
+        Map<UserDTO, Map<TaskDTO, Integer>> newMarks =
+                (Map<UserDTO, Map<TaskDTO, Integer>>) request.getSession().getAttribute("students");
 
-                    if(mark!=null)entry1.setValue(Integer.valueOf(mark));
-                }
+        for (var entry : newMarks.entrySet()) {
+            for (var entry1 : entry.getValue().entrySet()) {
+                String mark = request.getParameter("mark_" +
+                        entry1.getKey().getId() + "_" +
+                        entry.getKey().getLogin());
+
+                if (mark != null) entry1.setValue(Integer.valueOf(mark));
             }
-            userService.saveMarks(newMarks, courseTitle);
-            request.getSession().removeAttribute("students");
-//        }
+        }
+        userService.saveMarks(newMarks, courseTitle);
+        request.getSession().removeAttribute("students");
+
         executeGet(request, resp);
     }
 
@@ -87,7 +90,7 @@ public class TeacherDetailedCourseCommand implements Command {
             CourseDTO course = courseService.getCourseByTitle(request.getParameter("title"));
             List<CourseDTO> teacherCourses = courseService.getAllTeacherCourses(
                     (UserDTO) request.getSession().getAttribute("user")
-                    ,0,Integer.MAX_VALUE );
+                    , 0, Integer.MAX_VALUE);
             if (course.getState() != State.InProgress
                     || !teacherCourses.contains(course)) return false;
         }

@@ -14,7 +14,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-
+/**
+ * Command of admin role
+ * Using to add Teacher(User with role Teacher) to database
+ */
 public class AdminAddTeacher implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,6 +51,11 @@ public class AdminAddTeacher implements Command {
 
     }
 
+    /**
+     * @param req received as user request
+     *  req contains fields to create user
+     * @return created user
+     */
     private User formUser(HttpServletRequest req){
 
         UserBuilder userBuilder = DirectorBuilder.buildTeacher(

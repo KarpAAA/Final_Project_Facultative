@@ -3,6 +3,7 @@ package com.example.final_project.controller.factory.commands.admin;
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
 import com.example.final_project.database.entities.course.Course;
+import com.example.final_project.database.entities.user.Role;
 import com.example.final_project.dto.CourseDTO;
 import com.example.final_project.database.entities.course.CourseBuilder;
 import com.example.final_project.database.entities.course.State;
@@ -22,6 +23,11 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Command of admin role
+ * Using to edit course
+ */
 public class AdminCourseEditingCommand implements Command{
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,9 +40,10 @@ public class AdminCourseEditingCommand implements Command{
         ConnectionPool connectionPool = (ConnectionPool) request.getServletContext().getAttribute("connectionPool");
         String courseTitle = request.getParameter("courseTitle");
         CourseService courseService = new CourseService(connectionPool);
+        UserService userService = new UserService(connectionPool);
 
         CourseDTO courseDTO = courseService.getCourseByTitle(courseTitle);
-
+        request.setAttribute("teachersList",  userService.getUsersByRole(Role.Teacher));
         request.setAttribute("course", courseDTO);
         request.setAttribute("pageToInclude", "/admin/adminEditingCourse.jsp");
         request.getRequestDispatcher("/admin/adminPage.jsp").forward(request, response);
@@ -55,7 +62,7 @@ public class AdminCourseEditingCommand implements Command{
             req.setAttribute("errorList", errorList);
 
             if(errorList.size()==0){
-                courseService.updateCourse(connectionPool, course);
+                courseService.updateCourse(course);
                 resp.sendRedirect("/project/controller?command=adminEditingCourse&courseTitle="+ course.getTitle());
 
             }
@@ -75,6 +82,11 @@ public class AdminCourseEditingCommand implements Command{
         }
 
     }
+    /**
+     * @param req received as user request
+     *  req contains fields to create course
+     * @return created course
+     */
     private Course formCourse(ConnectionPool connectionPool, HttpServletRequest req) {
         UserService userService = new UserService(connectionPool);
         CourseBuilder courseBuilder = new CourseBuilder();

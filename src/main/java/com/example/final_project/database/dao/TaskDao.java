@@ -14,14 +14,24 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TaskDao which implements functions to interact with database
+ */
 public class TaskDao {
 
-    private ConnectionPool connectionPool;
-
+    private final ConnectionPool connectionPool;
+    /**
+     * @param connectionPool pool of connections used to request to database
+     */
     public TaskDao(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
+    /**
+     * @param user whose solution will be taken
+     * @param task solution to which task will be taken
+     * @return solution in file(as byte[])
+     */
     public byte[] getUserSolution(User user, Task task) {
         Connection connection = connectionPool.getConnection();
         byte[] solution = null;
@@ -45,6 +55,10 @@ public class TaskDao {
     }
 
 
+    /**
+     * @param course course to which task will be  taken
+     * @return list of tasks related to course
+     */
     public List<Task> getTaskByCourse(Course course) {
         List<Task> taskList = new ArrayList<>();
         Connection connection = connectionPool.getConnection();
@@ -64,6 +78,10 @@ public class TaskDao {
         return taskList;
     }
 
+    /**
+     * @param task item to be added to course
+     * @param course to which task is related
+     */
     public void addTaskToCourse(Task task, Course course) {
         Connection connection = connectionPool.getConnection();
 
@@ -83,6 +101,11 @@ public class TaskDao {
         addStudentsToTask(lastInserterId(), task);
     }
 
+    /**
+     * function add item in table user_has_task
+     * @param userLogin login of user(PK)
+     * @param task task for which we create item in table
+     */
     public void addStudentToTask(String userLogin, Task task) {
         Connection connection = connectionPool.getConnection();
 
@@ -101,6 +124,10 @@ public class TaskDao {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * @param task to be deleted from database
+     */
     public void deleteTaskFromCourse(Task task) {
         Connection connection = connectionPool.getConnection();
 
@@ -117,6 +144,10 @@ public class TaskDao {
     }
 
 
+    /**
+     * @param id of task(PK)
+     * @param task new task object
+     */
     public void updateTask(int id, Task task) {
         Connection connection = connectionPool.getConnection();
 
@@ -136,6 +167,11 @@ public class TaskDao {
         }
     }
 
+    /**
+     * @param user whose solution will be added
+     * @param task to which is solution
+     * @param file user solution as file(byte[])
+     */
     public void addAnswerToTask(User user, Task task, byte[] file) {
         Connection connection = connectionPool.getConnection();
 
@@ -156,6 +192,12 @@ public class TaskDao {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * @param user whose solution will be updated
+     * @param task to which is solution
+     * @param file new user solution as file(byte[])
+     */
     public void updateAnswerToTask(User user, Task task, byte[] file) {
         Connection connection = connectionPool.getConnection();
 
@@ -176,6 +218,10 @@ public class TaskDao {
         }
     }
 
+    /**
+     * @param taskId id of task(PK)
+     * @return task by id
+     */
     public Task getTask(int taskId) {
 
         Task task = null;
@@ -197,6 +243,12 @@ public class TaskDao {
 
         return task;
     }
+
+    /**
+     * @param user whose mark will be selected
+     * @param task to which mark will be selected
+     * @return mark(Integer)
+     */
     public Integer getUserGradeForTask(User user, Task task) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -219,20 +271,29 @@ public class TaskDao {
     }
 
 
-
+    /**
+     * @param resultSet received dataSet from database
+     * @return formed task from Result Set
+     */
     private Task getTaskFromDb(ResultSet resultSet) throws SQLException {
         TaskBuilder taskBuilder = new TaskBuilder();
         CoursesDao coursesDao = new CoursesDao(connectionPool);
 
 
-        taskBuilder.setId(resultSet.getInt(1))
-                .setCourse(coursesDao.findCourse(resultSet.getString(2)))
-                .setTitle(resultSet.getString(3))
-                .setCondition(resultSet.getString(4));
+        taskBuilder.setId(resultSet.getInt("id"))
+                .setCourse(coursesDao.findCourse(resultSet.getString("Course_title")))
+                .setTitle(resultSet.getString("title"))
+                .setCondition(resultSet.getString("condition"));
 
 
         return taskBuilder.buildTask();
     }
+
+    /**
+     * function add items in table user_has_task
+     * @param id task id(PK of task)
+     * @param task task for which we create items in table
+     */
     private void addStudentsToTask(int id, Task task) {
         Connection connection = connectionPool.getConnection();
 
@@ -252,6 +313,10 @@ public class TaskDao {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * @return last inserted id in database
+     */
     private int lastInserterId() {
         int res = -1;
         try {

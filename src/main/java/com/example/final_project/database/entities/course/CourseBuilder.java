@@ -4,6 +4,10 @@ import com.example.final_project.database.entities.user.User;
 
 import java.sql.Date;
 
+/**
+ * Course builder which creates Course entity
+ */
+
 public class CourseBuilder {
     private String title = "";
     private String topic = "";

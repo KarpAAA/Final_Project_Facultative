@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 
+/**
+ * Mail manager used to arrange mailing list to users
+ */
 public class MailManager {
     private static final String fromEmail = "bbetostudy@gmail.com"; //requires valid gmail id
     private static final String password = "qgevpzsdqvgewgei"; // correct password for gmail id
@@ -26,6 +29,11 @@ public class MailManager {
 
     }
 
+    /**
+     * @param text email message text
+     * @param subject email message subject
+     * @param mailTo email of user who will receive message
+     */
     public static void writeMessage(String text, String subject, String mailTo){
         Authenticator auth = new Authenticator() {
 

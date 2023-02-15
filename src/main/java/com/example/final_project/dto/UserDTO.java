@@ -6,9 +6,13 @@ import com.example.final_project.database.entities.user.Role;
 
 import java.io.*;
 import java.sql.Date;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Objects;
 
+/**
+ * UserDTO class which has only fields which need to be shown to user
+ */
 public class UserDTO {
     //nec fields
     private final String login;
@@ -26,6 +30,19 @@ public class UserDTO {
     private String base64String;
     private final int balance;
 
+    /**
+     * @param login user login
+     * @param name username
+     * @param role role of user
+     * @param email user email
+     * @param age user age
+     * @param registrationDate registration date of user
+     * @param surname user surname
+     * @param phone user phone
+     * @param photo user photo icon
+     * @param blocked_state user blocked state
+     * @param balance user balance
+     */
     public UserDTO(String login, String name, Role role, String email,
                    int age, Date registrationDate, String surname, String phone, byte[] photo, Blocked_State blocked_state, int balance) {
 
@@ -120,5 +137,21 @@ public class UserDTO {
     @Override
     public int hashCode() {
         return Objects.hash(login);
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "login='" + login + '\'' +
+                ", name='" + name + '\'' +
+                ", role=" + role +
+                ", email='" + email + '\'' +
+                ", age=" + age +
+                ", registrationDate=" + registrationDate +
+                ", surname='" + surname + '\'' +
+                ", phone='" + phone + '\'' +
+                ", blocked_state=" + blocked_state +
+                ", balance=" + balance +
+                '}';
     }
 }

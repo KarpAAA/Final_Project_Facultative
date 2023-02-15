@@ -6,6 +6,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Date;
 
+/**
+ * Course entity represents course in database
+ */
 public class Course {
     private final String title;
     private final String topic;
@@ -20,6 +23,19 @@ public class Course {
     private byte[] photo;
 
 
+    /**
+     * @param title course title
+     * @param topic course topic
+     * @param description course description
+     * @param teacher course teacher
+     * @param startDate start date of course
+     * @param finishDate finish date of course
+     * @param maxStudentsAmount max students amount of course
+     * @param currentStudentsAmount current students amount of course
+     * @param price course price
+     * @param state course state
+     * @param photo course photo
+     */
     public Course(String title, String topic, String description, User teacher, Date startDate,
                   Date finishDate, int maxStudentsAmount, int currentStudentsAmount, int price, State state, byte[] photo) {
         this.title = title;

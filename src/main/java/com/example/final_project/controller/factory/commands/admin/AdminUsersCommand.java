@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-
+/**
+ * Command of admin role
+ * Using to show all users by specified role
+ */
 public class AdminUsersCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

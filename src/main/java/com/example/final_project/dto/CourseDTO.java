@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Objects;
 
+/**
+ * CourseDTO class which has only fields which need to be shown to user
+ */
 public class CourseDTO {
     private final String title;
     private final String topic;
@@ -21,6 +24,19 @@ public class CourseDTO {
     private byte[] photo;
     private String base64String;
 
+    /**
+     * @param title course title
+     * @param topic course topic
+     * @param description course description
+     * @param teacher course teacher
+     * @param startDate start date of course
+     * @param finishDate finish date of course
+     * @param maxStudentsAmount max students amount of course
+     * @param currentStudentsAmount current students amount of course
+     * @param price course price
+     * @param state course state
+     * @param photo course photo
+     */
     public CourseDTO(String title, String topic, String description, UserDTO teacher, Date startDate,
                      Date finishDate, int maxStudentsAmount, int currentStudentsAmount, int price, State state, byte[] photo) {
         this.title = title;
@@ -110,5 +126,21 @@ public class CourseDTO {
     @Override
     public int hashCode() {
         return Objects.hash(title);
+    }
+
+    @Override
+    public String toString() {
+        return "CourseDTO{" +
+                "title='" + title + '\'' +
+                ", topic='" + topic + '\'' +
+                ", description='" + description + '\'' +
+                ", teacher=" + teacher +
+                ", startDate=" + startDate +
+                ", finishDate=" + finishDate +
+                ", maxStudentsAmount=" + maxStudentsAmount +
+                ", currentStudentsAmount=" + currentStudentsAmount +
+                ", price=" + price +
+                ", state=" + state +
+                '}';
     }
 }

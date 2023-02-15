@@ -18,7 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URISyntaxException;
 
-
+/**
+ * Command of student role
+ * Using to receive certificate of successful course completion
+ */
 public class StudentReceiveCerteficate implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -82,6 +85,15 @@ public class StudentReceiveCerteficate implements Command {
         return true;
     }
 
+
+    /**
+     * function add elements to document
+     * @param courseDTO completed course by student
+     * @param user user who receives certificate
+     * @param document document which will be filled
+     * @throws DocumentException
+     * @throws IOException
+     */
     private static void addingElementsToPdf(CourseDTO courseDTO, UserDTO user, Document document) throws DocumentException, IOException {
         float fntSize, lineSpacing;
         fntSize = 20f;

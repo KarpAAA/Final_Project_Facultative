@@ -66,7 +66,9 @@
                         <th class="text-center">${sessionScope.get("bundle").getString("surname")}:</th>
                         <th class="text-center">${sessionScope.get("bundle").getString("login")}:</th>
                         <th class="text-center">${sessionScope.get("bundle").getString("email")}:</th>
-                        <th class="text-center">${sessionScope.get("bundle").getString("сourses")}:</th>
+                        <c:if test="${users.compareTo('teachers') != 0}">
+                            <th class="text-center">${sessionScope.get("bundle").getString("сourses")}:</th>
+                        </c:if>
                         <th class="text-center">${sessionScope.get("bundle").getString("operate")}:</th>
                     </tr>
                     </thead>
@@ -81,11 +83,13 @@
                             <td contenteditable="false">${entry.getKey().surname}</td>
                             <td contenteditable="false">${entry.getKey().login}</td>
                             <td contenteditable="false">${entry.getKey().email}</td>
-                            <td contenteditable="false">
-                                <c:forEach var="course" items="${entry.getValue()}">
-                                    ${course.title}<br>
-                                </c:forEach>
-                            </td>
+                            <c:if test="${users.compareTo('teachers') != 0}">
+                                <td contenteditable="false">
+                                    <c:forEach var="course" items="${entry.getValue()}">
+                                        ${course.title}<br>
+                                    </c:forEach>
+                                </td>
+                            </c:if>
                             <td contenteditable="false">
                                 <a href="/project/controller?command=adminBlockUnlockStudent&login=${entry.getKey().login}&do=block"
                                    style="color: #EBEFF2">

@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 
-
+/**
+ * Filter used to redirect to settings page which differs by role
+ */
 @WebFilter(filterName = "settingsFilter", urlPatterns = {"/controller"})
 //?command=settings
 public class SettingsFilter implements Filter {

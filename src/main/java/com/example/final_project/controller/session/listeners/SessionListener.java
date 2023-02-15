@@ -12,10 +12,18 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+/**
+ * Listener used to adjust some initial parameters to session
+ * such as language bundle, blocked user list
+ * Also starting connection pool and changing courses state by date
+ */
 @WebListener()
 public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent se) {
+        System.setProperty("log4j.configurationFile",
+                "C:\\Users\\ivank\\IdeaProjects\\Final_Project\\src\\main\\resources\\log4j2.xml");
+
         try {
             ConnectionPool connectionPool = ConnectionPool.create();
             se.getSession().getServletContext().setAttribute("connectionPool", connectionPool);

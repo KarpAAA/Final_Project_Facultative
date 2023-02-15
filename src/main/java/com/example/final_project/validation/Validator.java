@@ -11,8 +11,16 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 
+/**
+ * Validator class used to validate entities fields
+ */
 public class Validator {
 
+    /**
+     * @param connectionPool pool of connection needs to get connection in order to request to database
+     * @param user entity which validates
+     * @return list or fields which do not match need field pattern
+     */
     public List<String> validateUser(ConnectionPool connectionPool, User user){
         List<String> result  = new ArrayList<>();
         if(!checkIfPhoneNumberValid(user.getPhone()))result.add("phone");
@@ -35,9 +43,14 @@ public class Validator {
         return  email.length() > 0 && Pattern.matches("[A-Za-zа-яА-я0-9.]+@[A-Za-zа-яА-я0-9.]+", email);
     }
     private static boolean checkIfNameValid(String name){
-        return  name.length() > 0 && Pattern.matches("[0-9A-Za-zа-яА-я]*", name);
+        return  name.length() > 0 && Pattern.matches("[0-9A-Za-zа-яА-я._]*", name);
     }
 
+    /**
+     * @param connectionPool pool of connection needs to get connection in order to request to database
+     * @param course entity which validates
+     * @return list or fields which do not match need field pattern
+     */
     public List<String> validateCourse(ConnectionPool connectionPool, Course course) {
         List<String> result  = new ArrayList<>();
         if(!checkIfTitleAvailable(connectionPool, course.getTitle())) result.add("title");
@@ -52,6 +65,10 @@ public class Validator {
     private static boolean checkIfMaxStudentsAmountValid(int amount){
         return amount>0;
     }
+    /**
+     * @param date string representation of DATE
+     * @return if date match necessary pattern
+     */
     public static boolean validateDate(String date){
         return Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", date);
     }

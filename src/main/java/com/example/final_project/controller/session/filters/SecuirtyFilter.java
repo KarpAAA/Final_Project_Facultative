@@ -10,6 +10,7 @@ import com.example.final_project.controller.factory.commands.teacher.*;
 import com.example.final_project.controller.session.exceptions.NoAccessProvidedException;
 import com.example.final_project.database.entities.user.Role;
 import com.example.final_project.dto.UserDTO;
+import com.example.final_project.utilities.LoggingManager;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -17,9 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 
-
+/**
+ * Filter used to check if user has right(specified by role) to request stated command
+ */
 @WebFilter(filterName = "SecurityFilter", urlPatterns = {"/controller"})
-
 public class SecuirtyFilter implements Filter {
     private static final HashMap<String, Command> ADMIN_COMMAND_MAP = new HashMap<>();
     private static final HashMap<String, Command> STUDENT_COMMAND_MAP = new HashMap<>();
@@ -92,20 +94,25 @@ public class SecuirtyFilter implements Filter {
             command = "";
         }
 
-
-        if (user == null) {
-            if (command.equals("") || DEFAULT_COMMAND_MAP.containsKey(command)) ;
-            else throw new NoAccessProvidedException();
-        } else if (user.getRole() == Role.Admin) {
-            if (ADMIN_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
-            else throw new NoAccessProvidedException();
-        } else if (user.getRole() == Role.Teacher) {
-            if (TEACHER_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
-            else throw new NoAccessProvidedException();
-        } else if (user.getRole() == Role.Student) {
-            if (STUDENT_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
-            else throw new NoAccessProvidedException();
-            if(command.compareTo("deleteAccount") == 0 && req.getParameter("teacher")!=null) throw new NoAccessProvidedException();
+        try {
+            if (user == null) {
+                if (command.equals("") || DEFAULT_COMMAND_MAP.containsKey(command)) ;
+                else throw new NoAccessProvidedException();
+            } else if (user.getRole() == Role.Admin) {
+                if (ADMIN_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
+                else throw new NoAccessProvidedException();
+            } else if (user.getRole() == Role.Teacher) {
+                if (TEACHER_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
+                else throw new NoAccessProvidedException();
+            } else if (user.getRole() == Role.Student) {
+                if (STUDENT_COMMAND_MAP.containsKey(command) || DEFAULT_COMMAND_MAP.containsKey(command)) ;
+                else throw new NoAccessProvidedException();
+                if (command.compareTo("deleteAccount") == 0 && req.getParameter("teacher") != null)
+                    throw new NoAccessProvidedException();
+            }
+        } catch (NoAccessProvidedException e) {
+            LoggingManager.logThreads(req, command);
+            throw new NoAccessProvidedException();
         }
         chain.doFilter(servletRequest, servletResponse);
     }

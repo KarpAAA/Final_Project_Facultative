@@ -9,6 +9,9 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+/**
+ * Tag which show course in card container
+ */
 public class CourseTag extends SimpleTagSupport {
     private CourseDTO course;
     private ResourceBundle bundle;

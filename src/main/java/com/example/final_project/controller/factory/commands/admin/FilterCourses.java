@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+/**
+ * Command of admin role
+ * Using to show courses to admin by selected filters
+ */
 public class FilterCourses implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,6 +39,11 @@ public class FilterCourses implements Command {
     private void executeGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     }
 
+    /**
+     * @param request received from user
+     * request contains filter parameters
+     * @return CoursesFilter
+     */
     private CoursesFilter formCourseFilter(HttpServletRequest request) {
 
         CoursesFilter coursesFilter = new CoursesFilter();

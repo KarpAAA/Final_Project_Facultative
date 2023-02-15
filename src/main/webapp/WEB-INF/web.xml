@@ -13,7 +13,10 @@
         <exception-type>com.example.final_project.controller.session.exceptions.NoAccessProvidedException</exception-type>
         <location>/errorPages/403/403.jsp</location>
     </error-page>
-
+    <error-page>
+        <exception-type>com.example.final_project.controller.session.exceptions.SomethingWentWrongException</exception-type>
+        <location>/errorPages/404/404.jsp</location>
+    </error-page>
 
     <error-page>
         <error-code>500</error-code>

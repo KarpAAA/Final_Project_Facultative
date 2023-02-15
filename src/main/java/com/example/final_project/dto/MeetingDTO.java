@@ -5,6 +5,9 @@ import com.example.final_project.database.entities.course.Course;
 import java.sql.Date;
 import java.sql.Time;
 
+/**
+ * MeetingDTO class which has only fields which need to be shown to user
+ */
 public class MeetingDTO {
     private final String title;
     private final String description;
@@ -13,7 +16,14 @@ public class MeetingDTO {
     private final Date startDate;
     private final Time time;
 
-
+    /**
+     * @param title meeting title
+     * @param description description of meeting
+     * @param link meeting link
+     * @param course course to which meeting is related
+     * @param startDate meeting date
+     * @param time meeting start time
+     */
     public MeetingDTO(String title, String description, String link, CourseDTO course, Date startDate, Time time) {
 
         this.title = title;
@@ -47,5 +57,17 @@ public class MeetingDTO {
 
     public Time getTime() {
         return time;
+    }
+
+    @Override
+    public String toString() {
+        return "MeetingDTO{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", link='" + link + '\'' +
+                ", course=" + course +
+                ", startDate=" + startDate +
+                ", time=" + time +
+                '}';
     }
 }

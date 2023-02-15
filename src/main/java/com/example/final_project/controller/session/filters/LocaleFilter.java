@@ -8,6 +8,9 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 
+/**
+ * Filter used to switch interface language
+ */
 @WebFilter(filterName = "localeFilter", urlPatterns = {"/*"})
 public class LocaleFilter implements Filter {
 

@@ -16,7 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
+/**
+ * Command of teacher role
+ * Using to show teacher messages of student desire to join teachers course
+ */
 public class TeacherMessagesCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,14 +34,13 @@ public class TeacherMessagesCommand implements Command {
         UserDTO userDTO = (UserDTO) request.getSession().getAttribute("user");
 
         String action = request.getParameter("action");
-        if(action!=null&&action.compareTo("sent") == 0){
+        if (action != null && action.compareTo("sent") == 0) {
             List<MessageDTO> list = (new MessagesService(connectionPool)).getMessagesBySender(userDTO);
 
             request.setAttribute("messages", list);
             request.setAttribute("messagesAmount", list.size());
 
-        }
-        else{
+        } else {
 
             Map<CourseDTO, List<UserDTO>> map = userService.getAllRegisteredUserToTeacherCourses(userDTO);
             request.setAttribute("map", map);
@@ -50,13 +52,13 @@ public class TeacherMessagesCommand implements Command {
         }
 
 
-
         request.setAttribute("servlet", "messages");
         request.setAttribute("pageToInclude", "/teacher/teacherMessages.jsp");
         request.getRequestDispatcher("/teacher/teacherPage.jsp").forward(request, response);
 
     }
 
-    private void executePost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {}
+    private void executePost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    }
 
 }

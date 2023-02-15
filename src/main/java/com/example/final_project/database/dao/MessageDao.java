@@ -10,13 +10,25 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * MessageDao which implements functions to interact with database
+ */
 public class MessageDao {
     private ConnectionPool connectionPool;
 
+    /**
+     * @param connectionPool pool of connections used to request to database
+     */
     public MessageDao(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
+    /**
+     * Select messages by user who received
+     *
+     * @param receiver user who received message
+     * @return user messages
+     */
     public List<Message> findMessagesByReceiver(User receiver) {
         Connection connection = connectionPool.getConnection();
         List<Message> messagesList = new ArrayList<>();
@@ -35,6 +47,13 @@ public class MessageDao {
         }
         return messagesList;
     }
+
+    /**
+     * Select messages by user who sent
+     *
+     * @param sender user who sent message
+     * @return user messages
+     */
     public List<Message> findMessagesBySender(User sender) {
         Connection connection = connectionPool.getConnection();
         List<Message> messagesList = new ArrayList<>();
@@ -55,15 +74,21 @@ public class MessageDao {
         return messagesList;
     }
 
+    /**
+     * Add meeting object to databse
+     *
+     * @param message which will be added to database
+     */
     public void sendMessage(Message message) {
         try {
             Connection connection = connectionPool.getConnection();
-            PreparedStatement statement = connection.prepareStatement("INSERT into Message (idMessage,value,subject,sender,receiver,status) VALUES(null,?,?,?,?,?)");
+            PreparedStatement statement = connection.prepareStatement("INSERT into Message (id,sender,receiver,text,subject,status) VALUES(null,?,?,?,?,?)");
 
-            statement.setString(1, message.getText());
-            statement.setString(2, message.getSubject());
-            statement.setString(3, message.getSender().getLogin());
-            statement.setString(4, message.getReceiver().getLogin());
+
+            statement.setString(1, message.getSender().getLogin());
+            statement.setString(2, message.getReceiver().getLogin());
+            statement.setString(3, message.getText());
+            statement.setString(4, message.getSubject());
             statement.setString(5, message.getStatus());
 
             statement.executeUpdate();
@@ -74,6 +99,12 @@ public class MessageDao {
         }
 
     }
+
+    /**
+     * Delete all user(receiver) messages
+     *
+     * @param user whose messages will be deleted
+     */
     public void clearUserMessages(User user) {
 
         try {
@@ -91,11 +122,16 @@ public class MessageDao {
 
     }
 
+    /**
+     * Change messages status to READ
+     *
+     * @param messageList messages state of which will be changed
+     */
     public void changeStatus(List<Message> messageList) {
         Connection connection = connectionPool.getConnection();
 
         try {
-            PreparedStatement statement = connection.prepareStatement("UPDATE message SET status = 'read'WHERE idMessage = ?");
+            PreparedStatement statement = connection.prepareStatement("UPDATE message SET status = 'read' WHERE id = ?");
 
 
             for (var message : messageList) {
@@ -113,23 +149,31 @@ public class MessageDao {
 
     }
 
-
+    /**
+     * @param resultSet received dataSet from database
+     * @return formed message from Result Set
+     */
     private Message getMessage(ResultSet resultSet) throws SQLException {
-        MessageBuilder messageBuilder = new MessageBuilder();
         UserDao userDao = new UserDao(connectionPool);
-        User sender = userDao.getUser(resultSet.getString(4));
-        User receiver = userDao.getUser(resultSet.getString(5));
+        User sender = userDao.getUser(resultSet.getString("sender"));
+        User receiver = userDao.getUser(resultSet.getString("receiver"));
+
 
         return new Message(
-                resultSet.getInt(1),
-                resultSet.getString(2),
-                resultSet.getString(3),
+                resultSet.getInt("id"),
+                resultSet.getString("text"),
+                resultSet.getString("subject"),
                 sender,
                 receiver,
-                validateStatus(resultSet.getString(6)).name()
+                validateStatus(resultSet.getString("status")).name()
 
         );
     }
+
+    /**
+     * @param status string from of status
+     * @return Status option by string
+     */
     private static Status validateStatus(String status) {
         if (status.compareToIgnoreCase("read") == 0) return Status.READ;
         else return Status.UNREAD;

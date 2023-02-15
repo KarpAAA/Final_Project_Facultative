@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
+/**
+ * Factory of available command in web application
+ */
 public class CommandFactory {
     private static HashMap<String, Command> COMMAND_MAP = new HashMap<>();
     static{
@@ -57,6 +60,10 @@ public class CommandFactory {
         COMMAND_MAP.put("fillBalance", new StudentFillBalance());
     }
 
+    /**
+     * @param request received by user
+     * @return defined Command requested by user
+     */
     public Command defineCommand(HttpServletRequest request, HttpServletResponse response) {
         if(request.getAttribute("ifBlockedUser")!=null){
             return COMMAND_MAP.get("logOut");

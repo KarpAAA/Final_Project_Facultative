@@ -20,7 +20,12 @@ import java.sql.Date;
 import java.util.List;
 
 
+/**
+ * Command of admin role
+ * Using to add Course to database
+ */
 public class AdminAddCourse implements Command {
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         boolean isPost = "POST".equals(request.getMethod());
@@ -37,7 +42,6 @@ public class AdminAddCourse implements Command {
 
         Course course = formCourse(connectionPool, request);
         List<String> errorList = courseService.validateCourse(course);
-
 
         request.setAttribute("teachersList", userService.getUsersByRole(Role.Teacher));
         request.setAttribute("errorList", errorList);
@@ -59,7 +63,11 @@ public class AdminAddCourse implements Command {
         request.setAttribute("pageToInclude", "/admin/adminAddCourse.jsp");
         request.getRequestDispatcher("/admin/adminPage.jsp").forward(request, response);
     }
-
+    /**
+     * @param req received as user request
+     *  req contains fields to create сourse
+     * @return created сourse
+     */
     private Course formCourse(ConnectionPool connectionPool, HttpServletRequest req) {
         UserService userService = new UserService(connectionPool);
         CourseBuilder courseBuilder = new CourseBuilder();

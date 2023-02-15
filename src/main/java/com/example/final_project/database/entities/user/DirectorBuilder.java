@@ -3,6 +3,10 @@ package com.example.final_project.database.entities.user;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Director_Builder which creates UserBuilder class
+ * with some default values specified depend on user role
+ */
 public class DirectorBuilder {
 
     private DirectorBuilder(){}

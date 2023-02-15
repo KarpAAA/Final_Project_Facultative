@@ -6,9 +6,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Application command interface
+ */
 public interface Command{
         void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
         default boolean securityCheck(HttpServletRequest request, HttpServletResponse response){
                 return true;
         }
+
+
 }

@@ -8,6 +8,7 @@ import com.example.final_project.database.entities.task.Task;
 import com.example.final_project.database.entities.user.User;
 import com.example.final_project.database.entities.user.Blocked_State;
 import com.example.final_project.database.entities.user.Role;
+import com.example.final_project.database.entities.user.UserBuilder;
 
 import java.io.*;
 import java.sql.*;
@@ -16,34 +17,50 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * UserDao which implements functions to interact with database
+ */
 public class UserDao {
     private ConnectionPool connectionPool;
 
+    /**
+     * @param connectionPool pool of connections used to request to database
+     */
     public UserDao(ConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
 
+    /**
+     * @param resultSet received dataSet from database
+     * @return formed user from Result Set
+     */
     private User getUserFromDb(ResultSet resultSet) throws SQLException {
-        Blob blob = resultSet.getBlob(11);
+        Blob blob = resultSet.getBlob("photo");
+        UserBuilder userBuilder = new UserBuilder();
 
-        return new User(
-                resultSet.getString(1)
-                , resultSet.getString(2)
-                , resultSet.getString(3)
-                , indentifyRole(resultSet.getInt(5))
-                , resultSet.getString(4)
-                , resultSet.getInt(7)
-                , resultSet.getDate(9)
-                , resultSet.getString(8)
-                , resultSet.getString(10)
-                , blob == null ? null : blob.getBytes(1, (int) blob.length())
-                , indentifyBlockedState(resultSet.getInt(12))
-                , resultSet.getInt(13)
-        );
+        userBuilder.setLogin(resultSet.getString("login"))
+                .setPassword(resultSet.getString("password"))
+                .setName(resultSet.getString("name"))
+                .setEmail(resultSet.getString("email"))
+                .setRole(indentifyRole(resultSet.getInt("Role_id")))
+                .setAge(resultSet.getInt("age"))
+                .setSurname(resultSet.getString("surname"))
+                .setRegistrationDate(resultSet.getDate("registration_date"))
+                .setPhone(resultSet.getString("phone"))
+                .setPhoto(blob == null ? null : blob.getBytes(1, (int) blob.length()))
+                .setBlocked_state(indentifyBlockedState(resultSet.getInt("Block_state_id")))
+                .setBalance(resultSet.getInt("balance"));
+
+        return userBuilder.getUser();
     }
 
+    /**
+     * used to identify user for signing in
+     * @param login user login
+     * @param password user password
+     * @return user if such exists else return null
+     */
     public User identifyUser(String login, String password) {
 
         User user = null;
@@ -71,6 +88,10 @@ public class UserDao {
         return user;
     }
 
+    /**
+     * @param login user login
+     * @return user by stated login(PK)
+     */
     public User getUser(String login) {
 
         User user = null;
@@ -97,6 +118,9 @@ public class UserDao {
         return user;
     }
 
+    /**
+     * @param user to be inserted
+     */
     public void insertUser(User user) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -107,7 +131,7 @@ public class UserDao {
             statement.setString(4, user.getEmail());
             statement.setInt(5, user.getRole().ordinal());
             statement.executeUpdate();
-            addAdditionalFieldsToUser(connection, user);
+            addAdditionalFieldsToUser(user);
             connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,6 +140,9 @@ public class UserDao {
 
     }
 
+    /**
+     * @param user to be updated
+     */
     public void updateUser(User user) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -136,7 +163,9 @@ public class UserDao {
 
 
     }
-
+    /**
+     * @param user to be deleted
+     */
     public void deleteUser(User user) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -149,6 +178,9 @@ public class UserDao {
         }
 
     }
+    /**
+     * @param user whose photo to beb updated
+     */
     public void updateUserPhoto(User user) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -164,18 +196,26 @@ public class UserDao {
     }
 
 
+    /**
+     * @param user whose additional fields to be added
+     */
+    private void addAdditionalFieldsToUser(User user) throws SQLException {
+        Connection connection = connectionPool.getConnection();
 
-    private void addAdditionalFieldsToUser(Connection connection, User user) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("INSERT into Additional_Info (User_login,age,surname,registration_date,phone, photo) VALUES(?,?,?,?,?,?)");
         statement.setString(1, user.getLogin());
         statement.setInt(2, user.getAge());
         statement.setString(3, user.getSurname());
         statement.setDate(4, user.getRegistrationDate());
         statement.setString(5, user.getPhone());
-
         statement.setBlob(6, new ByteArrayInputStream(user.getPhoto()));
         statement.executeUpdate();
+
+        connectionPool.releaseConnection(connection);
     }
+    /**
+     * @param user whose additional fields to be updated
+     */
     private void updateAdditionalFieldsToUser(Connection connection, User user) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("UPDATE Additional_Info " +
                 "SET age = ?, " +
@@ -192,6 +232,11 @@ public class UserDao {
         statement.executeUpdate();
 
     }
+
+    /**
+     * @param user whose password to be updated
+     * @param pwd new password
+     */
     public void updateUserPassword(User user, String pwd) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -206,6 +251,10 @@ public class UserDao {
         }
     }
 
+    /**
+     * @param role of users to be selected
+     * @return list of users with stated role
+     */
     public List<User> getUsersByRole(Role role) {
 
         List<User> userList = new ArrayList<>();
@@ -233,6 +282,9 @@ public class UserDao {
         return userList;
     }
 
+    /**
+     * @return list of all existing users
+     */
     public List<User> selectAllUsers() {
         Connection connection = connectionPool.getConnection();
         List<User> userList = new ArrayList<>();
@@ -253,6 +305,10 @@ public class UserDao {
         return userList;
     }
 
+    /**
+     * @param course to which students will be selected
+     * @return map of <student -> mark for course>
+     */
     public Map<User, Integer> selectUsersByCourse(Course course) {
 
         Connection connection = connectionPool.getConnection();
@@ -274,6 +330,10 @@ public class UserDao {
         return userMap;
     }
 
+    /**
+     * @param courseTitle course title(PK) to which will be selected registered users
+     * @return registered users for course
+     */
     public List<User> getRegisteredUserToCourse(String courseTitle) {
         Connection con = connectionPool.getConnection();
         List<User> userList = new ArrayList<>();
@@ -295,6 +355,11 @@ public class UserDao {
         }
     }
 
+    /**
+     * @param course for which mark will be placed
+     * @param user whose mark will be placed
+     * @param taskGrades map of <Task -> mark for task>
+     */
     private void setCourseMarkToUser(Course course, User user, Map<Task, Integer> taskGrades) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -321,6 +386,9 @@ public class UserDao {
         return (int) Math.round(generalMark / taskGrades.size());
     }
 
+    /**
+     * @param userMap map of <User to map of <Task -> mark for task> >
+     */
     public void saveTaskMarks(Map<User, Map<Task, Integer>> userMap) {
 
         try {
@@ -347,6 +415,10 @@ public class UserDao {
         }
     }
 
+    /**
+     * @param user whose blocked state will be updated
+     * @param blockedState new user blocked state
+     */
     public void updateBlockedState(User user, Blocked_State blockedState) {
         try {
             Connection connection = connectionPool.getConnection();
@@ -364,6 +436,10 @@ public class UserDao {
     }
 
 
+    /**
+     * @param login which will be checked
+     * @return if login available
+     */
     public boolean checkIfLoginAvailable(String login) {
         Connection con = connectionPool.getConnection();
         try {
@@ -383,6 +459,11 @@ public class UserDao {
 
     }
 
+    /**
+     * @param user user whose state will be selected
+     * @param course course to which state will be selected
+     * @return user state to course
+     */
     public String getUserRegisteredState(User user, Course course) {
         Connection con = connectionPool.getConnection();
         try {
@@ -403,6 +484,11 @@ public class UserDao {
         }
     }
 
+    /**
+     * @param userLogin whose grade will be chosen
+     * @param courseTitle to which mark will be chosen
+     * @return user grade for course
+     */
     public int getUserGradeForCourse(String userLogin, String courseTitle) {
         Connection con = connectionPool.getConnection();
         try {
@@ -440,14 +526,18 @@ public class UserDao {
     }
 
 
-    public void updateUserBalance(User user, int price) {
+    /**
+     * @param user whose balance will be updated
+     * @param sum on which balance will be updated
+     */
+    public void updateUserBalance(User user, int sum) {
         try {
             Connection connection = connectionPool.getConnection();
             PreparedStatement statement = connection.prepareStatement("UPDATE Additional_Info " +
                     "SET balance = ? " +
                     "WHERE User_login = ?");
 
-            statement.setInt(1, user.getBalance() + price);
+            statement.setInt(1, user.getBalance() + sum);
             statement.setString(2, user.getLogin());
             statement.executeUpdate();
 

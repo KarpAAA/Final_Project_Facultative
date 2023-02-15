@@ -4,7 +4,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Properties_Manager used to read property files
+ */
 public class PropertiesManager {
+    /**
+     * @return formed url for connection to database
+     */
     public static String getUrl(){
 
         Properties properties = new Properties();

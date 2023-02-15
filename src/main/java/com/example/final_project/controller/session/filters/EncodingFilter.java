@@ -6,6 +6,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 import java.io.IOException;
 
+/**
+ * Filter used to enable Cyrillic
+ */
 @WebFilter(filterName = "encodingFilter", urlPatterns = {"/*"},
         initParams = {@WebInitParam(name = "encoding", value = "UTF-8")})
 public class EncodingFilter implements Filter {

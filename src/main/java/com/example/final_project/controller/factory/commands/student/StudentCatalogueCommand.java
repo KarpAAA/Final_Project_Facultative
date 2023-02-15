@@ -2,6 +2,7 @@ package com.example.final_project.controller.factory.commands.student;
 
 import com.example.final_project.controller.factory.commands.Command;
 import com.example.final_project.database.connection.ConnectionPool;
+import com.example.final_project.database.entities.course.State;
 import com.example.final_project.dto.CourseDTO;
 import com.example.final_project.database.entities.user.Role;
 import com.example.final_project.dto.UserDTO;
@@ -18,7 +19,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-
+/**
+ * Command of student role
+ * Using for showing course catalogue to student
+ */
 public class StudentCatalogueCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -47,7 +51,7 @@ public class StudentCatalogueCommand implements Command {
         }
         coursesFilter.setOffset((page - 1) * recordsPerPage);
         coursesFilter.setCoursesPerPage(recordsPerPage);
-
+        coursesFilter.setState(State.NotStarted);
         List<CourseDTO> coursesList = courseService.selectCoursesByCondition(coursesFilter);
 
         int noOfRecords = courseService.getCoursesAmount();
@@ -71,7 +75,11 @@ public class StudentCatalogueCommand implements Command {
         executeGet(request, resp);
     }
 
-
+    /**
+     * @param request received from user
+     * request contains filter parameters
+     * @return CoursesFilter
+     */
     private CoursesFilter formCourseFilter(HttpServletRequest request) {
         CoursesFilter coursesFilter = new CoursesFilter();
         List<String> topicsList = (List<String>) request.getSession().getAttribute("topicsList");

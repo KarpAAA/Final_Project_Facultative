@@ -6,6 +6,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+/**
+ * Mapper interface user to generate Meeting Mapper class
+ * To 1)Move from MeetingDTO type to Meeting type
+ *    2)Move from Meeting type to MeetingDTO type
+ */
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface MeetingMapper {
 

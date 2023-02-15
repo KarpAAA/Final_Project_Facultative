@@ -2,6 +2,9 @@ package com.example.final_project.database.entities.user;
 
 import java.sql.Date;
 
+/**
+ * User builder which creates User entity
+ */
 public class UserBuilder {
     //nec fields
     private String login;

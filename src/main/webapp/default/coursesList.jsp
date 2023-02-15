@@ -59,6 +59,7 @@
                                                 ${topic}
                                         </label>
                                     </div>
+
                                 </li>
                             </c:forEach>
 

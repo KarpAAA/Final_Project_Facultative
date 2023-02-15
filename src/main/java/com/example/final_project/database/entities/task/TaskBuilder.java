@@ -3,6 +3,9 @@ package com.example.final_project.database.entities.task;
 
 import com.example.final_project.database.entities.course.Course;
 
+/**
+ * Task builder which creates Task entity
+ */
 public class TaskBuilder {
     private  int id;
     private  String title;

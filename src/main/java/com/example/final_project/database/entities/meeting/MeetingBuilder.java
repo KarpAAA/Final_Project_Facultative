@@ -7,6 +7,9 @@ import com.example.final_project.database.entities.user.User;
 import java.sql.Date;
 import java.sql.Time;
 
+/**
+ * Meeting builder which creates meeting entity
+ */
 public class MeetingBuilder {
     private String title;
     private String description;

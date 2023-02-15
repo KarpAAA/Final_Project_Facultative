@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
 
+/**
+ * User entity represents user in database
+ */
 public class User {
     //nec fields
     private final String login;
@@ -24,6 +27,20 @@ public class User {
     private final int balance;
 
 
+    /**
+     * @param login user login
+     * @param password user password
+     * @param name username
+     * @param role role of user
+     * @param email user email
+     * @param age user age
+     * @param registrationDate registration date of user
+     * @param surname user surname
+     * @param phone user phone
+     * @param photo user photo icon
+     * @param blocked_state user blocked state
+     * @param balance user balance
+     */
     public User(String login, String password, String name, Role role, String email,
                 int age, Date registrationDate, String surname, String phone, byte[] photo, Blocked_State blocked_state, int balance) {
 

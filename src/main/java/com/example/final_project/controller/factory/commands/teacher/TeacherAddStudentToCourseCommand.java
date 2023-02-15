@@ -11,7 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-
+/**
+ * Command of teacher role
+ * Using to admit student to course
+ */
 public class TeacherAddStudentToCourseCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

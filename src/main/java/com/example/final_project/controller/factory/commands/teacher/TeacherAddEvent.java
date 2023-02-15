@@ -29,6 +29,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Command of teacher role
+ * Using to add event to database
+ */
 public class TeacherAddEvent implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -57,6 +61,12 @@ public class TeacherAddEvent implements Command {
         response.sendRedirect("/project/controller?command=calendar");
     }
 
+
+    /**
+     * @param connectionPool pool of connection need to request data from database
+     * @param request contains necessary info about event
+     * @return created meeting of type MeetingDTO
+     */
     private MeetingDTO formMeeting(ConnectionPool connectionPool, HttpServletRequest request) {
         CourseService courseService = new CourseService(connectionPool);
         String date = request.getParameter("date");
